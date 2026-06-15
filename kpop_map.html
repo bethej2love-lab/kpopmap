@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>케이팝 아이돌 지형도</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f5f0e8;overflow:hidden;width:100vw;height:100vh;font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;}
+canvas{display:block;cursor:grab;}
+canvas.drag{cursor:grabbing;}
+#ui{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:5;}
+#titl{position:absolute;top:18px;left:0;right:0;text-align:center;font-size:11px;color:#ccc0b0;letter-spacing:0.14em;}
+#hint{position:absolute;bottom:18px;right:18px;font-size:9px;color:#d0c4b4;letter-spacing:0.04em;}
+#lang-sw{position:absolute;top:11px;left:14px;width:76px;height:32px;background:rgba(210,200,188,0.38);border-radius:16px;box-shadow:inset 0 1.5px 4px rgba(100,80,60,0.2);cursor:pointer;display:flex;align-items:center;padding:3px;box-sizing:border-box;pointer-events:all;}
+#knob{width:26px;height:26px;border-radius:13px;background:rgba(250,246,240,0.96);box-shadow:0 1.5px 4px rgba(100,80,60,0.24);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#7a6858;transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1);flex-shrink:0;user-select:none;}
+#knob.en{transform:translateX(44px);}
+#sw-en{position:absolute;right:10px;font-size:10px;color:rgba(140,120,100,0.65);transition:opacity .15s;pointer-events:none;}
+#lang-sw.en #sw-en{opacity:0;}
+#mode-sw{position:absolute;top:11px;left:100px;width:86px;height:32px;background:rgba(210,200,188,0.38);border-radius:16px;box-shadow:inset 0 1.5px 4px rgba(100,80,60,0.2);cursor:pointer;display:flex;align-items:center;padding:3px;box-sizing:border-box;pointer-events:all;}
+#mode-knob{width:36px;height:26px;border-radius:13px;background:rgba(250,246,240,0.96);box-shadow:0 1.5px 4px rgba(100,80,60,0.24);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#7a6858;letter-spacing:0.04em;transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1);flex-shrink:0;user-select:none;}
+#mode-knob.night{transform:translateX(44px);}
+#mode-label{position:absolute;right:8px;font-size:9px;font-weight:700;letter-spacing:0.04em;color:rgba(140,120,100,0.65);pointer-events:none;transition:opacity .15s;opacity:1;}
+#mode-sw.night #mode-label{opacity:0;}
+body.night{background:#1a1e2e;}
+body.night #ui #titl{color:rgba(180,190,215,0.5);}
+body.night #ui #hint{color:rgba(160,170,200,0.4);}
+body.night #mode-sw{background:rgba(40,50,80,0.55);box-shadow:inset 0 1.5px 4px rgba(0,0,0,0.4);}
+body.night #mode-knob{background:rgba(40,55,90,0.95);color:#a0b0d0;box-shadow:0 1.5px 4px rgba(0,0,0,0.5);}
+body.night #mode-label{color:rgba(140,160,200,0.5);}
+body.night #lang-sw{background:rgba(40,50,80,0.55);box-shadow:inset 0 1.5px 4px rgba(0,0,0,0.4);}
+body.night #knob{background:rgba(40,55,90,0.95);color:#a0b0d0;box-shadow:0 1.5px 4px rgba(0,0,0,0.5);}
+body.night #sw-en{color:rgba(140,160,200,0.5);}
+/* ── Glass Card Base ─────────────────────────────────────── */
+#tt,#gc,#lc{
+  background:rgba(252,249,244,0.52);
+  backdrop-filter:blur(36px) saturate(200%);
+  -webkit-backdrop-filter:blur(36px) saturate(200%);
+  border:0.5px solid rgba(255,255,255,0.82);
+  border-radius:16px;
+  box-shadow:0 1.5px 0 rgba(255,255,255,0.95) inset,0 8px 30px rgba(80,58,38,0.13),0 2px 6px rgba(80,58,38,0.07);
+}
+body.night #tt,body.night #gc,body.night #lc{
+  background:rgba(16,20,36,0.58);
+  border-color:rgba(255,255,255,0.10);
+  box-shadow:0 1px 0 rgba(255,255,255,0.06) inset,0 8px 32px rgba(0,0,0,0.55);
+}
+/* ── Member Tooltip ──────────────────────────────────────── */
+#tt{position:fixed;display:none;max-width:206px;padding:13px 15px 12px;font-size:12px;line-height:1.55;color:#4a3c32;z-index:20;pointer-events:all;}
+#ttx{position:absolute;top:9px;right:11px;font-size:15px;color:rgba(158,142,128,0.5);cursor:pointer;line-height:1;}
+.tn{font-size:14px;font-weight:700;color:#241c14;margin-bottom:3px;padding-right:18px;letter-spacing:-.02em;}
+.tg{font-size:10px;color:#b8a894;margin-bottom:1px;letter-spacing:.05em;font-weight:500;text-transform:uppercase;}
+.tco{font-size:9px;color:#c8b8a8;margin-bottom:6px;}
+.tm{font-size:10px;color:#b0a090;margin-bottom:8px;letter-spacing:.01em;}
+/* ── Member Video ──────────────────────────────────────────── */
+#tv-big-wrap{cursor:pointer;border-radius:8px;overflow:hidden;background:rgba(0,0,0,0.05);}
+#tv-big-wrap:hover #tv-big{opacity:.84;}
+#tv-big{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;transition:opacity .13s;}
+#tv-big-title{font-size:8.5px;color:#7a6858;line-height:1.3;padding:3px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+body.night #tv-big-title{color:#4a6080;}
+#tv-small-row{display:flex;gap:5px;margin-top:5px;}
+.tv-sm{flex:1;cursor:pointer;border-radius:6px;overflow:hidden;background:rgba(0,0,0,0.05);transition:opacity .13s;}
+.tv-sm:hover{opacity:.82;}
+.tv-sm img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;}
+.tv-sm-title{font-size:8.5px;color:#7a6858;line-height:1.3;padding:3px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tv-empty{font-size:11px;color:#c8b8a8;}
+body.night .tv-sm-title{color:#4a6080;}
+body.night .tv-sm{background:rgba(255,255,255,0.04);}
+body.night .tv-empty{color:#2e3e56;}
+/* ── YouTube Modal ─────────────────────────────────────────── */
+#yt-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:200;align-items:center;justify-content:center;}
+#yt-mi{position:relative;width:min(92vw,640px);background:#0e0e0e;border-radius:14px;padding:12px 12px 14px;box-shadow:0 10px 48px rgba(0,0,0,.85);}
+#yt-mp{width:100%;padding-bottom:56.25%;position:relative;background:#000;border-radius:8px;overflow:hidden;}
+#yt-mp>div,#yt-mp iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+#yt-mc{position:absolute;top:-14px;right:-14px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.92);border:none;cursor:pointer;font-size:18px;line-height:1;color:#111;box-shadow:0 2px 8px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;}
+#yt-mc:hover{background:#fff;}
+#yt-mf{display:none;padding:28px 16px;text-align:center;}
+#yt-mfl{font-size:13px;color:#bbb;text-decoration:none;padding:9px 20px;border:1px solid rgba(255,255,255,.22);border-radius:9px;transition:background .15s,color .15s;}
+#yt-mfl:hover{background:rgba(255,255,255,.1);color:#fff;}
+#yt-mt{font-size:10.5px;color:rgba(255,255,255,.3);margin-top:9px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px;}
+/* ── Group Card ──────────────────────────────────────────── */
+#gc{position:fixed;display:none;max-width:234px;z-index:20;overflow:hidden;pointer-events:all;}
+#gc-bar{height:3px;width:100%;}
+#gc-inner{padding:12px 16px 14px;}
+#gcx{position:absolute;top:11px;right:11px;font-size:15px;color:rgba(158,142,128,0.5);cursor:pointer;line-height:1;}
+#gc-name{font-size:15px;font-weight:700;margin-bottom:1px;padding-right:16px;letter-spacing:-.02em;}
+#gc-en{font-size:9px;letter-spacing:.1em;color:#b8a894;margin-bottom:10px;text-transform:uppercase;font-weight:500;}
+#gc-grid{display:flex;flex-direction:column;gap:5px;margin-top:12px;padding-top:11px;border-top:0.5px solid rgba(150,130,110,0.14);}
+#gc-tv{margin-top:12px;}
+#gc-grid .row{display:flex;align-items:center;}
+body.night #gc-grid{border-top-color:rgba(255,255,255,0.07);}
+#gc-grid .lbl{font-size:9px;color:#c0b0a0;min-width:56px;flex-shrink:0;letter-spacing:.02em;}
+#gc-grid .val{font-size:10.5px;color:#5a4c3e;font-weight:500;}
+/* night overrides */
+body.night #tt{color:#a8b8d2;}
+body.night #ttx{color:rgba(120,140,175,0.45);}
+body.night .tn{color:#d8e4f6;}
+body.night .tg{color:#8aa4c8;}
+body.night .tco{color:#607898;}
+body.night .tm{color:#6080a0;}
+body.night .ts a{color:#5e7098;background:rgba(60,80,130,0.13);}
+body.night .ts a:hover{background:rgba(60,80,130,0.26);color:#9ab0d0;}
+body.night #gc-name{color:#d8e4f6 !important;}
+body.night #gc-en{color:#607898 !important;}
+body.night #gcx{color:rgba(120,140,175,0.55) !important;}
+body.night #gc-grid .lbl{color:#7090b8 !important;}
+body.night #gc-grid .val{color:#9aaece !important;}
+/* ── Connection Card ─────────────────────────────────────── */
+#lc{position:fixed;display:none;max-width:176px;z-index:20;overflow:hidden;pointer-events:all;}
+#lc-bar{height:3px;width:100%;}
+#lc-inner{padding:11px 15px 13px;}
+#lcx{position:absolute;top:10px;right:11px;font-size:15px;color:rgba(158,142,128,0.5);cursor:pointer;line-height:1;}
+#lc-pair{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding-right:16px;}
+.lc-name{font-size:13px;font-weight:700;color:#241c14;letter-spacing:-.02em;}
+.lc-sep{font-size:10px;color:#c8b8a8;flex-shrink:0;letter-spacing:.04em;}
+#lc-grp{font-size:9px;color:#b8a894;letter-spacing:.05em;text-transform:uppercase;font-weight:500;margin-bottom:9px;}
+#lc-links{margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(150,130,110,0.14);}
+#lc-links a{font-size:10.5px;color:#9a8878;text-decoration:none;padding:5px 9px;border-radius:8px;background:rgba(160,140,120,0.08);display:block;margin-bottom:3px;letter-spacing:.01em;transition:background .13s,color .13s;}
+#lc-links a:hover{background:rgba(160,140,120,0.18);color:#4a3626;}
+#lc-links .lc-empty{font-size:10px;color:#c8b8a8;padding:2px 1px;}
+body.night #lcx{color:rgba(120,140,175,0.45);}
+body.night .lc-name{color:#d8e4f6;}
+body.night .lc-sep{color:#2e3e58;}
+body.night #lc-grp{color:#384a64;}
+body.night #lc-links{border-top-color:rgba(255,255,255,0.07);}
+body.night #lc-links a{color:#5e7098;background:rgba(60,80,130,0.13);}
+body.night #lc-links a:hover{background:rgba(60,80,130,0.26);color:#9ab0d0;}
+body.night #lc-links .lc-empty{color:#2e3e56;}
+/* ── Connection Toggle ───────────────────── */
+#conn-sw{position:absolute;top:11px;left:196px;width:72px;height:32px;background:rgba(210,200,188,0.38);border-radius:16px;box-shadow:inset 0 1.5px 4px rgba(100,80,60,0.2);cursor:pointer;display:flex;align-items:center;padding:3px;box-sizing:border-box;pointer-events:all;}
+#conn-knob{width:30px;height:26px;border-radius:13px;background:rgba(250,246,240,0.96);box-shadow:0 1.5px 4px rgba(100,80,60,0.24);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#7a6858;letter-spacing:.03em;transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1);flex-shrink:0;user-select:none;}
+#conn-knob.on{transform:translateX(36px);}
+#conn-off{position:absolute;right:7px;font-size:8px;font-weight:700;color:rgba(140,120,100,0.65);pointer-events:none;letter-spacing:.03em;transition:opacity .15s;}
+#conn-sw.on #conn-off{opacity:0;}
+body.night #conn-sw{background:rgba(40,50,80,0.55);box-shadow:inset 0 1.5px 4px rgba(0,0,0,0.4);}
+body.night #conn-knob{background:rgba(40,55,90,0.95);color:#a0b0d0;}
+/* ── Settings Button ─────────────────────────── */
+#cfg-btn{position:absolute;top:11px;left:278px;width:32px;height:32px;border-radius:50%;background:rgba(210,200,188,0.38);box-shadow:inset 0 1.5px 4px rgba(100,80,60,0.2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:#7a6858;pointer-events:all;user-select:none;transition:background .15s,color .15s;border:none;}
+#cfg-btn:hover,#cfg-btn.open{background:rgba(200,190,178,0.60);}
+body.night #cfg-btn{background:rgba(40,50,80,0.55);box-shadow:inset 0 1.5px 4px rgba(0,0,0,0.4);color:#a0b0d0;}
+body.night #cfg-btn:hover,body.night #cfg-btn.open{background:rgba(50,65,105,0.68);}
+/* ── Settings Panel ──────────────────────────── */
+#cfg-panel{position:fixed;top:52px;left:14px;display:none;width:264px;background:rgba(252,249,244,0.52);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border:0.5px solid rgba(255,255,255,0.82);border-radius:16px;box-shadow:0 1.5px 0 rgba(255,255,255,0.95) inset,0 8px 30px rgba(80,58,38,0.13),0 2px 6px rgba(80,58,38,0.07);padding:14px 16px 16px;z-index:30;pointer-events:all;}
+body.night #cfg-panel{background:rgba(16,20,36,0.58);border-color:rgba(255,255,255,0.10);box-shadow:0 1px 0 rgba(255,255,255,0.06) inset,0 8px 32px rgba(0,0,0,0.55);}
+.cfg-sec{margin-bottom:13px;}
+.cfg-sec:last-child{margin-bottom:0;}
+.cfg-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;color:#b8a894;text-transform:uppercase;margin-bottom:7px;}
+body.night .cfg-lbl{color:#364a68;}
+.cfg-dslider{display:flex;align-items:center;gap:6px;}
+.cfg-dtrack-wrap{flex:1;position:relative;height:16px;user-select:none;}
+.cfg-dtrack-bg{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:3px;border-radius:2px;background:rgba(160,140,120,0.28);}
+body.night .cfg-dtrack-bg{background:rgba(60,80,130,0.30);}
+.cfg-dtrack-fill{position:absolute;top:50%;transform:translateY(-50%);height:3px;border-radius:2px;background:rgba(115,95,75,0.42);left:0;width:100%;}
+body.night .cfg-dtrack-fill{background:rgba(85,115,190,0.50);}
+.cfg-thumb{-webkit-appearance:none;appearance:none;position:absolute;left:0;top:50%;transform:translateY(-50%);width:100%;height:16px;background:transparent;border:none;outline:none;pointer-events:none;margin:0;padding:0;}
+.cfg-thumb::-webkit-slider-runnable-track{-webkit-appearance:none;height:3px;background:transparent;border:none;}
+.cfg-thumb::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:7px;margin-top:-5.5px;background:rgba(250,246,240,0.96);border:0.5px solid rgba(160,140,120,0.4);box-shadow:0 1px 4px rgba(80,60,40,0.22);cursor:pointer;pointer-events:all;}
+body.night .cfg-thumb::-webkit-slider-thumb{background:rgba(40,55,90,0.95);border-color:rgba(120,140,180,0.35);}
+.cfg-dval{font-size:10px;font-weight:600;color:#5a4c3e;min-width:30px;flex-shrink:0;text-align:center;letter-spacing:-.01em;}
+body.night .cfg-dval{color:#7090b8;}
+.cfg-gender{display:flex;gap:5px;}
+.cfg-gtag{padding:4px 10px;border-radius:10px;font-size:9px;font-weight:700;letter-spacing:.04em;cursor:pointer;background:rgba(160,140,120,0.10);color:#9a8870;border:0.5px solid rgba(160,140,120,0.20);transition:background .13s,color .13s;user-select:none;}
+.cfg-gtag.sel{background:rgba(120,100,82,0.20);color:#4a3626;border-color:rgba(120,100,82,0.32);}
+body.night .cfg-gtag{background:rgba(60,80,130,0.12);color:#6080b0;border-color:rgba(80,100,160,0.18);}
+body.night .cfg-gtag.sel{background:rgba(80,110,190,0.26);color:#a0bce0;border-color:rgba(100,130,210,0.36);}
+#cfg-active-wrap{display:flex;align-items:center;gap:8px;font-size:10px;color:#6a5848;}
+body.night #cfg-active-wrap{color:#6080a8;}
+#cfg-active-sw{width:36px;height:20px;border-radius:10px;background:rgba(210,200,188,0.38);box-shadow:inset 0 1px 3px rgba(100,80,60,0.2);cursor:pointer;position:relative;flex-shrink:0;transition:background .2s;}
+#cfg-active-sw.on{background:rgba(90,150,100,0.42);}
+#cfg-active-knob{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:7px;background:rgba(250,246,240,0.96);box-shadow:0 1px 3px rgba(80,60,40,0.22);transition:transform .2s cubic-bezier(0.34,1.56,0.64,1);}
+#cfg-active-sw.on #cfg-active-knob{transform:translateX(16px);}
+body.night #cfg-active-sw{background:rgba(40,50,80,0.55);}
+body.night #cfg-active-sw.on{background:rgba(50,110,80,0.48);}
+body.night #cfg-active-knob{background:rgba(40,55,90,0.95);}
+#cfg-reset{width:100%;margin-top:10px;padding:7px 0;border:none;border-radius:10px;background:rgba(160,140,120,0.12);color:#7a6858;font-family:inherit;font-size:10px;font-weight:600;letter-spacing:.04em;cursor:pointer;transition:background .15s,color .15s;}
+#cfg-reset:hover{background:rgba(160,140,120,0.22);color:#4a3626;}
+body.night #cfg-reset{background:rgba(60,80,130,0.18);color:#6080b0;}
+body.night #cfg-reset:hover{background:rgba(80,110,190,0.28);color:#a0bce0;}
+/* ── Search ──────────────────────────────── */
+#srch{position:absolute;top:11px;right:14px;display:flex;align-items:center;gap:5px;pointer-events:all;}
+#srch-btn{width:32px;height:32px;border-radius:50%;background:rgba(210,200,188,0.38);box-shadow:inset 0 1.5px 4px rgba(100,80,60,0.2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#7a6858;flex-shrink:0;padding:0;transition:background .15s,color .15s;}
+#srch-btn:hover{background:rgba(205,195,183,0.60);}
+#srch-bar{height:32px;background:rgba(252,249,244,0.72);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border:0.5px solid rgba(255,255,255,0.82);border-radius:16px;box-shadow:0 1.5px 0 rgba(255,255,255,0.95) inset,0 4px 16px rgba(80,58,38,0.10);width:0;overflow:hidden;transition:width 0.28s cubic-bezier(0.34,1.2,0.64,1);display:flex;align-items:center;}
+#srch-bar.open{width:200px;}
+#srch-in{border:none;background:transparent;outline:none;font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;color:#4a3c32;padding:0 14px;width:100%;letter-spacing:0.03em;}
+#srch-in::placeholder{color:rgba(150,130,110,0.5);}
+#srch-drop{position:absolute;top:38px;right:0;min-width:210px;background:rgba(252,249,244,0.95);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border:0.5px solid rgba(255,255,255,0.82);border-radius:14px;box-shadow:0 1.5px 0 rgba(255,255,255,0.95) inset,0 8px 28px rgba(80,58,38,0.14);display:none;overflow:hidden;max-height:260px;overflow-y:auto;}
+.srch-item{padding:8px 14px 7px;cursor:pointer;display:flex;flex-direction:column;gap:1px;transition:background .1s;border-bottom:0.5px solid rgba(150,130,110,0.07);}
+.srch-item:last-child{border-bottom:none;}
+.srch-item:hover,.srch-item.sel{background:rgba(160,140,120,0.11);}
+.srch-nm{font-size:12.5px;font-weight:600;color:#2e2018;letter-spacing:-0.01em;}
+.srch-gr{font-size:9px;color:#b8a894;letter-spacing:0.05em;text-transform:uppercase;font-weight:500;margin-top:1px;}
+.srch-tag{font-size:8px;font-weight:700;padding:1px 5px;border-radius:4px;background:rgba(160,140,120,0.14);color:#9a8870;letter-spacing:0.07em;flex-shrink:0;}
+body.night .srch-tag{background:rgba(80,100,150,0.25);color:#7090c8;}
+body.night #srch-btn{background:rgba(40,50,80,0.55);box-shadow:inset 0 1.5px 4px rgba(0,0,0,0.4);color:#a0b0d0;}
+body.night #srch-btn:hover{background:rgba(50,65,105,0.68);}
+body.night #srch-bar{background:rgba(16,20,36,0.75);border-color:rgba(255,255,255,0.10);box-shadow:0 1px 0 rgba(255,255,255,0.06) inset,0 4px 16px rgba(0,0,0,0.35);}
+body.night #srch-in{color:#a8b8d2;}
+body.night #srch-in::placeholder{color:rgba(120,140,175,0.4);}
+body.night #srch-drop{background:rgba(14,18,36,0.97);border-color:rgba(255,255,255,0.10);box-shadow:0 1px 0 rgba(255,255,255,0.05) inset,0 8px 24px rgba(0,0,0,0.55);}
+body.night .srch-nm{color:#d8e4f6;}
+body.night .srch-gr{color:#4e6080;}
+body.night .srch-item{border-bottom-color:rgba(255,255,255,0.04);}
+body.night .srch-item:hover,body.night .srch-item.sel{background:rgba(60,80,130,0.22);}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="ui">
+  <div id="titl">케이팝 아이돌 지형도</div>
+  <div id="hint">드래그 · 스크롤 줌 · 클릭 고정</div>
+  <div id="lang-sw"><div id="knob">KO</div><span id="sw-en">EN</span></div>
+  <div id="mode-sw"><div id="mode-knob">DAY</div><span id="mode-label">NIGHT</span></div>
+  <div id="conn-sw"><div id="conn-knob">LINE</div><span id="conn-off">OFF</span></div>
+  <button id="cfg-btn">⚙</button>
+  <div id="srch">
+    <div id="srch-bar"><input id="srch-in" type="text" autocomplete="off" spellcheck="false" placeholder="멤버·그룹 검색..."></div>
+    <button id="srch-btn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.5"/><line x1="8.5" y1="8.5" x2="12" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    <div id="srch-drop"></div>
+  </div>
+</div>
+
+<div id="cfg-panel">
+  <div class="cfg-sec">
+    <div class="cfg-lbl" id="cfg-lbl-debut">데뷔 연도</div>
+    <div class="cfg-dslider">
+      <span class="cfg-dval" id="cfg-debut-min-v">2000</span>
+      <div class="cfg-dtrack-wrap">
+        <div class="cfg-dtrack-bg"></div>
+        <div class="cfg-dtrack-fill" id="cfg-debut-fill"></div>
+        <input type="range" class="cfg-thumb" id="cfg-debut-lo" min="2000" max="2025" value="2000" step="1">
+        <input type="range" class="cfg-thumb" id="cfg-debut-hi" min="2000" max="2025" value="2025" step="1">
+      </div>
+      <span class="cfg-dval" id="cfg-debut-max-v">2025</span>
+    </div>
+  </div>
+  <div class="cfg-sec">
+    <div class="cfg-lbl" id="cfg-lbl-bday">멤버 출생연도</div>
+    <div class="cfg-dslider">
+      <span class="cfg-dval" id="cfg-bday-min-v">1985</span>
+      <div class="cfg-dtrack-wrap">
+        <div class="cfg-dtrack-bg"></div>
+        <div class="cfg-dtrack-fill" id="cfg-bday-fill"></div>
+        <input type="range" class="cfg-thumb" id="cfg-bday-lo" min="1985" max="2012" value="1985" step="1">
+        <input type="range" class="cfg-thumb" id="cfg-bday-hi" min="1985" max="2012" value="2012" step="1">
+      </div>
+      <span class="cfg-dval" id="cfg-bday-max-v">2012</span>
+    </div>
+  </div>
+  <div class="cfg-sec">
+    <div class="cfg-lbl" id="cfg-lbl-gender">그룹 유형</div>
+    <div class="cfg-gender">
+      <span class="cfg-gtag sel" data-gender="all" id="cfg-gtag-all">전체</span>
+      <span class="cfg-gtag" data-gender="f" id="cfg-gtag-f">걸그룹</span>
+      <span class="cfg-gtag" data-gender="m" id="cfg-gtag-m">보이그룹</span>
+    </div>
+  </div>
+  <div class="cfg-sec">
+    <div class="cfg-lbl" id="cfg-lbl-active">탈퇴/비활동 멤버</div>
+    <div id="cfg-active-wrap"><span id="cfg-active-lbl">표시</span><div id="cfg-active-sw"><div id="cfg-active-knob"></div></div></div>
+  </div>
+  <button id="cfg-reset">초기화</button>
+</div>
+
+<div id="gc">
+  <div id="gc-bar"></div>
+  <div id="gc-inner">
+    <span id="gcx">×</span>
+    <div id="gc-name"></div>
+    <div id="gc-en"></div>
+    <div id="gc-grid">
+      <div class="row"><span id="gc-lbl-co" class="lbl">소속</span><span id="gc-co" class="val"></span></div>
+      <div class="row"><span id="gc-lbl-debut" class="lbl">데뷔</span><span id="gc-debut" class="val"></span></div>
+      <div class="row"><span id="gc-lbl-cnt" class="lbl">멤버</span><span id="gc-cnt" class="val"></span></div>
+    </div>
+    <div id="gc-tv"></div>
+  </div>
+</div>
+
+<div id="lc">
+  <div id="lc-bar"></div>
+  <div id="lc-inner">
+    <span id="lcx">×</span>
+    <div id="lc-pair">
+      <span id="lc-ma" class="lc-name"></span>
+      <span class="lc-sep">——</span>
+      <span id="lc-mb" class="lc-name"></span>
+    </div>
+    <div id="lc-grp"></div>
+    <div id="lc-links"></div>
+  </div>
+</div>
+
+<div id="tt"><span id="ttx">×</span><div class="tn" id="tn"></div><div class="tg" id="tg"></div><div class="tco" id="tco"></div><div class="tm" id="tm"></div><div id="tv"></div></div>
+
+<div id="yt-modal">
+  <div id="yt-mi">
+    <button id="yt-mc">×</button>
+    <div id="yt-mp"></div>
+    <div id="yt-mf"><a id="yt-mfl" href="" target="_blank">▶ 유튜브에서 보기</a></div>
+    <div id="yt-mt"></div>
+  </div>
+</div>
+
+<script>
+const cv=document.getElementById('cv');
+const ctx=cv.getContext('2d');
+const sw=document.getElementById('lang-sw');
+const knob=document.getElementById('knob');
+const titl=document.getElementById('titl');
+const hint=document.getElementById('hint');
+const tt=document.getElementById('tt');
+const ttx=document.getElementById('ttx');
+let lang='ko';
+
+// ── 세계 좌표계 ──────────────────────────
+// 세계 크기: 6000 x 6000 단위 (정사각형)
+// 메인 구: 중심 (3000,3000), 반지름 2000
+// 레거시 행성: 주변 가장자리
+// wx(x) = x * scale + offsetX  (세계→화면 변환)
+
+const BG=[];
+const PAL=[[210,170,200],[170,200,210],[200,210,170],[210,195,170],[180,170,210],[210,180,165]];
+for(let i=0;i<40;i++)BG.push({x:Math.random()*6000,y:Math.random()*6000,r:100+Math.random()*400,c:PAL[~~(Math.random()*6)],a:.04+Math.random()*.09});
+
+const CO={hybe:{ko:'HYBE',en:'HYBE'},sm:{ko:'SM',en:'SM'},jyp:{ko:'JYP',en:'JYP'},yg:{ko:'YG',en:'YG'},starship:{ko:'Starship',en:'Starship'},s2:{ko:'S2',en:'S2'},themuse:{ko:'더뮤즈',en:'The Muse'},edam:{ko:'EDAM',en:'EDAM'},kq:{ko:'KQ',en:'KQ'},cube:{ko:'Cube',en:'Cube'}};
+
+const C={
+  cortis:[130,192,148],aespa:[148,188,218],ive:[132,152,218],itzy:[175,145,218],
+  newjeans:[120,162,215],svt:[138,195,228],kolof:[228,182,125],nmixx:[218,132,185],
+  skz:[222,192,118],nct127:[215,135,135],nctdream:[135,215,185],wayv:[185,168,222],
+  tws:[178,165,218],nctwish:[218,158,148],rescene:[218,180,158],
+  bigbang:[218,192,135],snsd:[218,175,188],shinee:[148,188,222],
+  bts:[182,152,218],twice:[218,175,165],blackpink:[222,132,172],fx:[162,218,175],iu:[208,155,198],
+  riize:[218,148,158],enhypen:[148,138,218],txt:[138,210,198],redvelvet:[218,148,168],
+  illit:[205,162,215],kiiikiii:[152,215,192],
+  ateez:[218,148,120],gidle:[178,142,218],
+  lesserafim:[155,208,185],babymonster:[210,148,185],
+};
+
+// 행성 (세계 좌표)
+const PLANETS=[
+  {id:'main', cx:3000,cy:3000,r:2000,legacy:false,color:[180,170,160]},
+  // SM 레거시: 오른쪽
+  {id:'snsd',    name:{ko:'소녀시대',en:'SNSD'},    cx:5200,cy:500, r:380,legacy:true,color:C.snsd},
+  {id:'shinee',  name:{ko:'샤이니',en:'SHINee'},   cx:5600,cy:2200,r:360,legacy:true,color:C.shinee},
+  {id:'fx',      name:{ko:'f(x)',en:'f(x)'},       cx:5600,cy:3800,r:320,legacy:true,color:C.fx},
+  // HYBE 레거시: 오른쪽 하단
+  {id:'bts',     name:{ko:'BTS',en:'BTS'},         cx:5000,cy:5400,r:420,legacy:true,color:C.bts},
+  // JYP 레거시: 왼쪽 하단
+  {id:'twice',   name:{ko:'트와이스',en:'TWICE'},   cx:700, cy:5200,r:410,legacy:true,color:C.twice},
+  // YG 레거시: 왼쪽
+  {id:'bigbang', name:{ko:'빅뱅',en:'BIGBANG'},    cx:500, cy:500, r:380,legacy:true,color:C.bigbang},
+  {id:'blackpink',name:{ko:'블랙핑크',en:'BLACKPINK'},cx:700,cy:1500,r:360,legacy:true,color:C.blackpink},
+  // SM 레거시: 레드벨벳
+  {id:'redvelvet',name:{ko:'레드벨벳',en:'Red Velvet'},cx:5400,cy:3050,r:320,legacy:true,color:C.redvelvet},
+  // 솔로
+  {id:'iu',      name:{ko:'아이유',en:'IU'},        cx:3000,cy:200, r:290,legacy:true,color:C.iu},
+];
+
+// 아티스트 (세계 좌표)
+// HYBE 클러스터: 오른쪽 하단 (BTS 방향)
+// SM 클러스터: 오른쪽 상단
+// JYP 클러스터: 왼쪽 하단 (트와이스 방향)
+// 기타: 중앙 상단/좌측
+
+// 그룹 정보
+const GI={
+  '코르티스':{en:'CORTIS',debut:'2024.11.26',co:'HYBE',color:C.cortis,gender:'m',songs:[{t:'REDRED',u:'https://www.youtube.com/watch?v=qSYNCpb0Bzw'},{t:'GO! + FaSHioN',u:'https://www.youtube.com/watch?v=koED8KSXfeo'},{t:'MIC Drop (Steve Aoki Remix)',u:'https://www.youtube.com/watch?v=592Q6lyEvag'}]},
+  '에스파':{en:'aespa',debut:'2020.11.17',co:'SM',color:C.aespa,gender:'f'},
+  '아이브':{en:'IVE',debut:'2021.12.01',co:'Starship',color:C.ive,gender:'f'},
+  '키키':{en:'KiiiKiii',debut:'2025.03.24',co:'Starship',color:C.kiiikiii,gender:'f'},
+  '있지':{en:'ITZY',debut:'2019.02.12',co:'JYP',color:C.itzy,gender:'f'},
+  '뉴진스':{en:'NewJeans',debut:'2022.07.22',co:'HYBE/ADOR',color:C.newjeans,gender:'f',songs:[{t:'Attention',u:'https://www.youtube.com/watch?v=CHp0Kaidr14'},{t:'OMG',u:'https://www.youtube.com/watch?v=1hcdQixxJdA'},{t:'Ditto',u:'https://www.youtube.com/watch?v=jUNz-uTF--E'}]},
+  '세븐틴':{en:'SEVENTEEN',debut:'2015.05.26',co:'HYBE',color:C.svt,gender:'m',songs:[{t:'좋은 사람',u:'https://www.youtube.com/watch?v=UA_t1VBt_GU'}]},
+  '키스오브라이프':{en:'KISS OF LIFE',debut:'2023.07.05',co:'S2',color:C.kolof,gender:'f'},
+  '엔믹스':{en:'NMIXX',debut:'2022.02.22',co:'JYP',color:C.nmixx,gender:'f'},
+  '스트레이키즈':{en:'Stray Kids',debut:'2018.03.25',co:'JYP',color:C.skz,gender:'m'},
+  'NCT 127':{en:'NCT 127',debut:'2016.07.10',co:'SM',color:C.nct127,gender:'m'},
+  'NCT Dream':{en:'NCT Dream',debut:'2016.08.25',co:'SM',color:C.nctdream,gender:'m'},
+  'NCT 127·NCT Dream':{en:'NCT 127·NCT Dream',debut:'2016.07.10',co:'SM',color:C.nct127,gender:'m'},
+  'WayV':{en:'WayV',debut:'2019.01.17',co:'SM / Label V',color:C.wayv,gender:'m'},
+  '투어스':{en:'TWS',debut:'2024.01.22',co:'HYBE',color:C.tws,gender:'m',songs:[{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=9f6AdfijSTg'},{t:'내가 S면 넌 나의 N이 되어줘',u:'https://www.youtube.com/watch?v=HCaUTfs5hlQ'},{t:'OVERDRIVE',u:'https://www.youtube.com/watch?v=VyKb0WWl6k8'}]},
+  'NCT WISH':{en:'NCT WISH',debut:'2024.02.21',co:'SM',color:C.nctwish,gender:'m'},
+  '리센느':{en:'RESCENE',debut:'2024.03.27',co:'더뮤즈',color:C.rescene,gender:'f',songs:[{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=Hv1wQ6nlpNE'},{t:'Deja Vu',u:'https://www.youtube.com/watch?v=2_1YFwGFqys'},{t:'고백주파수',u:'https://www.youtube.com/watch?v=p1asr5bLsl0'}]},
+  '라이즈':{en:'RIIZE',debut:'2023.09.04',co:'SM',color:C.riize,gender:'m'},
+  '엔하이픈':{en:'ENHYPEN',debut:'2020.11.30',co:'HYBE / Belift Lab',color:C.enhypen,gender:'m'},
+  '아일릿':{en:'ILLIT',debut:'2024.03.25',co:'HYBE / Belift Lab',color:C.illit,gender:'f'},
+  'TXT':{en:'TXT',debut:'2019.03.04',co:'HYBE / BigHit',color:C.txt,gender:'m'},
+  'BTS':{en:'BTS',debut:'2013.06.13',co:'HYBE',color:C.bts,gender:'m'},
+  '트와이스':{en:'TWICE',debut:'2015.10.20',co:'JYP',color:C.twice,gender:'f'},
+  '블랙핑크':{en:'BLACKPINK',debut:'2016.08.08',co:'YG',color:C.blackpink,gender:'f'},
+  '빅뱅':{en:'BIGBANG',debut:'2006.08.19',co:'YG',color:C.bigbang,gender:'m'},
+  '소녀시대':{en:'Girls Generation',debut:'2007.08.05',co:'SM',color:C.snsd,gender:'f'},
+  '샤이니':{en:'SHINee',debut:'2008.05.22',co:'SM',color:C.shinee,gender:'m'},
+  '레드벨벳':{en:'Red Velvet',debut:'2014.08.01',co:'SM',color:C.redvelvet,gender:'f'},
+  'f(x)':{en:'f(x)',debut:'2009.09.05',co:'SM',color:C.fx,gender:'f'},
+  '에이티즈':{en:'ATEEZ',debut:'2018.10.24',co:'KQ',color:C.ateez,gender:'m'},
+  '아이들':{en:'(G)I-DLE',debut:'2018.05.02',co:'Cube',color:C.gidle,gender:'f'},
+  '르세라핌':{en:'LE SSERAFIM',debut:'2022.05.02',co:'HYBE / Source Music',color:C.lesserafim,gender:'f'},
+  '베이비몬스터':{en:'BABYMONSTER',debut:'2023.11.27',co:'YG',color:C.babymonster,gender:'f'},
+};
+
+// 그룹 경계 캐시
+let grpCache={};
+let grpLabelCache=[];
+// 그룹 원 충돌 분리용 오프셋 (screen px)
+const grpDelta={};
+function emx(m){const d=grpDelta[`${m.planet}__${m.group.ko}`];return wx(m.x)+(d?d.dx:0);}
+function emy(m){const d=grpDelta[`${m.planet}__${m.group.ko}`];return wy(m.y)+(d?d.dy:0);}
+
+const A=[
+// ── 메인 행성 ──────────────────────────────
+// SM: 오른쪽 | JYP: 왼쪽 | HYBE: 아래 | 독립: 위/대각선
+{name:{ko:'카리나',en:'Karina'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:3494,y:2665,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2000.04.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'WDA 직캠',u:'https://www.youtube.com/watch?v=_Pgr8l7a_KI'}]},
+{name:{ko:'지젤',en:'Giselle'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:3614,y:2645,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2000.10.30',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'윈터',en:'Winter'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:3654,y:2725,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2001.01.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'닝닝',en:'Ningning'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:3534,y:2775,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2002.10.23',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'시온',en:'Sion'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4376,y:3123,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2002.05.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'리쿠',en:'Riku'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4466,y:3103,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2003.06.28',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'유우시',en:'Yuushi'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4556,y:3133,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2004.04.05',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'재희',en:'Jaehee'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4406,y:3223,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2005.06.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'료',en:'Ryo'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4506,y:3223,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2007.08.04',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'사쿠야',en:'Sakuya'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4576,y:3183,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2007.11.18',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'쟈니',en:'Johnny'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4065,y:2755,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1995.02.09',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'태용',en:'Taeyong'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4155,y:2735,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1995.07.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'질주 직캠',u:'https://www.youtube.com/watch?v=fXd-uJUrjK4'}]},
+{name:{ko:'유타',en:'Yuta'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4255,y:2745,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1995.10.26',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'도영',en:'Doyoung'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4315,y:2775,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1996.02.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'재현',en:'Jaehyun'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4085,y:2855,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1997.02.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'정우',en:'Jungwoo'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4195,y:2835,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1998.02.19',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'마크',en:'Mark'},group:{ko:'NCT 127·NCT Dream',en:'NCT 127·NCT Dream'},co:'sm',planet:'main',x:4250,y:2965,sat:0.78,op:0.8,active:false,color:C.nct127,bday:'1999.08.02',nat:{ko:'한국·캐나다',en:'KR·CA'},sparkle:false,songs:[]},
+{name:{ko:'해찬',en:'Haechan'},group:{ko:'NCT 127·NCT Dream',en:'NCT 127·NCT Dream'},co:'sm',planet:'main',x:4150,y:2965,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'2000.06.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'런쥔',en:'Renjun'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:4160,y:3020,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2000.03.23',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'제노',en:'Jeno'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:4260,y:3000,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2000.04.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'재민',en:'Jaemin'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:4320,y:3030,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2000.08.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'천러',en:'Chenle'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:4190,y:3130,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2001.11.22',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'지성',en:'Jisung'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:4290,y:3130,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2002.02.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'쿤',en:'Kun'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4262,y:3655,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1996.01.01',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'텐',en:'Ten'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4342,y:3635,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1996.02.27',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
+{name:{ko:'윈윈',en:'WinWin'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4422,y:3675,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1997.10.28',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'샤오쥔',en:'Xiaojun'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4282,y:3755,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1999.08.08',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'헨드리',en:'Hendery'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4382,y:3755,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1999.09.28',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'양양',en:'Yangyang'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4452,y:3715,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'2000.10.10',nat:{ko:'중국·독일',en:'CN·DE'},sparkle:false,songs:[]},
+{name:{ko:'방찬',en:'Bang Chan'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2536,y:3637,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.10.03',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[]},
+{name:{ko:'이노',en:'Lee Know'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2616,y:3617,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.10.25',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'창빈',en:'Changbin'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2716,y:3637,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.08.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'현진',en:'Hyunjin'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2766,y:3677,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.03.20',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'JJAM 직캠',u:'https://www.youtube.com/watch?v=IgrDN1yOIKY'}]},
+{name:{ko:'한',en:'Han'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2556,y:3757,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.09.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'필릭스',en:'Felix'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2666,y:3777,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.09.15',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[]},
+{name:{ko:'승민',en:'Seungmin'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2756,y:3737,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.09.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'아이엔',en:'I.N'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2626,y:3807,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2001.02.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'예지',en:'Yeji'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:2280,y:3748,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2000.05.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'리아',en:'Lia'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:2360,y:3728,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2000.07.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'류진',en:'Ryujin'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:2440,y:3768,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2001.04.17',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Motto 직캠',u:'https://www.youtube.com/watch?v=g3ndfIRcUhc'}]},
+{name:{ko:'채령',en:'Chaeryeong'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:2320,y:3848,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2001.06.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'유나',en:'Yuna'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:2420,y:3848,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2003.12.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'릴리',en:'Lily'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2019,y:3625,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2003.08.04',nat:{ko:'캐나다',en:'CA'},sparkle:false,songs:[]},
+{name:{ko:'해원',en:'Haewon'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2109,y:3605,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2003.08.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'설윤',en:'Sullyoon'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2199,y:3630,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2004.11.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'배이',en:'Bae'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2049,y:3715,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2005.08.22',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[]},
+{name:{ko:'지우',en:'Jiwoo'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2139,y:3715,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2006.10.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'규진',en:'Kyujin'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2209,y:3680,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2006.11.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'S.COUPS',en:'S.COUPS'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3045,y:3639,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1995.08.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'정한',en:'Jeonghan'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3125,y:3619,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1995.10.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'조슈아',en:'Joshua'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3205,y:3619,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1995.12.30',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'준',en:'Jun'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3285,y:3639,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.06.10',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'호시',en:'Hoshi'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3365,y:3669,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.06.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'MAESTRO 직캠',u:'https://www.youtube.com/watch?v=4r00ps3AtaU'}]},
+{name:{ko:'원우',en:'Wonwoo'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3425,y:3699,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.07.17',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'우지',en:'Woozi'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3045,y:3739,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.11.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'도겸',en:'DK'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3125,y:3729,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1997.02.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'민규',en:'Mingyu'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3205,y:3729,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1997.04.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'승관',en:'Seungkwan'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3285,y:3749,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1998.01.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'버논',en:'Vernon'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3365,y:3769,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1998.02.18',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'디노',en:'Dino'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3145,y:3809,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1999.02.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'신유',en:'Shinyu'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2800,y:3860,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2003.11.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=BtFPgl0tC0k'},{t:'Oh Mymy : 7s',u:'https://www.youtube.com/watch?v=jTQyctuLb_4'},{t:'Rock with you',u:'https://www.youtube.com/watch?v=kQem0PeYcvs'}]},
+{name:{ko:'도훈',en:'Dohoon'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2880,y:3840,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2005.01.30',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Run Run',u:'https://www.youtube.com/watch?v=EhDIY4FjCeU'},{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=KPd460eDrWs'},{t:'OVERDRIVE',u:'https://www.youtube.com/watch?v=XpadVtyPogs'}]},
+{name:{ko:'영재',en:'Youngjae'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2960,y:3870,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2005.05.31',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'너의 모든 가능성이 되어줄게',u:'https://www.youtube.com/watch?v=U5QNHCyKvXI'},{t:'다시 만난 오늘',u:'https://www.youtube.com/watch?v=Y_1mhDE_fX0'},{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=OYK9DHYPXDw'}]},
+{name:{ko:'한진',en:'Hanjin'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2810,y:3960,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2006.01.05',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=WxDm3oin7lk'},{t:'Oh Mymy : 7s',u:'https://www.youtube.com/watch?v=m9J7C7yrA9w'},{t:'내가 S면 넌 나의 N이 되어줘',u:'https://www.youtube.com/watch?v=X-DLqSIv3YA'}]},
+{name:{ko:'지훈',en:'Jihoon'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2910,y:3960,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2006.04.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'마음 따라 뛰는 건 멋지지 않아?',u:'https://www.youtube.com/watch?v=Ma_JErDCfBM'},{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=uJnPpGXEEf4'},{t:'내가 S면 넌 나의 N이 되어줘',u:'https://www.youtube.com/watch?v=BzSV1_K-P7A'}]},
+{name:{ko:'경민',en:'Kyungmin'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2980,y:3920,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2007.09.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=TJxdabTKRQc'},{t:'はじめまして',u:'https://www.youtube.com/watch?v=zVjxDvjt36A'},{t:'BFF',u:'https://www.youtube.com/watch?v=UMcSD3KHeLQ'}]},
+{name:{ko:'민지',en:'Minji'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:2541,y:4147,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2004.05.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Odoriko (踊り子)',u:'https://www.youtube.com/watch?v=9ninWlkEthY'},{t:'Attention',u:'https://www.youtube.com/watch?v=ZzU1TNHWWhM'},{t:'Hype Boy',u:'https://www.youtube.com/watch?v=p1cE9T0CFCQ'}]},
+{name:{ko:'하니',en:'Hanni'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:2641,y:4137,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2004.10.06',nat:{ko:'베트남',en:'VN'},sparkle:false,songs:[{t:'푸른 산호초 (青い珊瑚礁)',u:'https://www.youtube.com/watch?v=Rj7N4ThLGQY'},{t:'Hype Boy',u:'https://www.youtube.com/watch?v=lmJPeFW75qQ'},{t:'New Jeans',u:'https://www.youtube.com/watch?v=tQ8YtKBqaMc'}]},
+{name:{ko:'해린',en:'Haerin'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:2531,y:4237,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2006.05.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Hype Boy',u:'https://www.youtube.com/watch?v=zbyet4HK4ko'},{t:'Tell Me',u:'https://www.youtube.com/watch?v=g6gM8x9H65Q'},{t:'Cookie',u:'https://www.youtube.com/watch?v=GyqqpCOyBos'}]},
+{name:{ko:'혜인',en:'Hyein'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:2651,y:4237,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2008.04.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Hype Boy',u:'https://www.youtube.com/watch?v=lg6O00c0dGU'},{t:'New Jeans',u:'https://www.youtube.com/watch?v=Wz_mVys9Z4w'},{t:'Attention',u:'https://www.youtube.com/watch?v=gwXFWPZAxME'}]},
+{name:{ko:'다니엘',en:'Danielle'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:2731,y:4187,sat:0.70,op:0.42,active:false,color:C.newjeans,bday:'2005.04.11',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[{t:'Hype Boy',u:'https://www.youtube.com/watch?v=v5UH3wTPbzw'},{t:'OMG',u:'https://www.youtube.com/watch?v=NDTuPvEvVRI'},{t:'Ditto',u:'https://www.youtube.com/watch?v=tPKmJMEg2do'}]},
+{name:{ko:'마틴',en:'Martin'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:3567,y:4147,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2008.03.20',nat:{ko:'한국·캐나다',en:'KR·CA'},sparkle:false,songs:[{t:'GO!',u:'https://www.youtube.com/watch?v=tWOItSAfA4M'},{t:'REDRED',u:'https://www.youtube.com/watch?v=2LDdWZOK34c'},{t:'What You Want',u:'https://www.youtube.com/watch?v=2azvJj4u5D4'}]},
+{name:{ko:'제임스',en:'James'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:3697,y:4127,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2005.10.14',nat:{ko:'대만',en:'TW'},sparkle:false,songs:[{t:'FaSHioN',u:'https://www.youtube.com/watch?v=twqghto0qZs'},{t:'REDRED',u:'https://www.youtube.com/watch?v=xZBxf0BhMV8'},{t:'ACAI',u:'https://www.youtube.com/watch?v=JlTb7tJbA8U'}]},
+{name:{ko:'주훈',en:'Juhoon'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:3607,y:4227,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2008.01.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'REDRED',u:'https://www.youtube.com/watch?v=a8PVi1KsIoc'},{t:'FaSHioN',u:'https://www.youtube.com/watch?v=vVPM4nZvGWg'},{t:'GO!',u:'https://www.youtube.com/watch?v=yYUTq-7Ttb4'}]},
+{name:{ko:'성현',en:'Seonghyeon'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:3707,y:4207,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2009.01.13',nat:{ko:'한국',en:'KR'},sparkle:true,songs:[{t:'REDRED',u:'https://www.youtube.com/watch?v=pXbO-QQJsxM'},{t:'FaSHioN',u:'https://www.youtube.com/watch?v=A7CRAA9Ztkw'},{t:'GO!',u:'https://www.youtube.com/watch?v=2Li7-6iraJE'}]},
+{name:{ko:'건호',en:'Geonho'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:3647,y:4257,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2009.02.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'GO!',u:'https://www.youtube.com/watch?v=93iJLm0kUAU'},{t:'REDRED',u:'https://www.youtube.com/watch?v=cxcxx0f6caM'},{t:'FaSHioN',u:'https://www.youtube.com/watch?v=kPjbIP7kaqs'}]},
+{name:{ko:'안유진',en:'Yujin'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3070,y:2280,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2003.09.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'가을',en:'Gaeul'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3170,y:2260,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2002.09.24',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'레이',en:'Rei'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3270,y:2290,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2004.02.03',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'장원영',en:'Wonyoung'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3110,y:2385,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2004.08.31',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'BLACKHOLE 직캠',u:'https://www.youtube.com/watch?v=7mum1Qu4J64'}]},
+{name:{ko:'리즈',en:'Liz'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3210,y:2385,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2004.11.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'이서',en:'Leeseo'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3300,y:2350,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2007.02.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'이솔',en:'Leesol'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:3090,y:1850,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2005.09.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'지유',en:'Jiyu'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:3175,y:1835,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2006.05.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'수이',en:'Sui'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:3250,y:1855,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2006.04.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'하음',en:'Haum'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:3120,y:1940,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2006.11.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'키야',en:'Kya'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:3210,y:1935,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2010.12.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'원이',en:'Woni'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:1796,y:2009,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2004.05.25',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=geAne2rrf7Q'},{t:'Deja Vu',u:'https://www.youtube.com/watch?v=a2OHT0Bi5lE'},{t:'Pinball',u:'https://www.youtube.com/watch?v=YAmTgcLa-80'}]},
+{name:{ko:'리브',en:'Liv'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:1906,y:1999,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2006.10.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=Xc8zNkCwGC0'},{t:'Glow Up',u:'https://www.youtube.com/watch?v=Lo1CTBTXda8'},{t:'Deja Vu',u:'https://www.youtube.com/watch?v=dwGvBIkURR0'}]},
+{name:{ko:'미나미',en:'Minami'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:1946,y:2069,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2006.11.29',nat:{ko:'일본',en:'JP'},sparkle:true,songs:[{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=3lONVqtRXAI'},{t:'다시 만난 세계',u:'https://www.youtube.com/watch?v=XA1cVAlrid4'},{t:'Runaway',u:'https://www.youtube.com/watch?v=ZJGzCkV_RGg'}]},
+{name:{ko:'메이',en:'May'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:1826,y:2109,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2008.08.19',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'다시 만난 세계',u:'https://www.youtube.com/watch?v=GX4I0MyI6I0'},{t:'Glow Up',u:'https://www.youtube.com/watch?v=hlyhddaC6qg'},{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=h7zcNExoSKM'}]},
+{name:{ko:'제나',en:'Zena'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:1926,y:2109,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2008.11.27',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Deja Vu',u:'https://www.youtube.com/watch?v=maQWa95XlLE'},{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=vJkC_NveL08'},{t:'Glow Up',u:'https://www.youtube.com/watch?v=jRfTKjK-mmY'}]},
+{name:{ko:'쥴리',en:'Julie'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:1675,y:3544,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2000.03.29',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'나띠',en:'Natty'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:1795,y:3534,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2002.05.30',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[{t:'Who is she 직캠',u:'https://www.youtube.com/watch?v=Z9rYx1b4yjU'}]},
+{name:{ko:'벨',en:'Belle'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:1815,y:3624,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2004.03.20',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'하늘',en:'Haneul'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:1695,y:3644,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2005.05.25',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+
+// ── 에이티즈 ──
+{name:{ko:'홍중',en:'Hongjoong'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2180,y:3132,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1998.11.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'성화',en:'Seonghwa'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2270,y:3112,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1998.04.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'윤호',en:'Yunho'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2360,y:3132,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.03.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'여상',en:'Yeosang'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2445,y:3152,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.06.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'산',en:'San'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2195,y:3242,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.07.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'민기',en:'Mingi'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2285,y:3232,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.08.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'우영',en:'Wooyoung'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2375,y:3247,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.11.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'종호',en:'Jongho'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2455,y:3222,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'2000.09.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+
+// ── (여자)아이들 ──
+{name:{ko:'소연',en:'Soyeon'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2323,y:2398,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1998.08.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'미연',en:'Miyeon'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2413,y:2378,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1997.01.31',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'민니',en:'Minnie'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2498,y:2408,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1997.10.23',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
+{name:{ko:'수진',en:'Soojin'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2358,y:2498,sat:0.70,op:0.45,active:false,color:C.gidle,bday:'1998.03.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'우기',en:'Yuqi'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2443,y:2513,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1999.09.23',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'슈화',en:'Shuhua'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2528,y:2503,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'2000.10.10',nat:{ko:'대만',en:'TW'},sparkle:false,songs:[]},
+
+// ── 신규 추가 ──
+{name:{ko:'성찬',en:'Sungchan'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3930,y:2460,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2001.09.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'은석',en:'Eunseok'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3710,y:2450,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2001.01.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'쇼타로',en:'Shotaro'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3950,y:2535,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2000.11.25',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'원빈',en:'Wonbin'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3810,y:2430,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2002.02.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'승한',en:'Seunghan'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3880,y:2450,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2003.04.02',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'소희',en:'Sohee'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3750,y:2540,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2003.04.17',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'앤톤',en:'Anton'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3855,y:2525,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2004.11.21',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'연준',en:'Yeonjun'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:3625,y:3940,sat:0.78,op:0.8,active:true,color:C.txt,bday:'1999.09.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'수빈',en:'Soobin'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:3705,y:3920,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2000.12.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'범규',en:'Beomgyu'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:3785,y:3950,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2001.03.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'태현',en:'Taehyun'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:3665,y:4050,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2002.02.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'휴닝카이',en:'Huening Kai'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:3765,y:4050,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2002.08.14',nat:{ko:'한국·독일·미국',en:'KR·DE·US'},sparkle:false,songs:[]},
+{name:{ko:'희승',en:'Heeseung'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3149,y:4106,sat:0.78,op:0.8,active:false,color:C.enhypen,bday:'2001.10.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'제이',en:'Jay'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3219,y:4086,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2002.04.20',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'제이크',en:'Jake'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3299,y:4106,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2002.11.15',nat:{ko:'호주',en:'AU'},sparkle:false,songs:[]},
+{name:{ko:'성훈',en:'Sunghoon'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3359,y:4136,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2002.12.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'선우',en:'Sunoo'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3169,y:4226,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2003.06.24',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'정원',en:'Jungwon'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3279,y:4236,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2004.02.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'니키',en:'Ni-Ki'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3349,y:4206,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2005.12.09',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'윤아',en:'Yunah'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:2900,y:4150,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2004.01.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'민주',en:'Minju'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:2980,y:4130,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2004.05.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'모카',en:'Moka'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:3060,y:4155,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2004.10.08',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'원희',en:'Wonhee'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:2920,y:4250,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2007.06.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'이로하',en:'Iroha'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:3020,y:4250,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2008.12.21',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+
+// ── 르세라핌 ──
+{name:{ko:'사쿠라',en:'Sakura'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3405,y:3970,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'1998.03.19',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'김채원',en:'Chaewon'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3495,y:3952,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2000.08.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'허윤진',en:'Yunjin'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3572,y:3978,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2001.10.08',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'카즈하',en:'Kazuha'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3422,y:4068,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2003.08.09',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'홍은채',en:'Eunchae'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3527,y:4073,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2006.11.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'김가람',en:'Garam'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3468,y:4022,sat:0.70,op:0.42,active:false,color:C.lesserafim,bday:'2004.10.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+
+// ── 베이비몬스터 ──
+{name:{ko:'루카',en:'Ruka'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2099,y:2052,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2004.11.25',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'파리타',en:'Pharita'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2189,y:2032,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2004.03.03',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
+{name:{ko:'아사',en:'Ahyeon'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2279,y:2058,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2006.04.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'치키타',en:'Chiquita'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2111,y:2147,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2005.01.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'라미',en:'Rami'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2207,y:2162,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2004.09.28',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'로라',en:'Rora'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2291,y:2142,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2007.04.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'하나',en:'Hana'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2227,y:2110,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2007.04.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+
+{name:{ko:'아이린',en:'Irene'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:5320,y:3000,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1991.03.29',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'슬기',en:'Seulgi'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:5400,y:2980,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1994.02.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'웬디',en:'Wendy'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:5480,y:3010,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1994.02.21',nat:{ko:'한국·캐나다',en:'KR·CA'},sparkle:false,songs:[]},
+{name:{ko:'조이',en:'Joy'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:5360,y:3120,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1996.09.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'예리',en:'Yeri'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:5460,y:3120,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1999.03.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+// ── 레거시 행성 ──────────────────────────────
+{name:{ko:'태연',en:'Taeyeon'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5060,y:440,sat:.92,op:.82,active:true,color:C.snsd,bday:'1989.03.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'써니',en:'Sunny'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5160,y:420,sat:.72,op:.70,active:true,color:C.snsd,bday:'1989.05.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'효연',en:'Hyoyeon'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5260,y:440,sat:.70,op:.68,active:true,color:C.snsd,bday:'1989.09.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'유리',en:'Yuri'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5300,y:500,sat:.74,op:.70,active:true,color:C.snsd,bday:'1989.12.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'수영',en:'Sooyoung'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5200,y:540,sat:.72,op:.70,active:true,color:C.snsd,bday:'1990.02.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'윤아',en:'Yoona'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5080,y:520,sat:.80,op:.75,active:true,color:C.snsd,bday:'1990.05.30',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'서현',en:'Seohyun'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5240,y:580,sat:.70,op:.68,active:true,color:C.snsd,bday:'1991.06.28',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'온유',en:'Onew'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:5500,y:2140,sat:.88,op:.80,active:true,color:C.shinee,bday:'1989.12.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'키',en:'Key'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:5620,y:2120,sat:.85,op:.78,active:true,color:C.shinee,bday:'1991.09.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'민호',en:'Minho'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:5720,y:2180,sat:.80,op:.76,active:true,color:C.shinee,bday:'1991.12.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'태민',en:'Taemin'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:5660,y:2280,sat:.95,op:.85,active:true,color:C.shinee,bday:'1993.07.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'종현',en:'Jonghyun'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:5520,y:2260,sat:.92,op:.35,active:false,color:C.shinee,bday:'1990.04.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'빅토리아',en:'Victoria'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:5480,y:3740,sat:.75,op:.50,active:false,color:C.fx,bday:'1987.02.02',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'앰버',en:'Amber'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:5620,y:3720,sat:.78,op:.55,active:false,color:C.fx,bday:'1992.09.18',nat:{ko:'미국',en:'US'},sparkle:false,songs:[]},
+{name:{ko:'루나',en:'Luna'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:5640,y:3840,sat:.72,op:.50,active:false,color:C.fx,bday:'1993.08.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'크리스탈',en:'Krystal'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:5500,y:3860,sat:.80,op:.55,active:false,color:C.fx,bday:'1994.10.24',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'RM',en:'RM'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:4860,y:5320,sat:.85,op:.78,active:true,color:C.bts,bday:'1994.09.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'진',en:'Jin'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:4980,y:5280,sat:.75,op:.76,active:true,color:C.bts,bday:'1992.12.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'슈가',en:'Suga'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:5100,y:5300,sat:.80,op:.78,active:true,color:C.bts,bday:'1993.03.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'제이홉',en:'J-Hope'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:5160,y:5400,sat:.78,op:.76,active:true,color:C.bts,bday:'1994.02.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'지민',en:'Jimin'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:5020,y:5480,sat:.72,op:.80,active:true,color:C.bts,bday:'1995.10.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'뷔',en:'V'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:4880,y:5460,sat:.76,op:.78,active:true,color:C.bts,bday:'1995.12.30',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'정국',en:'Jungkook'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:4960,y:5540,sat:.70,op:.82,active:true,color:C.bts,bday:'1997.09.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'나연',en:'Nayeon'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:560,y:5100,sat:.80,op:.78,active:true,color:C.twice,bday:'1995.09.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'정연',en:'Jeongyeon'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:680,y:5060,sat:.75,op:.75,active:true,color:C.twice,bday:'1996.09.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'모모',en:'Momo'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:800,y:5100,sat:.78,op:.76,active:true,color:C.twice,bday:'1996.11.09',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'사나',en:'Sana'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:860,y:5200,sat:.76,op:.76,active:true,color:C.twice,bday:'1996.12.29',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'지효',en:'Jihyo'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:700,y:5260,sat:.82,op:.78,active:true,color:C.twice,bday:'1997.02.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'미나',en:'Mina'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:580,y:5200,sat:.78,op:.74,active:true,color:C.twice,bday:'1997.03.24',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'다현',en:'Dahyun'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:620,y:5320,sat:.72,op:.72,active:true,color:C.twice,bday:'1998.05.28',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'채영',en:'Chaeyoung'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:780,y:5320,sat:.75,op:.73,active:true,color:C.twice,bday:'1999.04.23',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'쯔위',en:'Tzuyu'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:720,y:5400,sat:.80,op:.76,active:true,color:C.twice,bday:'2000.06.14',nat:{ko:'대만',en:'TW'},sparkle:false,songs:[]},
+{name:{ko:'GD',en:'G-Dragon'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:400,y:420,sat:.92,op:.80,active:true,color:C.bigbang,bday:'1988.08.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'태양',en:'Taeyang'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:540,y:400,sat:.78,op:.50,active:false,color:C.bigbang,bday:'1988.05.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'탑',en:'T.O.P'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:600,y:500,sat:.60,op:.35,active:false,color:C.bigbang,bday:'1987.11.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'대성',en:'Daesung'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:440,y:580,sat:.68,op:.50,active:false,color:C.bigbang,bday:'1989.04.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'지수',en:'Jisoo'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:600,y:1420,sat:.85,op:.80,active:true,color:C.blackpink,bday:'1995.01.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'제니',en:'Jennie'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:740,y:1400,sat:.88,op:.82,active:true,color:C.blackpink,bday:'1996.01.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'로제',en:'Rosé'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:780,y:1540,sat:.85,op:.80,active:true,color:C.blackpink,bday:'1997.02.11',nat:{ko:'한국·NZ',en:'KR·NZ'},sparkle:false,songs:[]},
+{name:{ko:'리사',en:'Lisa'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:620,y:1580,sat:.90,op:.82,active:true,color:C.blackpink,bday:'1997.03.27',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
+{name:{ko:'아이유',en:'IU'},group:{ko:'솔로',en:'Solo'},co:'edam',planet:'iu',x:3000,y:200,sat:.95,op:.85,active:true,color:C.iu,bday:'1993.05.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LILAC',u:'https://www.youtube.com/watch?v=A-Bd5NnUMNk'},{t:'Celebrity',u:'https://www.youtube.com/watch?v=6oanIo_9Z4M'},{t:'Strawberry Moon',u:'https://www.youtube.com/watch?v=UY4ZCgkTHpQ'}]},
+];
+
+// 연결선 데이터 — 개별 멤버 기반
+// type: 'member'(그룹색 실선 얇게), 'collab'(실선), 'stage'(짧은점선), 'challenge'(점선옅게)
+// ※ 소녀시대 윤아는 아일릿 윤아와 동명 → en명 'Yoona' 사용
+const CONN=[
+  // ── SM ─────────────────────────────────────────
+  // 에스파
+  {a:'카리나',b:'지젤',type:'member'},{a:'카리나',b:'윈터',type:'member'},{a:'카리나',b:'닝닝',type:'member'},
+  {a:'지젤',b:'윈터',type:'member'},{a:'지젤',b:'닝닝',type:'member'},
+  {a:'윈터',b:'닝닝',type:'member'},
+  // NCT WISH
+  {a:'시온',b:'리쿠',type:'member'},{a:'시온',b:'유우시',type:'member'},{a:'시온',b:'재희',type:'member'},{a:'시온',b:'료',type:'member'},{a:'시온',b:'사쿠야',type:'member'},
+  {a:'리쿠',b:'유우시',type:'member'},{a:'리쿠',b:'재희',type:'member'},{a:'리쿠',b:'료',type:'member'},{a:'리쿠',b:'사쿠야',type:'member'},
+  {a:'유우시',b:'재희',type:'member'},{a:'유우시',b:'료',type:'member'},{a:'유우시',b:'사쿠야',type:'member'},
+  {a:'재희',b:'료',type:'member'},{a:'재희',b:'사쿠야',type:'member'},
+  {a:'료',b:'사쿠야',type:'member'},
+  // NCT 127
+  {a:'쟈니',b:'태용',type:'member'},{a:'쟈니',b:'유타',type:'member'},{a:'쟈니',b:'도영',type:'member'},{a:'쟈니',b:'재현',type:'member'},{a:'쟈니',b:'정우',type:'member'},
+  {a:'태용',b:'유타',type:'member'},{a:'태용',b:'도영',type:'member'},{a:'태용',b:'재현',type:'member'},{a:'태용',b:'정우',type:'member'},
+  {a:'유타',b:'도영',type:'member'},{a:'유타',b:'재현',type:'member'},{a:'유타',b:'정우',type:'member'},
+  {a:'도영',b:'재현',type:'member'},{a:'도영',b:'정우',type:'member'},
+  {a:'재현',b:'정우',type:'member'},
+  // NCT 127·NCT Dream 교집합
+  {a:'마크',b:'해찬',type:'member'},
+  // 마크·해찬 ↔ NCT 127
+  {a:'마크',b:'쟈니',type:'member'},{a:'마크',b:'태용',type:'member'},{a:'마크',b:'유타',type:'member'},{a:'마크',b:'도영',type:'member'},{a:'마크',b:'재현',type:'member'},{a:'마크',b:'정우',type:'member'},
+  {a:'해찬',b:'쟈니',type:'member'},{a:'해찬',b:'태용',type:'member'},{a:'해찬',b:'유타',type:'member'},{a:'해찬',b:'도영',type:'member'},{a:'해찬',b:'재현',type:'member'},{a:'해찬',b:'정우',type:'member'},
+  // 마크·해찬 ↔ NCT Dream
+  {a:'마크',b:'런쥔',type:'member'},{a:'마크',b:'제노',type:'member'},{a:'마크',b:'재민',type:'member'},{a:'마크',b:'천러',type:'member'},{a:'마크',b:'지성',type:'member'},
+  {a:'해찬',b:'런쥔',type:'member'},{a:'해찬',b:'제노',type:'member'},{a:'해찬',b:'재민',type:'member'},{a:'해찬',b:'천러',type:'member'},{a:'해찬',b:'지성',type:'member'},
+  // NCT Dream
+  {a:'런쥔',b:'제노',type:'member'},{a:'런쥔',b:'재민',type:'member'},{a:'런쥔',b:'천러',type:'member'},{a:'런쥔',b:'지성',type:'member'},
+  {a:'제노',b:'재민',type:'member'},{a:'제노',b:'천러',type:'member'},{a:'제노',b:'지성',type:'member'},
+  {a:'재민',b:'천러',type:'member'},{a:'재민',b:'지성',type:'member'},
+  {a:'천러',b:'지성',type:'member'},
+  // WayV
+  {a:'쿤',b:'텐',type:'member'},{a:'쿤',b:'윈윈',type:'member'},{a:'쿤',b:'샤오쥔',type:'member'},{a:'쿤',b:'헨드리',type:'member'},{a:'쿤',b:'양양',type:'member'},
+  {a:'텐',b:'윈윈',type:'member'},{a:'텐',b:'샤오쥔',type:'member'},{a:'텐',b:'헨드리',type:'member'},{a:'텐',b:'양양',type:'member'},
+  {a:'윈윈',b:'샤오쥔',type:'member'},{a:'윈윈',b:'헨드리',type:'member'},{a:'윈윈',b:'양양',type:'member'},
+  {a:'샤오쥔',b:'헨드리',type:'member'},{a:'샤오쥔',b:'양양',type:'member'},
+  {a:'헨드리',b:'양양',type:'member'},
+  // 라이즈
+  {a:'성찬',b:'은석',type:'member'},{a:'성찬',b:'쇼타로',type:'member'},{a:'성찬',b:'원빈',type:'member'},{a:'성찬',b:'승한',type:'member'},{a:'성찬',b:'소희',type:'member'},{a:'성찬',b:'앤톤',type:'member'},
+  {a:'은석',b:'쇼타로',type:'member'},{a:'은석',b:'원빈',type:'member'},{a:'은석',b:'승한',type:'member'},{a:'은석',b:'소희',type:'member'},{a:'은석',b:'앤톤',type:'member'},
+  {a:'쇼타로',b:'원빈',type:'member'},{a:'쇼타로',b:'승한',type:'member'},{a:'쇼타로',b:'소희',type:'member'},{a:'쇼타로',b:'앤톤',type:'member'},
+  {a:'원빈',b:'승한',type:'member'},{a:'원빈',b:'소희',type:'member'},{a:'원빈',b:'앤톤',type:'member'},
+  {a:'승한',b:'소희',type:'member'},{a:'승한',b:'앤톤',type:'member'},
+  {a:'소희',b:'앤톤',type:'member'},
+  // 레드벨벳
+  {a:'아이린',b:'슬기',type:'member'},{a:'아이린',b:'웬디',type:'member'},{a:'아이린',b:'조이',type:'member'},{a:'아이린',b:'예리',type:'member'},
+  {a:'슬기',b:'웬디',type:'member'},{a:'슬기',b:'조이',type:'member'},{a:'슬기',b:'예리',type:'member'},
+  {a:'웬디',b:'조이',type:'member'},{a:'웬디',b:'예리',type:'member'},
+  {a:'조이',b:'예리',type:'member'},
+  // 소녀시대 (윤아→'Yoona' 사용)
+  {a:'태연',b:'써니',type:'member'},{a:'태연',b:'효연',type:'member'},{a:'태연',b:'유리',type:'member'},{a:'태연',b:'수영',type:'member'},{a:'태연',b:'Yoona',type:'member'},{a:'태연',b:'서현',type:'member'},
+  {a:'써니',b:'효연',type:'member'},{a:'써니',b:'유리',type:'member'},{a:'써니',b:'수영',type:'member'},{a:'써니',b:'Yoona',type:'member'},{a:'써니',b:'서현',type:'member'},
+  {a:'효연',b:'유리',type:'member'},{a:'효연',b:'수영',type:'member'},{a:'효연',b:'Yoona',type:'member'},{a:'효연',b:'서현',type:'member'},
+  {a:'유리',b:'수영',type:'member'},{a:'유리',b:'Yoona',type:'member'},{a:'유리',b:'서현',type:'member'},
+  {a:'수영',b:'Yoona',type:'member'},{a:'수영',b:'서현',type:'member'},
+  {a:'Yoona',b:'서현',type:'member'},
+  // 샤이니
+  {a:'온유',b:'키',type:'member'},{a:'온유',b:'민호',type:'member'},{a:'온유',b:'태민',type:'member'},{a:'온유',b:'종현',type:'member'},
+  {a:'키',b:'민호',type:'member'},{a:'키',b:'태민',type:'member'},{a:'키',b:'종현',type:'member'},
+  {a:'민호',b:'태민',type:'member'},{a:'민호',b:'종현',type:'member'},
+  {a:'태민',b:'종현',type:'member'},
+  // f(x)
+  {a:'빅토리아',b:'앰버',type:'member'},{a:'빅토리아',b:'루나',type:'member'},{a:'빅토리아',b:'크리스탈',type:'member'},
+  {a:'앰버',b:'루나',type:'member'},{a:'앰버',b:'크리스탈',type:'member'},
+  {a:'루나',b:'크리스탈',type:'member'},
+  // ── JYP ────────────────────────────────────────
+  // 스트레이키즈
+  {a:'방찬',b:'이노',type:'member'},{a:'방찬',b:'창빈',type:'member'},{a:'방찬',b:'현진',type:'member'},{a:'방찬',b:'한',type:'member'},{a:'방찬',b:'필릭스',type:'member'},{a:'방찬',b:'승민',type:'member'},{a:'방찬',b:'아이엔',type:'member'},
+  {a:'이노',b:'창빈',type:'member'},{a:'이노',b:'현진',type:'member'},{a:'이노',b:'한',type:'member'},{a:'이노',b:'필릭스',type:'member'},{a:'이노',b:'승민',type:'member'},{a:'이노',b:'아이엔',type:'member'},
+  {a:'창빈',b:'현진',type:'member'},{a:'창빈',b:'한',type:'member'},{a:'창빈',b:'필릭스',type:'member'},{a:'창빈',b:'승민',type:'member'},{a:'창빈',b:'아이엔',type:'member'},
+  {a:'현진',b:'한',type:'member'},{a:'현진',b:'필릭스',type:'member'},{a:'현진',b:'승민',type:'member'},{a:'현진',b:'아이엔',type:'member'},
+  {a:'한',b:'필릭스',type:'member'},{a:'한',b:'승민',type:'member'},{a:'한',b:'아이엔',type:'member'},
+  {a:'필릭스',b:'승민',type:'member'},{a:'필릭스',b:'아이엔',type:'member'},
+  {a:'승민',b:'아이엔',type:'member'},
+  // 있지
+  {a:'예지',b:'리아',type:'member'},{a:'예지',b:'류진',type:'member'},{a:'예지',b:'채령',type:'member'},{a:'예지',b:'유나',type:'member'},
+  {a:'리아',b:'류진',type:'member'},{a:'리아',b:'채령',type:'member'},{a:'리아',b:'유나',type:'member'},
+  {a:'류진',b:'채령',type:'member'},{a:'류진',b:'유나',type:'member'},
+  {a:'채령',b:'유나',type:'member'},
+  // 엔믹스
+  {a:'릴리',b:'해원',type:'member'},{a:'릴리',b:'설윤',type:'member'},{a:'릴리',b:'배이',type:'member'},{a:'릴리',b:'지우',type:'member'},{a:'릴리',b:'규진',type:'member'},
+  {a:'해원',b:'설윤',type:'member'},{a:'해원',b:'배이',type:'member'},{a:'해원',b:'지우',type:'member'},{a:'해원',b:'규진',type:'member'},
+  {a:'설윤',b:'배이',type:'member'},{a:'설윤',b:'지우',type:'member'},{a:'설윤',b:'규진',type:'member'},
+  {a:'배이',b:'지우',type:'member'},{a:'배이',b:'규진',type:'member'},
+  {a:'지우',b:'규진',type:'member'},
+  // 트와이스
+  {a:'나연',b:'정연',type:'member'},{a:'나연',b:'모모',type:'member'},{a:'나연',b:'사나',type:'member'},{a:'나연',b:'지효',type:'member'},{a:'나연',b:'미나',type:'member'},{a:'나연',b:'다현',type:'member'},{a:'나연',b:'채영',type:'member'},{a:'나연',b:'쯔위',type:'member'},
+  {a:'정연',b:'모모',type:'member'},{a:'정연',b:'사나',type:'member'},{a:'정연',b:'지효',type:'member'},{a:'정연',b:'미나',type:'member'},{a:'정연',b:'다현',type:'member'},{a:'정연',b:'채영',type:'member'},{a:'정연',b:'쯔위',type:'member'},
+  {a:'모모',b:'사나',type:'member'},{a:'모모',b:'지효',type:'member'},{a:'모모',b:'미나',type:'member'},{a:'모모',b:'다현',type:'member'},{a:'모모',b:'채영',type:'member'},{a:'모모',b:'쯔위',type:'member'},
+  {a:'사나',b:'지효',type:'member'},{a:'사나',b:'미나',type:'member'},{a:'사나',b:'다현',type:'member'},{a:'사나',b:'채영',type:'member'},{a:'사나',b:'쯔위',type:'member'},
+  {a:'지효',b:'미나',type:'member'},{a:'지효',b:'다현',type:'member'},{a:'지효',b:'채영',type:'member'},{a:'지효',b:'쯔위',type:'member'},
+  {a:'미나',b:'다현',type:'member'},{a:'미나',b:'채영',type:'member'},{a:'미나',b:'쯔위',type:'member'},
+  {a:'다현',b:'채영',type:'member'},{a:'다현',b:'쯔위',type:'member'},
+  {a:'채영',b:'쯔위',type:'member'},
+  // ── HYBE ───────────────────────────────────────
+  // 세븐틴
+  {a:'S.COUPS',b:'정한',type:'member'},{a:'S.COUPS',b:'조슈아',type:'member'},{a:'S.COUPS',b:'준',type:'member'},{a:'S.COUPS',b:'호시',type:'member'},{a:'S.COUPS',b:'원우',type:'member'},{a:'S.COUPS',b:'우지',type:'member'},{a:'S.COUPS',b:'도겸',type:'member'},{a:'S.COUPS',b:'민규',type:'member'},{a:'S.COUPS',b:'승관',type:'member'},{a:'S.COUPS',b:'버논',type:'member'},{a:'S.COUPS',b:'디노',type:'member'},
+  {a:'정한',b:'조슈아',type:'member'},{a:'정한',b:'준',type:'member'},{a:'정한',b:'호시',type:'member'},{a:'정한',b:'원우',type:'member'},{a:'정한',b:'우지',type:'member'},{a:'정한',b:'도겸',type:'member'},{a:'정한',b:'민규',type:'member'},{a:'정한',b:'승관',type:'member'},{a:'정한',b:'버논',type:'member'},{a:'정한',b:'디노',type:'member'},
+  {a:'조슈아',b:'준',type:'member'},{a:'조슈아',b:'호시',type:'member'},{a:'조슈아',b:'원우',type:'member'},{a:'조슈아',b:'우지',type:'member'},{a:'조슈아',b:'도겸',type:'member'},{a:'조슈아',b:'민규',type:'member'},{a:'조슈아',b:'승관',type:'member'},{a:'조슈아',b:'버논',type:'member'},{a:'조슈아',b:'디노',type:'member'},
+  {a:'준',b:'호시',type:'member'},{a:'준',b:'원우',type:'member'},{a:'준',b:'우지',type:'member'},{a:'준',b:'도겸',type:'member'},{a:'준',b:'민규',type:'member'},{a:'준',b:'승관',type:'member'},{a:'준',b:'버논',type:'member'},{a:'준',b:'디노',type:'member'},
+  {a:'호시',b:'원우',type:'member'},{a:'호시',b:'우지',type:'member'},{a:'호시',b:'도겸',type:'member'},{a:'호시',b:'민규',type:'member'},{a:'호시',b:'승관',type:'member'},{a:'호시',b:'버논',type:'member'},{a:'호시',b:'디노',type:'member'},
+  {a:'원우',b:'우지',type:'member'},{a:'원우',b:'도겸',type:'member'},{a:'원우',b:'민규',type:'member'},{a:'원우',b:'승관',type:'member'},{a:'원우',b:'버논',type:'member'},{a:'원우',b:'디노',type:'member'},
+  {a:'우지',b:'도겸',type:'member'},{a:'우지',b:'민규',type:'member'},{a:'우지',b:'승관',type:'member'},{a:'우지',b:'버논',type:'member'},{a:'우지',b:'디노',type:'member'},
+  {a:'도겸',b:'민규',type:'member'},{a:'도겸',b:'승관',type:'member'},{a:'도겸',b:'버논',type:'member'},{a:'도겸',b:'디노',type:'member'},
+  {a:'민규',b:'승관',type:'member'},{a:'민규',b:'버논',type:'member'},{a:'민규',b:'디노',type:'member'},
+  {a:'승관',b:'버논',type:'member'},{a:'승관',b:'디노',type:'member'},
+  {a:'버논',b:'디노',type:'member'},
+  // TXT
+  {a:'연준',b:'수빈',type:'member'},{a:'연준',b:'범규',type:'member'},{a:'연준',b:'태현',type:'member'},{a:'연준',b:'휴닝카이',type:'member'},
+  {a:'수빈',b:'범규',type:'member'},{a:'수빈',b:'태현',type:'member'},{a:'수빈',b:'휴닝카이',type:'member'},
+  {a:'범규',b:'태현',type:'member'},{a:'범규',b:'휴닝카이',type:'member'},
+  {a:'태현',b:'휴닝카이',type:'member'},
+  // 엔하이픈
+  {a:'희승',b:'제이',type:'member'},{a:'희승',b:'제이크',type:'member'},{a:'희승',b:'성훈',type:'member'},{a:'희승',b:'선우',type:'member'},{a:'희승',b:'정원',type:'member'},{a:'희승',b:'니키',type:'member'},
+  {a:'제이',b:'제이크',type:'member'},{a:'제이',b:'성훈',type:'member'},{a:'제이',b:'선우',type:'member'},{a:'제이',b:'정원',type:'member'},{a:'제이',b:'니키',type:'member'},
+  {a:'제이크',b:'성훈',type:'member'},{a:'제이크',b:'선우',type:'member'},{a:'제이크',b:'정원',type:'member'},{a:'제이크',b:'니키',type:'member'},
+  {a:'성훈',b:'선우',type:'member'},{a:'성훈',b:'정원',type:'member'},{a:'성훈',b:'니키',type:'member'},
+  {a:'선우',b:'정원',type:'member'},{a:'선우',b:'니키',type:'member'},
+  {a:'정원',b:'니키',type:'member'},
+  // 뉴진스
+  {a:'민지',b:'하니',type:'member'},{a:'민지',b:'해린',type:'member'},{a:'민지',b:'혜인',type:'member'},{a:'민지',b:'다니엘',type:'member'},
+  {a:'하니',b:'해린',type:'member'},{a:'하니',b:'혜인',type:'member'},{a:'하니',b:'다니엘',type:'member'},
+  {a:'해린',b:'혜인',type:'member'},{a:'해린',b:'다니엘',type:'member'},
+  {a:'혜인',b:'다니엘',type:'member'},
+  // 투어스
+  {a:'신유',b:'도훈',type:'member'},{a:'신유',b:'영재',type:'member'},{a:'신유',b:'한진',type:'member'},{a:'신유',b:'지훈',type:'member'},{a:'신유',b:'경민',type:'member'},
+  {a:'도훈',b:'영재',type:'member'},{a:'도훈',b:'한진',type:'member'},{a:'도훈',b:'지훈',type:'member'},{a:'도훈',b:'경민',type:'member'},
+  {a:'영재',b:'한진',type:'member'},{a:'영재',b:'지훈',type:'member'},{a:'영재',b:'경민',type:'member'},
+  {a:'한진',b:'지훈',type:'member'},{a:'한진',b:'경민',type:'member'},
+  {a:'지훈',b:'경민',type:'member'},
+  // 아일릿
+  {a:'윤아',b:'민주',type:'member'},{a:'윤아',b:'모카',type:'member'},{a:'윤아',b:'원희',type:'member'},{a:'윤아',b:'이로하',type:'member'},
+  {a:'민주',b:'모카',type:'member'},{a:'민주',b:'원희',type:'member'},{a:'민주',b:'이로하',type:'member'},
+  {a:'모카',b:'원희',type:'member'},{a:'모카',b:'이로하',type:'member'},
+  {a:'원희',b:'이로하',type:'member'},
+  // 르세라핌
+  {a:'사쿠라',b:'김채원',type:'member'},{a:'사쿠라',b:'허윤진',type:'member'},{a:'사쿠라',b:'카즈하',type:'member'},{a:'사쿠라',b:'홍은채',type:'member'},{a:'사쿠라',b:'김가람',type:'member'},
+  {a:'김채원',b:'허윤진',type:'member'},{a:'김채원',b:'카즈하',type:'member'},{a:'김채원',b:'홍은채',type:'member'},{a:'김채원',b:'김가람',type:'member'},
+  {a:'허윤진',b:'카즈하',type:'member'},{a:'허윤진',b:'홍은채',type:'member'},{a:'허윤진',b:'김가람',type:'member'},
+  {a:'카즈하',b:'홍은채',type:'member'},{a:'카즈하',b:'김가람',type:'member'},
+  {a:'홍은채',b:'김가람',type:'member'},
+  // 코르티스
+  {a:'마틴',b:'제임스',type:'member'},{a:'마틴',b:'주훈',type:'member'},{a:'마틴',b:'성현',type:'member'},{a:'마틴',b:'건호',type:'member'},
+  {a:'제임스',b:'주훈',type:'member'},{a:'제임스',b:'성현',type:'member'},{a:'제임스',b:'건호',type:'member'},
+  {a:'주훈',b:'성현',type:'member'},{a:'주훈',b:'건호',type:'member'},
+  {a:'성현',b:'건호',type:'member'},
+  // BTS
+  {a:'RM',b:'진',type:'member'},{a:'RM',b:'슈가',type:'member'},{a:'RM',b:'제이홉',type:'member'},{a:'RM',b:'지민',type:'member'},{a:'RM',b:'뷔',type:'member'},{a:'RM',b:'정국',type:'member'},
+  {a:'진',b:'슈가',type:'member'},{a:'진',b:'제이홉',type:'member'},{a:'진',b:'지민',type:'member'},{a:'진',b:'뷔',type:'member'},{a:'진',b:'정국',type:'member'},
+  {a:'슈가',b:'제이홉',type:'member'},{a:'슈가',b:'지민',type:'member'},{a:'슈가',b:'뷔',type:'member'},{a:'슈가',b:'정국',type:'member'},
+  {a:'제이홉',b:'지민',type:'member'},{a:'제이홉',b:'뷔',type:'member'},{a:'제이홉',b:'정국',type:'member'},
+  {a:'지민',b:'뷔',type:'member'},{a:'지민',b:'정국',type:'member'},
+  {a:'뷔',b:'정국',type:'member'},
+  // ── Starship ───────────────────────────────────
+  // 아이브
+  {a:'안유진',b:'가을',type:'member'},{a:'안유진',b:'레이',type:'member'},{a:'안유진',b:'장원영',type:'member'},{a:'안유진',b:'리즈',type:'member'},{a:'안유진',b:'이서',type:'member'},
+  {a:'가을',b:'레이',type:'member'},{a:'가을',b:'장원영',type:'member'},{a:'가을',b:'리즈',type:'member'},{a:'가을',b:'이서',type:'member'},
+  {a:'레이',b:'장원영',type:'member'},{a:'레이',b:'리즈',type:'member'},{a:'레이',b:'이서',type:'member'},
+  {a:'장원영',b:'리즈',type:'member'},{a:'장원영',b:'이서',type:'member'},
+  {a:'리즈',b:'이서',type:'member'},
+  // 키키
+  {a:'이솔',b:'지유',type:'member'},{a:'이솔',b:'수이',type:'member'},{a:'이솔',b:'하음',type:'member'},{a:'이솔',b:'키야',type:'member'},
+  {a:'지유',b:'수이',type:'member'},{a:'지유',b:'하음',type:'member'},{a:'지유',b:'키야',type:'member'},
+  {a:'수이',b:'하음',type:'member'},{a:'수이',b:'키야',type:'member'},
+  {a:'하음',b:'키야',type:'member'},
+  // ── 독립/기타 ───────────────────────────────────
+  // 키스오브라이프
+  {a:'쥴리',b:'나띠',type:'member'},{a:'쥴리',b:'벨',type:'member'},{a:'쥴리',b:'하늘',type:'member'},
+  {a:'나띠',b:'벨',type:'member'},{a:'나띠',b:'하늘',type:'member'},
+  {a:'벨',b:'하늘',type:'member'},
+  // 리센느
+  {a:'원이',b:'리브',type:'member'},{a:'원이',b:'미나미',type:'member'},{a:'원이',b:'메이',type:'member'},{a:'원이',b:'제나',type:'member'},
+  {a:'리브',b:'미나미',type:'member'},{a:'리브',b:'메이',type:'member'},{a:'리브',b:'제나',type:'member'},
+  {a:'미나미',b:'메이',type:'member'},{a:'미나미',b:'제나',type:'member'},
+  {a:'메이',b:'제나',type:'member'},
+  // 에이티즈
+  {a:'홍중',b:'성화',type:'member'},{a:'홍중',b:'윤호',type:'member'},{a:'홍중',b:'여상',type:'member'},{a:'홍중',b:'산',type:'member'},{a:'홍중',b:'민기',type:'member'},{a:'홍중',b:'우영',type:'member'},{a:'홍중',b:'종호',type:'member'},
+  {a:'성화',b:'윤호',type:'member'},{a:'성화',b:'여상',type:'member'},{a:'성화',b:'산',type:'member'},{a:'성화',b:'민기',type:'member'},{a:'성화',b:'우영',type:'member'},{a:'성화',b:'종호',type:'member'},
+  {a:'윤호',b:'여상',type:'member'},{a:'윤호',b:'산',type:'member'},{a:'윤호',b:'민기',type:'member'},{a:'윤호',b:'우영',type:'member'},{a:'윤호',b:'종호',type:'member'},
+  {a:'여상',b:'산',type:'member'},{a:'여상',b:'민기',type:'member'},{a:'여상',b:'우영',type:'member'},{a:'여상',b:'종호',type:'member'},
+  {a:'산',b:'민기',type:'member'},{a:'산',b:'우영',type:'member'},{a:'산',b:'종호',type:'member'},
+  {a:'민기',b:'우영',type:'member'},{a:'민기',b:'종호',type:'member'},
+  {a:'우영',b:'종호',type:'member'},
+  // (여자)아이들
+  {a:'소연',b:'미연',type:'member'},{a:'소연',b:'민니',type:'member'},{a:'소연',b:'수진',type:'member'},{a:'소연',b:'우기',type:'member'},{a:'소연',b:'슈화',type:'member'},
+  {a:'미연',b:'민니',type:'member'},{a:'미연',b:'수진',type:'member'},{a:'미연',b:'우기',type:'member'},{a:'미연',b:'슈화',type:'member'},
+  {a:'민니',b:'수진',type:'member'},{a:'민니',b:'우기',type:'member'},{a:'민니',b:'슈화',type:'member'},
+  {a:'수진',b:'우기',type:'member'},{a:'수진',b:'슈화',type:'member'},
+  {a:'우기',b:'슈화',type:'member'},
+  // 베이비몬스터
+  {a:'루카',b:'파리타',type:'member'},{a:'루카',b:'아사',type:'member'},{a:'루카',b:'치키타',type:'member'},{a:'루카',b:'라미',type:'member'},{a:'루카',b:'로라',type:'member'},{a:'루카',b:'하나',type:'member'},
+  {a:'파리타',b:'아사',type:'member'},{a:'파리타',b:'치키타',type:'member'},{a:'파리타',b:'라미',type:'member'},{a:'파리타',b:'로라',type:'member'},{a:'파리타',b:'하나',type:'member'},
+  {a:'아사',b:'치키타',type:'member'},{a:'아사',b:'라미',type:'member'},{a:'아사',b:'로라',type:'member'},{a:'아사',b:'하나',type:'member'},
+  {a:'치키타',b:'라미',type:'member'},{a:'치키타',b:'로라',type:'member'},{a:'치키타',b:'하나',type:'member'},
+  {a:'라미',b:'로라',type:'member'},{a:'라미',b:'하나',type:'member'},
+  {a:'로라',b:'하나',type:'member'},
+  // 블랙핑크
+  {a:'지수',b:'제니',type:'member'},{a:'지수',b:'로제',type:'member'},{a:'지수',b:'리사',type:'member'},
+  {a:'제니',b:'로제',type:'member'},{a:'제니',b:'리사',type:'member'},
+  {a:'로제',b:'리사',type:'member'},
+  // 빅뱅
+  {a:'GD',b:'태양',type:'member'},{a:'GD',b:'탑',type:'member'},{a:'GD',b:'대성',type:'member'},
+  {a:'태양',b:'탑',type:'member'},{a:'태양',b:'대성',type:'member'},
+  {a:'탑',b:'대성',type:'member'},
+];
+let showConn=false;
+let fDebutMin=2000,fDebutMax=2025;
+let fBdayMin=1985,fBdayMax=2012;
+let fGender='all';
+let fShowInactive=false;
+
+function memberVisible(a){
+  const gi=GI[a.group.ko];
+  const dy=groupDebutYear(a.group.ko);
+  if(dy!==9999&&(dy<fDebutMin||dy>fDebutMax))return false;
+  if(fGender!=='all'&&gi&&gi.gender!==fGender)return false;
+  const byear=parseInt(a.bday)||0;
+  if(byear&&(byear<fBdayMin||byear>fBdayMax))return false;
+  if(!fShowInactive&&!a.active)return false;
+  return true;
+}
+A.forEach(a=>{a._fade=memberVisible(a)?1:0;});
+let W,H,sc,ox,oy;
+let drag=false,dsx=0,dsy=0,dox=0,doy=0,moved=false,pinned=false;
+let pd=0,ps=1;
+
+function initView(){
+  W=window.innerWidth;H=window.innerHeight;
+  cv.width=W;cv.height=H;
+  // 메인 구가 화면의 ~80% 차지하도록 초기 스케일
+  sc=Math.min(W,H)*0.7/2000;
+  // 메인 구 중심(3000,3000)을 화면 중앙에
+  ox=W/2-3000*sc;
+  oy=H/2-3000*sc;
+}
+
+function resize(){W=window.innerWidth;H=window.innerHeight;cv.width=W;cv.height=H;}
+function wx(x){return x*sc+ox;}
+function wy(y){return y*sc+oy;}
+function groupDebutYear(ko){const i=GI[ko];if(!i||!i.debut)return 9999;return parseInt(i.debut)||9999;}
+const PLANET_DEBUT={iu:2008};
+function planetDebutYear(pid){if(pid==='main')return 0;if(PLANET_DEBUT[pid]!=null)return PLANET_DEBUT[pid];const m=A.find(a=>a.planet===pid);return m?groupDebutYear(m.group.ko):0;}
+function drawConnections(){
+  if(!showConn)return;
+  const S={
+    member:{dash:[],lw:0.7,a:nightMode?.30:.18},
+    collab:{dash:[],lw:1.4,a:nightMode?.55:.48},
+    stage:{dash:[4,4],lw:.8,a:nightMode?.30:.24},
+    challenge:{dash:[2,8],lw:.55,a:nightMode?.18:.13},
+  };
+  CONN.forEach(c=>{
+    const ma=A.find(m=>m.name.ko===c.a||m.name.en===c.a);
+    const mb=A.find(m=>m.name.ko===c.b||m.name.en===c.b);
+    if(!ma||!mb)return;
+    if(!memberVisible(ma)||!memberVisible(mb))return;
+    const ax=emx(ma),ay=emy(ma),bx=emx(mb),by=emy(mb);
+    const len=Math.hypot(bx-ax,by-ay);if(len<1)return;
+    const s=S[c.type]||S.stage;
+    // 베지어 제어점: 선분 수직 방향으로 offset, 지도 중심(3000,3000) 쪽으로 볼록
+    const mx2=(ax+bx)/2,my2=(ay+by)/2;
+    const px=-(by-ay)/len*len*0.2,py=(bx-ax)/len*len*0.2;
+    const dot=(wx(3000)-mx2)*px+(wy(3000)-my2)*py;
+    const cpx=mx2+(dot>=0?px:-px),cpy=my2+(dot>=0?py:-py);
+    const rgb=c.type==='member'?ma.color:null;
+    // 탈퇴 등 inactive 멤버가 포함된 선은 매우 얇고 희미하게
+    const dim=ma.active===false||mb.active===false;
+    const lw=dim?s.lw*0.5:s.lw;
+    const alpha=dim?s.a*0.5:s.a;
+    ctx.save();
+    ctx.beginPath();ctx.moveTo(ax,ay);ctx.quadraticCurveTo(cpx,cpy,bx,by);
+    ctx.setLineDash(s.dash.map(d=>d*Math.max(0.5,sc)));
+    ctx.lineWidth=lw;
+    ctx.strokeStyle=rgb
+      ?`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`
+      :(nightMode?`rgba(180,200,240,${alpha})`:`rgba(100,82,65,${alpha})`);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  });
+}
+
+
+const modeSw=document.getElementById('mode-sw');
+const modeKnob=document.getElementById('mode-knob');
+let nightMode=false;
+modeSw.addEventListener('click',()=>{
+  nightMode=!nightMode;
+  if(nightMode){modeKnob.classList.add('night');modeKnob.textContent='NIGHT';modeSw.classList.add('night');document.body.classList.add('night');}
+  else{modeKnob.classList.remove('night');modeKnob.textContent='DAY';modeSw.classList.remove('night');document.body.classList.remove('night');}
+});
+
+const CFG_TEXTS={
+  ko:{debut:'데뷔 연도',bday:'멤버 출생연도',gender:'그룹 유형',all:'전체',f:'걸그룹',m:'보이그룹',active:'탈퇴/비활동 멤버',show:'표시',reset:'초기화'},
+  en:{debut:'Debut Year',bday:'Member Birth Year',gender:'Group Type',all:'All',f:'Girl Group',m:'Boy Group',active:'Inactive Members',show:'Show',reset:'Reset'}
+};
+function updateCfgLang(){
+  const t=CFG_TEXTS[lang];
+  document.getElementById('cfg-lbl-debut').textContent=t.debut;
+  document.getElementById('cfg-lbl-bday').textContent=t.bday;
+  document.getElementById('cfg-lbl-gender').textContent=t.gender;
+  document.getElementById('cfg-lbl-active').textContent=t.active;
+  document.getElementById('cfg-gtag-all').textContent=t.all;
+  document.getElementById('cfg-gtag-f').textContent=t.f;
+  document.getElementById('cfg-gtag-m').textContent=t.m;
+  document.getElementById('cfg-active-lbl').textContent=t.show;
+  document.getElementById('cfg-reset').textContent=t.reset;
+}
+sw.addEventListener('click',()=>{lang=lang==='ko'?'en':'ko';knob.textContent=lang==='ko'?'KO':'EN';lang==='en'?(knob.classList.add('en'),sw.classList.add('en'),titl.textContent='K-POP IDOL MAP',hint.textContent='drag · scroll zoom · click to pin'):(knob.classList.remove('en'),sw.classList.remove('en'),titl.textContent='케이팝 아이돌 지형도',hint.textContent='드래그 · 스크롤 줌 · 클릭 고정');document.getElementById('srch-in').placeholder=lang==='ko'?'멤버·그룹 검색...':'member / group...';updateCfgLang();closeT();});
+function closeT(){pinned=false;tt.style.display='none';}
+let pinnedGC=false;
+function closeAll(){closeT();gc.style.display='none';pinnedGC=false;lc.style.display='none';}
+ttx.addEventListener('click',e=>{e.stopPropagation();closeT();});
+
+function wc(x,y,r,rgb,a,seed){
+  const rn=n=>{let v=seed+n;return Math.abs(Math.sin(v)*43758.5)%1;};
+  for(let i=0;i<4;i++){
+    const ox2=(rn(i*3)-.5)*r*.5,oy2=(rn(i*3+1)-.5)*r*.5,rr=r*(.6+rn(i*3+2)*.6)*sc;
+    const g=ctx.createRadialGradient(x+ox2*sc,y+oy2*sc,0,x+ox2*sc,y+oy2*sc,rr);
+    const a1=a*(.3+rn(i+10)*.5);
+    g.addColorStop(0,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a1})`);
+    g.addColorStop(.5,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a1*.25})`);
+    g.addColorStop(1,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},0)`);
+    ctx.beginPath();ctx.arc(x+ox2*sc,y+oy2*sc,rr,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+  }
+}
+
+function drawBg(){
+  ctx.fillStyle=nightMode?'#1a1e2e':'#f5f0e8';ctx.fillRect(0,0,W,H);
+  BG.forEach(b=>{
+    const bx=b.x*sc+ox,by=b.y*sc+oy,br=b.r*sc;
+    if(bx+br<0||bx-br>W||by+br<0||by-br>H)return; // 화면 밖 skip
+    const g=ctx.createRadialGradient(bx,by,0,bx,by,br);
+    g.addColorStop(0,`rgba(${b.c[0]},${b.c[1]},${b.c[2]},${b.a})`);
+    g.addColorStop(1,`rgba(${b.c[0]},${b.c[1]},${b.c[2]},0)`);
+    ctx.beginPath();ctx.arc(bx,by,br,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+  });
+}
+
+function drawPlanets(){
+  PLANETS.forEach(p=>{
+    if(p.id!=='main'){const pdy=planetDebutYear(p.id);if(pdy<fDebutMin||pdy>fDebutMax)return;if(!A.some(a=>a.planet===p.id&&a._fade>0))return;}
+    const px=wx(p.cx),py=wy(p.cy),pr=p.r*sc,rgb=p.color;
+    if(px+pr<-100||px-pr>W+100||py+pr<-100||py-pr>H+100)return;
+    const g=ctx.createRadialGradient(px,py,0,px,py,pr);
+    g.addColorStop(0,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},.10)`);
+    g.addColorStop(.7,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},.05)`);
+    g.addColorStop(1,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},0)`);
+    ctx.beginPath();ctx.arc(px,py,pr,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+    ctx.beginPath();ctx.arc(px,py,pr,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(${rgb[0]-20},${rgb[1]-20},${rgb[2]-20},${p.legacy?.18:.10})`;
+    ctx.lineWidth=.5;p.legacy?ctx.setLineDash([3*sc,3*sc]):ctx.setLineDash([]);ctx.stroke();ctx.setLineDash([]);
+    [.5,.75].forEach(r=>{ctx.beginPath();ctx.arc(px,py,pr*r,0,Math.PI*2);ctx.strokeStyle=`rgba(${rgb[0]-10},${rgb[1]-10},${rgb[2]-10},.06)`;ctx.lineWidth=.3;ctx.stroke();});
+    if(p.legacy&&p.name){
+      const fs=Math.max(6,Math.min(14,12*sc));
+      ctx.font=`600 ${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
+      ctx.fillStyle=`rgba(${rgb[0]-30},${rgb[1]-30},${rgb[2]-30},.55)`;
+      ctx.fillText(p.name[lang],px,py-pr-6*sc);
+    }
+  });
+}
+
+function drawGroups(){
+  grpCache={};grpLabelCache=[];
+  const grps={};
+  A.forEach(a=>{
+    if(!a.group[lang])return;
+    if(a._fade===0)return;
+    // 이중소속(·구분) 멤버는 두 그룹 원 계산에 모두 포함
+    const koNames=a.group.ko.includes('·')?a.group.ko.split('·').map(s=>s.trim()):[a.group.ko];
+    koNames.forEach(kn=>{const k=`${a.planet}__${kn}`;if(!grps[k])grps[k]=[];grps[k].push(a);});
+  });
+  const circ=[];
+  Object.entries(grps).forEach(([k,mem])=>{
+    if(mem.length===0)return;
+    const pid=k.split('__')[0],grpKo=k.split('__')[1],isL=PLANETS.find(p=>p.id===pid)?.legacy;
+    const pts=mem.map(m=>[wx(m.x),wy(m.y)]);
+    const mx=pts.reduce((s,p)=>s+p[0],0)/pts.length,my=pts.reduce((s,p)=>s+p[1],0)/pts.length;
+    const r=Math.max(...pts.map(p=>Math.hypot(p[0]-mx,p[1]-my)))+16*sc;
+    circ.push({k,grpKo,isL,mem,mx,my,r});
+  });
+  // ── 그룹 원 충돌 분리 (NCT 127 ↔ NCT Dream 겹침은 허용, 모션 없이 즉시 수렴)
+  {
+    const ALLOW=new Set(['main__NCT 127|main__NCT Dream','main__NCT Dream|main__NCT 127']);
+    const FIXED=new Set(['main__NCT 127','main__NCT Dream']);
+    const mc=circ.filter(c=>!c.isL);
+    const tmp={};mc.forEach(c=>{tmp[c.k]={dx:0,dy:0};});
+    for(let iter=0;iter<30;iter++){
+      for(let i=0;i<mc.length;i++){for(let j=i+1;j<mc.length;j++){
+        const ci=mc[i],cj=mc[j];
+        if(ALLOW.has(`${ci.k}|${cj.k}`))continue;
+        const ax=ci.mx+tmp[ci.k].dx,ay=ci.my+tmp[ci.k].dy;
+        const bx=cj.mx+tmp[cj.k].dx,by=cj.my+tmp[cj.k].dy;
+        const ddx=ax-bx,ddy=ay-by;
+        const dist=Math.hypot(ddx,ddy)||0.01;
+        const minD=ci.r+cj.r+4*sc;
+        if(dist<minD){
+          const push=(minD-dist)*0.5,nx=ddx/dist,ny=ddy/dist;
+          if(!FIXED.has(ci.k)){tmp[ci.k].dx+=nx*push;tmp[ci.k].dy+=ny*push;}
+          if(!FIXED.has(cj.k)){tmp[cj.k].dx-=nx*push;tmp[cj.k].dy-=ny*push;}
+        }
+      }}
+    }
+    // circ 센터 갱신 + grpDelta 저장 (멤버 렌더링에 적용)
+    mc.forEach(({k})=>{const t=tmp[k];grpDelta[k]=t;const c=circ.find(x=>x.k===k);if(c){c.mx+=t.dx;c.my+=t.dy;}});
+  }
+  // 1차: 원 그리기
+  circ.forEach(({k,grpKo,isL,mem,mx,my,r})=>{
+    if(mx+r<0||mx-r>W||my+r<0||my-r>H)return;
+    const rgb=(GI[grpKo]||{color:mem[0].color}).color;
+    ctx.beginPath();ctx.arc(mx,my,r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(${rgb[0]-15},${rgb[1]-15},${rgb[2]-15},.14)`;
+    ctx.lineWidth=.5;ctx.setLineDash([2*sc,2*sc]);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=`rgba(${rgb[0]},${rgb[1]},${rgb[2]},.05)`;ctx.fill();
+    grpCache[k]={cx:mx,cy:my,r:r};
+  });
+  // 2차: 레이블 — 다른 원 밖 위치 탐색 (위→아래→왼→오른 순)
+  circ.forEach(({k,grpKo,isL,mem,mx,my,r})=>{
+    if(isL||mx+r<0||mx-r>W||my+r<0||my-r>H)return;
+    const rgb=(GI[grpKo]||{color:mem[0].color}).color;
+    const fs=Math.max(6,Math.min(12,10*sc));
+    ctx.fillStyle=`rgba(${rgb[0]-40},${rgb[1]-40},${rgb[2]-40},.38)`;
+    ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
+    const lbl=lang==='ko'?grpKo:(GI[grpKo]?.en||grpKo);
+    const cands=[[mx,my-r-4*sc],[mx,my+r+fs+4*sc],[mx-r-16*sc,my],[mx+r+16*sc,my]];
+    const pos=cands.find(([lx,ly])=>!circ.some(c=>c.k!==k&&Math.hypot(lx-c.mx,ly-c.my)<c.r))||cands[0];
+    ctx.fillText(lbl,pos[0],pos[1]);
+    const tw=ctx.measureText(lbl).width,pad=6*sc;
+    grpLabelCache.push({grpKo,lx:pos[0]-tw/2-pad,ly:pos[1]-fs-pad,w:tw+pad*2,h:fs+pad*2});
+  });
+
+  // NCT 상위 그룹 경계 (NCT 127 + Dream + WISH + WayV)
+  const nctNames=['NCT 127','NCT Dream','NCT WISH','WayV','NCT 127','NCT Dream','NCT WISH','WayV'];
+  const nctEn=['NCT 127','NCT Dream','NCT WISH','WayV'];
+  const nctMembers=A.filter(a=>{const en=a.group.en;return (nctEn.includes(en)||nctEn.some(n=>en.includes(n)))&&a.planet==='main'&&memberVisible(a);});
+  if(nctMembers.length>0){
+    const pts=nctMembers.map(m=>[emx(m),emy(m)]);
+    const mx=pts.reduce((s,p)=>s+p[0],0)/pts.length;
+    const my=pts.reduce((s,p)=>s+p[1],0)/pts.length;
+    const r=Math.max(...pts.map(p=>Math.hypot(p[0]-mx,p[1]-my)))+30*sc;
+    ctx.beginPath();ctx.arc(mx,my,r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(165,185,210,0.16)`;
+    ctx.lineWidth=.6;ctx.setLineDash([5*sc,4*sc]);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='rgba(165,185,210,0.03)';ctx.fill();
+    const fs=Math.max(7,Math.min(13,11*sc));
+    ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
+    ctx.fillStyle='rgba(135,158,192,0.40)';
+    ctx.fillText(lang==='ko'?'NCT':'NCT',mx,my-r-5*sc);
+  }
+}
+
+function sparkle(px,py,t){
+  const br=16*sc, p=.5+.5*Math.sin(t*.003);
+  // 외곽 헤일로 - 넓고 옅게
+  const g1=ctx.createRadialGradient(px,py,0,px,py,br*5);
+  g1.addColorStop(0,`rgba(255,252,235,${.28*p})`);
+  g1.addColorStop(.3,`rgba(255,245,210,${.16*p})`);
+  g1.addColorStop(1,'rgba(255,240,200,0)');
+  ctx.beginPath();ctx.arc(px,py,br*5,0,Math.PI*2);ctx.fillStyle=g1;ctx.fill();
+  // 중간 글로우
+  const g2=ctx.createRadialGradient(px,py,0,px,py,br*2.5);
+  g2.addColorStop(0,`rgba(255,255,245,${.45*p})`);
+  g2.addColorStop(.45,`rgba(255,248,220,${.26*p})`);
+  g2.addColorStop(1,'rgba(255,242,200,0)');
+  ctx.beginPath();ctx.arc(px,py,br*2.5,0,Math.PI*2);ctx.fillStyle=g2;ctx.fill();
+  // 코어 - 흰빛
+  const g3=ctx.createRadialGradient(px,py,0,px,py,br*1.1);
+  g3.addColorStop(0,`rgba(255,255,255,${.72*p})`);
+  g3.addColorStop(.4,`rgba(255,252,235,${.45*p})`);
+  g3.addColorStop(1,'rgba(255,248,220,0)');
+  ctx.beginPath();ctx.arc(px,py,br*1.1,0,Math.PI*2);ctx.fillStyle=g3;ctx.fill();
+}
+
+function draw(t){
+  ctx.clearRect(0,0,W,H);
+  const FADE=0.07;
+  A.forEach(a=>{const tgt=memberVisible(a)?1:0;if(a._fade<tgt)a._fade=Math.min(1,a._fade+FADE);else if(a._fade>tgt)a._fade=Math.max(0,a._fade-FADE);});
+  drawBg();drawPlanets();drawGroups();drawConnections();
+  A.forEach(a=>{if(a._fade===0)return;if(a.sparkle)sparkle(emx(a),emy(a),t);});
+  A.forEach((a,i)=>{
+    if(a._fade===0)return;
+    const fd=a._fade;
+    const px=emx(a),py=emy(a);
+    if(px<-50||px>W+50||py<-50||py>H+50)return;
+    const br=(10+a.sat*11)*sc,rgb=a.color;
+    const b=[Math.min(255,rgb[0]-a.sat*24),Math.min(255,rgb[1]-a.sat*16),Math.min(255,rgb[2]-a.sat*12)];
+    if(a.active){wc(px,py,br*1.2/sc,rgb,a.op*.28*fd,i*100);wc(px,py,br*.8/sc,b,a.op*.52*fd,i*100+1);wc(px,py,br*.35/sc,[b[0]-8,b[1]-8,b[2]-8],a.op*.40*fd,i*100+2);}
+    else{wc(px,py,br*.8/sc,rgb,a.op*.22*fd,i*100);for(let j=0;j<7;j++){const a2=j/7*Math.PI*2;ctx.beginPath();ctx.arc(px+Math.cos(a2)*(br*.5),py+Math.sin(a2)*(br*.5),sc,0,Math.PI*2);ctx.fillStyle=`rgba(${rgb[0]-10},${rgb[1]-10},${rgb[2]-10},${a.op*.35*fd})`;ctx.fill();}}
+    const fs=Math.max(5,Math.min(13,(7.5+a.sat)*sc));
+    ctx.fillStyle=nightMode?`rgba(150,165,188,${(a.active?.52:.20)*fd})`:`rgba(55,45,40,${(a.active?.64:.24)*fd})`;ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
+    ctx.fillText(a.name[lang],px,py+br+6*sc);
+  });
+  drawHilite();
+}
+
+function find(mx,my){let f=null,d=30*sc;A.forEach(a=>{const dd=Math.hypot(emx(a)-mx,emy(a)-my);if(dd<d){d=dd;f=a;}});return f;}
+
+
+const gc=document.getElementById('gc');
+const gcx=document.getElementById('gcx');
+gcx.addEventListener('click',e=>{e.stopPropagation();gc.style.display='none';pinnedGC=false;});
+const lc=document.getElementById('lc');
+const lcx=document.getElementById('lcx');
+lcx.addEventListener('click',e=>{e.stopPropagation();lc.style.display='none';});
+
+function showGC(grp_ko,ex,ey){
+  const info=GI[grp_ko];if(!info)return;
+  const members=A.filter(a=>a.group.ko===grp_ko);
+  const cnt=members.filter(a=>a.active).length;
+  gc.style.display='block';
+  const isEN=lang==='en';
+  const rgb=info.color;
+  document.getElementById('gc-name').textContent=isEN?info.en:grp_ko;
+  document.getElementById('gc-name').style.color=`rgb(${rgb[0]-30},${rgb[1]-30},${rgb[2]-30})`;
+  const enEl=document.getElementById('gc-en');
+  enEl.textContent=isEN?'':info.en;
+  enEl.style.display=isEN?'none':'block';
+  document.getElementById('gc-bar').style.background=`linear-gradient(90deg,rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.75),rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.35))`;
+  document.getElementById('gc-lbl-co').textContent=isEN?'label':'소속';
+  document.getElementById('gc-lbl-debut').textContent=isEN?'debut':'데뷔';
+  document.getElementById('gc-lbl-cnt').textContent=isEN?'members':'멤버';
+  document.getElementById('gc-co').textContent=info.co;
+  document.getElementById('gc-debut').textContent=info.debut;
+  document.getElementById('gc-cnt').textContent=isEN?cnt:cnt+'명';
+  const gcTv=document.getElementById('gc-tv');
+  gcTv.innerHTML='';
+  const gSongs=(info.songs||[]).slice(0,3);
+  if(gSongs.length>0){
+    const bigWrap=document.createElement('div');bigWrap.id='tv-big-wrap';
+    const big=document.createElement('img');big.id='tv-big';
+    big.src=`https://img.youtube.com/vi/${ytId(gSongs[0].u)}/mqdefault.jpg`;big.alt=gSongs[0].t;
+    const bigTitle=document.createElement('div');bigTitle.id='tv-big-title';bigTitle.textContent=gSongs[0].t;
+    bigWrap.appendChild(big);bigWrap.appendChild(bigTitle);
+    bigWrap.addEventListener('click',e=>{e.stopPropagation();openVideoModal(gSongs[0].u,gSongs[0].t);});
+    gcTv.appendChild(bigWrap);
+    if(gSongs.length>1){
+      const row=document.createElement('div');row.id='tv-small-row';
+      for(let i=1;i<gSongs.length;i++){
+        const s=gSongs[i],vid=ytId(s.u);
+        const box=document.createElement('div');box.className='tv-sm';
+        const img=document.createElement('img');img.src=`https://img.youtube.com/vi/${vid}/mqdefault.jpg`;img.alt=s.t;
+        const lbl=document.createElement('div');lbl.className='tv-sm-title';lbl.textContent=s.t;
+        box.appendChild(img);box.appendChild(lbl);
+        (function(su,st){box.addEventListener('click',e=>{e.stopPropagation();openVideoModal(su,st);});})(s.u,s.t);
+        row.appendChild(box);
+      }
+      gcTv.appendChild(row);
+    }
+  }
+  const hasSongs=gSongs.length>0;
+  const cardW=hasSongs?264:234;
+  gc.style.maxWidth=cardW+'px';
+  const nSmall=hasSongs?Math.max(0,gSongs.length-1):0;
+  const estH=155+(hasSongs?120+(nSmall>0?78:0):0);
+  let lx=ex+14,ly=ey-10;
+  if(lx+cardW>W)lx=ex-(cardW+4);if(ly<0)ly=4;if(ly+estH>H)ly=Math.max(4,H-estH-4);
+  gc.style.left=lx+'px';gc.style.top=ly+'px';
+}
+
+function findGroupLabel(mx,my){
+  for(const lb of grpLabelCache){if(mx>=lb.lx&&mx<=lb.lx+lb.w&&my>=lb.ly&&my<=lb.ly+lb.h)return lb.grpKo;}
+  return null;
+}
+function findGroup(mx,my){
+  for(const [k,v] of Object.entries(grpCache)){
+    const dx=mx-v.cx,dy=my-v.cy;
+    if(dx*dx+dy*dy<v.r*v.r)return k.split('__')[1];
+  }
+  return null;
+}
+
+function findConn(mx,my){
+  if(!showConn)return null;
+  for(const c of CONN){
+    const ma=A.find(m=>m.name.ko===c.a||m.name.en===c.a);
+    const mb=A.find(m=>m.name.ko===c.b||m.name.en===c.b);
+    if(!ma||!mb)continue;
+    if(!memberVisible(ma)||!memberVisible(mb))continue;
+    const ax=emx(ma),ay=emy(ma),bx=emx(mb),by=emy(mb);
+    const len=Math.hypot(bx-ax,by-ay);if(len<1)continue;
+    const mx2=(ax+bx)/2,my2=(ay+by)/2;
+    const px=-(by-ay)/len*len*0.2,py=(bx-ax)/len*len*0.2;
+    const dot=(wx(3000)-mx2)*px+(wy(3000)-my2)*py;
+    const cpx=mx2+(dot>=0?px:-px),cpy=my2+(dot>=0?py:-py);
+    ctx.save();
+    ctx.beginPath();ctx.moveTo(ax,ay);ctx.quadraticCurveTo(cpx,cpy,bx,by);
+    ctx.lineWidth=12;
+    const hit=ctx.isPointInStroke(mx,my);
+    ctx.restore();
+    if(hit)return{c,ma,mb};
+  }
+  return null;
+}
+
+function showLC(c,ma,mb,ex,ey){
+  lc.style.display='block';
+  let lx=ex+14,ly=ey-10;
+  if(lx+180>W)lx=ex-184;if(ly<0)ly=4;if(ly+130>H)ly=H-134;
+  lc.style.left=lx+'px';lc.style.top=ly+'px';
+  const rgb=ma.color;
+  document.getElementById('lc-bar').style.background=`linear-gradient(90deg,rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.75),rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.35))`;
+  document.getElementById('lc-ma').textContent=lang==='ko'?ma.name.ko:ma.name.en;
+  document.getElementById('lc-mb').textContent=lang==='ko'?mb.name.ko:mb.name.en;
+  const ga=lang==='ko'?ma.group.ko:ma.group.en;
+  const gb=lang==='ko'?mb.group.ko:mb.group.en;
+  document.getElementById('lc-grp').textContent=ga===gb?ga:`${ga} · ${gb}`;
+  const wrap=document.getElementById('lc-links');
+  wrap.innerHTML='';
+  if(c.links&&c.links.length){
+    c.links.forEach(s=>{
+      const el=document.createElement('a');
+      el.textContent='▶ '+s.t;el.href=s.u;el.target='_blank';
+      wrap.appendChild(el);
+    });
+  }else{
+    const p=document.createElement('div');
+    p.className='lc-empty';
+    p.textContent=lang==='ko'?'준비 중':'coming soon';
+    wrap.appendChild(p);
+  }
+}
+
+function ytId(url){const m=(url||'').match(/[?&]v=([^&]+)/);return m?m[1]:null;}
+
+// ── YouTube iframe API ──────────────────────────────────────
+let ytApiReady=false,ytPlayerInst=null;
+const ytCbs=[];
+window.onYouTubeIframeAPIReady=function(){ytApiReady=true;ytCbs.forEach(f=>f());ytCbs.length=0;};
+(function(){const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s);})();
+function onYtReady(cb){if(ytApiReady)cb();else ytCbs.push(cb);}
+
+function openVideoModal(url,title){
+  const vid=ytId(url);
+  const modal=document.getElementById('yt-modal');
+  const mp=document.getElementById('yt-mp');
+  const mf=document.getElementById('yt-mf');
+  document.getElementById('yt-mfl').href=url;
+  document.getElementById('yt-mt').textContent=title||'';
+  mp.style.display='block';mf.style.display='none';
+  mp.innerHTML='<div id="yt-pt"></div>';
+  modal.style.display='flex';
+  if(ytPlayerInst){try{ytPlayerInst.destroy();}catch(e){}ytPlayerInst=null;}
+  onYtReady(()=>{
+    ytPlayerInst=new YT.Player('yt-pt',{
+      videoId:vid,
+      playerVars:{autoplay:1,mute:1,modestbranding:1,rel:0,playsinline:1},
+      events:{
+        onReady:function(event){
+          const iframe=document.querySelector('#yt-mi iframe');
+          if(iframe)iframe.setAttribute('allow','autoplay; encrypted-media');
+          event.target.mute();
+          event.target.playVideo();
+        },
+        onError:function(){
+          if(ytPlayerInst){try{ytPlayerInst.destroy();}catch(e){}ytPlayerInst=null;}
+          mp.style.display='none';mf.style.display='block';
+        }
+      }
+    });
+  });
+}
+function closeYoutubeModal(){
+  const modal=document.getElementById('yt-modal');
+  const playerContainer=document.getElementById('yt-mp');
+  if(ytPlayerInst){try{ytPlayerInst.destroy();}catch(e){}ytPlayerInst=null;}
+  if(playerContainer)playerContainer.innerHTML='';
+  modal.style.display='none';
+}
+document.getElementById('yt-mc').addEventListener('click',closeYoutubeModal);
+document.getElementById('yt-modal').addEventListener('click',function(e){if(e.target===this)closeYoutubeModal();});
+
+
+function showT(a,ex,ey,pin){
+  tt.style.display='block';pinned=!!pin;ttx.style.display=pinned?'block':'none';
+  const hasSongs=a.songs&&a.songs.length>0;
+  const cardW=hasSongs?264:210;
+  tt.style.maxWidth=cardW+'px';
+  let lx=ex+14,ly=ey-10;
+  if(lx+cardW>W)lx=ex-(cardW+4);
+  if(ly<0)ly=4;
+  // 높이 추정: 텍스트~130 + 큰썸네일~120 + 작은썸네일~75(있으면)
+  const nSmall=hasSongs?Math.max(0,Math.min(a.songs.length,3)-1):0;
+  const estH=130+(hasSongs?120+(nSmall>0?78:0):20);
+  if(ly+estH>H)ly=Math.max(4,H-estH-4);
+  tt.style.left=lx+'px';tt.style.top=ly+'px';
+  document.getElementById('tn').textContent=a.name[lang];
+  document.getElementById('tg').textContent=a.group[lang];
+  document.getElementById('tco').textContent=CO[a.co]?.[lang]||'';
+  const meta=[];if(a.nat)meta.push(a.nat[lang]);if(a.bday)meta.push(a.bday);
+  document.getElementById('tm').textContent=meta.join(' · ');
+
+  const tv=document.getElementById('tv');
+  tv.innerHTML='';
+  if(!hasSongs){
+    const p=document.createElement('div');p.className='tv-empty';
+    p.textContent=lang==='ko'?'준비 중':'coming soon';
+    tv.appendChild(p);return;
+  }
+
+  const songs=a.songs.slice(0,3);
+
+  // 큰 썸네일 (top1)
+  const bigWrap=document.createElement('div');bigWrap.id='tv-big-wrap';
+  const big=document.createElement('img');
+  big.id='tv-big';
+  big.src=`https://img.youtube.com/vi/${ytId(songs[0].u)}/mqdefault.jpg`;
+  big.alt=songs[0].t;
+  const bigTitle=document.createElement('div');bigTitle.id='tv-big-title';bigTitle.textContent=songs[0].t;
+  bigWrap.appendChild(big);bigWrap.appendChild(bigTitle);
+  bigWrap.addEventListener('click',e=>{e.stopPropagation();openVideoModal(songs[0].u,songs[0].t);});
+  tv.appendChild(bigWrap);
+
+  // 작은 썸네일 2개 (top2, top3)
+  if(songs.length>1){
+    const row=document.createElement('div');row.id='tv-small-row';
+    for(let i=1;i<songs.length;i++){
+      const s=songs[i],vid=ytId(s.u);
+      const box=document.createElement('div');box.className='tv-sm';
+      const img=document.createElement('img');img.src=`https://img.youtube.com/vi/${vid}/mqdefault.jpg`;img.alt=s.t;
+      const lbl=document.createElement('div');lbl.className='tv-sm-title';lbl.textContent=s.t;
+      box.appendChild(img);box.appendChild(lbl);
+      (function(su,st){box.addEventListener('click',e=>{e.stopPropagation();openVideoModal(su,st);});})(s.u,s.t);
+      row.appendChild(box);
+    }
+    tv.appendChild(row);
+  }
+}
+
+function gp(e){return e.touches?{x:e.touches[0].clientX,y:e.touches[0].clientY}:{x:e.clientX,y:e.clientY};}
+
+window.addEventListener('wheel',e=>{e.preventDefault();const mx=e.clientX,my=e.clientY,ns=Math.max(.02,Math.min(2,sc*(e.deltaY>0?.88:1.12)));ox=mx-(mx-ox)*(ns/sc);oy=my-(my-oy)*(ns/sc);sc=ns;closeAll();},{passive:false});
+cv.addEventListener('mousedown',e=>{drag=true;moved=false;const p=gp(e);dsx=p.x;dsy=p.y;dox=ox;doy=oy;cv.classList.add('drag');});
+let _hovGrpKo=null;
+window.addEventListener('mousemove',e=>{
+  if(drag){const p=gp(e),dx=p.x-dsx,dy=p.y-dsy;if(Math.abs(dx)>4||Math.abs(dy)>4){if(!moved)closeAll();moved=true;}ox=dox+dx;oy=doy+dy;return;}
+  if(pinned)return;
+  const f=find(e.clientX,e.clientY);
+  if(f){showT(f,e.clientX,e.clientY,false);_hovGrpKo=null;if(!pinnedGC)gc.style.display='none';}
+  else{
+    tt.style.display='none';
+    const g=findGroupLabel(e.clientX,e.clientY);
+    if(g){if(_hovGrpKo!==g){_hovGrpKo=g;if(!pinnedGC)showGC(g,e.clientX,e.clientY);}}
+    else{_hovGrpKo=null;if(!pinnedGC)gc.style.display='none';}
+  }
+});
+window.addEventListener('mouseup',e=>{
+  if(drag&&!moved){
+    const f=find(e.clientX,e.clientY);
+    if(f){showT(f,e.clientX,e.clientY,true);gc.style.display='none';pinnedGC=false;lc.style.display='none';}
+    else{
+      const cn=findConn(e.clientX,e.clientY);
+      if(cn){closeT();gc.style.display='none';pinnedGC=false;showLC(cn.c,cn.ma,cn.mb,e.clientX,e.clientY);}
+      else{
+        const g=findGroup(e.clientX,e.clientY)||findGroupLabel(e.clientX,e.clientY);
+        if(g){closeT();lc.style.display='none';showGC(g,e.clientX,e.clientY);pinnedGC=true;_hovGrpKo=g;}
+        else{closeAll();}
+      }
+    }
+  }
+  drag=false;cv.classList.remove('drag');
+});
+window.addEventListener('mouseleave',()=>{if(!pinned)tt.style.display='none';});
+cv.addEventListener('touchstart',e=>{e.preventDefault();if(e.touches.length===2){pd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);ps=sc;drag=false;return;}drag=true;moved=false;const p=gp(e);dsx=p.x;dsy=p.y;dox=ox;doy=oy;},{passive:false});
+cv.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY),ns=Math.max(.02,Math.min(2,ps*(d/pd))),mx=(e.touches[0].clientX+e.touches[1].clientX)/2,my=(e.touches[0].clientY+e.touches[1].clientY)/2;ox=mx-(mx-ox)*(ns/sc);oy=my-(my-oy)*(ns/sc);sc=ns;closeAll();return;}if(!drag)return;const p=gp(e),dx=p.x-dsx,dy=p.y-dsy;if(Math.abs(dx)>6||Math.abs(dy)>6){if(!moved)closeAll();moved=true;}ox=dox+dx;oy=doy+dy;},{passive:false});
+cv.addEventListener('touchend',e=>{e.preventDefault();drag=false;if(!moved&&e.changedTouches.length===1){const t2=e.changedTouches[0],f=find(t2.clientX,t2.clientY);if(f){showT(f,t2.clientX,t2.clientY,true);gc.style.display='none';lc.style.display='none';}else{const cn=findConn(t2.clientX,t2.clientY);if(cn){closeT();gc.style.display='none';showLC(cn.c,cn.ma,cn.mb,t2.clientX,t2.clientY);}else{const g=findGroup(t2.clientX,t2.clientY);if(g){closeT();lc.style.display='none';showGC(g,t2.clientX,t2.clientY);}else{closeAll();}}}}},{passive:false});
+window.addEventListener('resize',()=>{resize();});
+// ── 설정 패널 ─────────────────────────────────
+const cfgBtn=document.getElementById('cfg-btn');
+const cfgPanel=document.getElementById('cfg-panel');
+cfgBtn.addEventListener('click',e=>{
+  e.stopPropagation();
+  const open=cfgPanel.style.display==='block';
+  cfgPanel.style.display=open?'none':'block';
+  cfgBtn.classList.toggle('open',!open);
+});
+document.addEventListener('click',e=>{
+  if(cfgPanel.style.display==='block'&&!cfgPanel.contains(e.target)&&e.target!==cfgBtn){
+    cfgPanel.style.display='none';cfgBtn.classList.remove('open');
+  }
+});
+// 듀얼 범위 슬라이더 초기화
+function initDS(loId,hiId,fillId,minVId,maxVId,cb){
+  const lo=document.getElementById(loId),hi=document.getElementById(hiId);
+  const fill=document.getElementById(fillId);
+  const minV=document.getElementById(minVId),maxV=document.getElementById(maxVId);
+  function update(){
+    const mn=parseInt(lo.min),mx=parseInt(lo.max);
+    let loV=parseInt(lo.value),hiV=parseInt(hi.value);
+    if(loV>hiV){loV=hiV;lo.value=loV;}
+    if(hiV<loV){hiV=loV;hi.value=hiV;}
+    const pLo=(loV-mn)/(mx-mn)*100,pHi=(hiV-mn)/(mx-mn)*100;
+    fill.style.left=pLo+'%';fill.style.width=(pHi-pLo)+'%';
+    minV.textContent=loV;maxV.textContent=hiV;
+    lo.style.zIndex=loV>=hiV?5:3;hi.style.zIndex=2;
+    if(cb)cb(loV,hiV);
+  }
+  lo.addEventListener('input',update);hi.addEventListener('input',update);
+  update();
+}
+initDS('cfg-debut-lo','cfg-debut-hi','cfg-debut-fill','cfg-debut-min-v','cfg-debut-max-v',(lo,hi)=>{fDebutMin=lo;fDebutMax=hi;});
+initDS('cfg-bday-lo','cfg-bday-hi','cfg-bday-fill','cfg-bday-min-v','cfg-bday-max-v',(lo,hi)=>{fBdayMin=lo;fBdayMax=hi;});
+// 그룹 유형 토글
+document.querySelectorAll('.cfg-gtag').forEach(el=>{
+  el.addEventListener('click',()=>{
+    fGender=el.dataset.gender;
+    document.querySelectorAll('.cfg-gtag').forEach(t=>t.classList.toggle('sel',t===el));
+  });
+});
+// 비활동 멤버 표시 토글
+const cfgActiveSw=document.getElementById('cfg-active-sw');
+cfgActiveSw.addEventListener('click',()=>{
+  fShowInactive=!fShowInactive;
+  cfgActiveSw.classList.toggle('on',fShowInactive);
+});
+// 초기화 버튼
+document.getElementById('cfg-reset').addEventListener('click',()=>{
+  const dlo=document.getElementById('cfg-debut-lo'),dhi=document.getElementById('cfg-debut-hi');
+  const blo=document.getElementById('cfg-bday-lo'),bhi=document.getElementById('cfg-bday-hi');
+  dlo.value=2000;dhi.value=2025;dlo.dispatchEvent(new Event('input'));dhi.dispatchEvent(new Event('input'));
+  blo.value=1985;bhi.value=2012;blo.dispatchEvent(new Event('input'));bhi.dispatchEvent(new Event('input'));
+  fGender='all';
+  document.querySelectorAll('.cfg-gtag').forEach(el=>el.classList.toggle('sel',el.dataset.gender==='all'));
+  fShowInactive=false;cfgActiveSw.classList.remove('on');
+});
+// 연결선 토글
+const connSw=document.getElementById('conn-sw');
+const connKnob=document.getElementById('conn-knob');
+connSw.addEventListener('click',()=>{showConn=!showConn;connSw.classList.toggle('on');connKnob.classList.toggle('on');connKnob.textContent=showConn?'ON':'LINE';});
+initView();
+requestAnimationFrame(function loop(t){requestAnimationFrame(loop);draw(t);});
+
+// ── Search ──────────────────────────────────
+let hilite=null,flyGen=0;
+const srchBtn=document.getElementById('srch-btn');
+const srchBar=document.getElementById('srch-bar');
+const srchIn=document.getElementById('srch-in');
+const srchDrop=document.getElementById('srch-drop');
+let srchOpen=false,srchIdx=-1,srchRes=[];
+
+// GI 영문 키 그룹의 한국어 검색 alias
+const GRP_KO_ALIAS={
+  'NCT 127':'엔씨티 127 엔시티 127 엔시티',
+  'NCT Dream':'엔씨티 드림 엔시티 드림 엔씨티',
+  'WayV':'웨이션브이 웨이브 엔씨티',
+  'NCT WISH':'엔씨티 위시 엔시티 위시 엔씨티',
+  'TXT':'투모로우바이투게더 투바투'
+};
+
+// 그룹 검색 목록 (world 좌표 중심)
+const GRP_SRCH=Object.entries(GI).map(([ko,info])=>{
+  const mems=A.filter(a=>a.group.ko===ko);
+  if(!mems.length)return null;
+  const cx=mems.reduce((s,a)=>s+a.x,0)/mems.length;
+  const cy=mems.reduce((s,a)=>s+a.y,0)/mems.length;
+  return {type:'group',name:{ko,en:info.en},alias:GRP_KO_ALIAS[ko]||'',x:cx,y:cy};
+}).filter(Boolean);
+
+function srchToggle(){
+  srchOpen=!srchOpen;
+  if(srchOpen){srchBar.classList.add('open');setTimeout(()=>srchIn.focus(),290);}
+  else{srchBar.classList.remove('open');srchHide();srchIn.value='';srchRes=[];srchIdx=-1;}
+}
+srchBtn.addEventListener('click',e=>{e.stopPropagation();srchToggle();});
+
+function srchFilter(q){
+  if(!q.trim()){srchHide();return;}
+  const lq=q.toLowerCase();
+  const grpRes=GRP_SRCH.filter(g=>g.name.ko.toLowerCase().includes(lq)||g.name.en.toLowerCase().includes(lq)||g.alias.includes(lq)).slice(0,4);
+  const memRes=A.filter(a=>a.name.ko.toLowerCase().includes(lq)||a.name.en.toLowerCase().includes(lq)).map(a=>({...a,type:'member'})).slice(0,6);
+  srchRes=[...grpRes,...memRes].slice(0,9);
+  srchIdx=-1;srchRender();
+}
+
+function srchRender(){
+  srchDrop.innerHTML='';
+  if(!srchRes.length){srchHide();return;}
+  srchRes.forEach((a,i)=>{
+    const el=document.createElement('div');
+    el.className='srch-item'+(i===srchIdx?' sel':'');
+    if(a.type==='group'){
+      const info=GI[a.name.ko];
+      el.innerHTML=`<div style="display:flex;align-items:center;gap:5px"><span class="srch-nm">${a.name[lang]}</span><span class="srch-tag">${lang==='ko'?'그룹':'group'}</span></div>${info?`<span class="srch-gr">${info.co}</span>`:''}`;
+    } else {
+      el.innerHTML=`<span class="srch-nm">${a.name[lang]}</span><span class="srch-gr">${a.group[lang]}</span>`;
+    }
+    el.addEventListener('mousedown',e=>{e.preventDefault();srchSelect(i);});
+    srchDrop.appendChild(el);
+  });
+  srchDrop.style.display='block';
+}
+
+function srchHide(){srchDrop.style.display='none';srchIdx=-1;}
+
+function srchSelect(i){
+  const a=srchRes[i];if(!a)return;
+  srchBar.classList.remove('open');srchHide();srchIn.value='';srchOpen=false;srchRes=[];
+  if(a.type==='group')flyToGroup(a);else flyTo(a);
+}
+
+srchIn.addEventListener('input',function(){srchFilter(this.value);});
+srchIn.addEventListener('blur',()=>setTimeout(srchHide,200));
+srchIn.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'){e.preventDefault();srchIdx=Math.min(srchIdx+1,srchRes.length-1);srchRender();}
+  else if(e.key==='ArrowUp'){e.preventDefault();srchIdx=Math.max(srchIdx-1,-1);srchRender();}
+  else if(e.key==='Enter'){e.preventDefault();if(srchIdx>=0)srchSelect(srchIdx);else if(srchRes.length)srchSelect(0);}
+  else if(e.key==='Escape'){srchToggle();}
+});
+
+function flyTo(a){
+  closeAll();
+  const gen=++flyGen;
+  const tSc=Math.max(0.80,sc>1.1?sc:0.80);
+  const tOx=W/2-a.x*tSc,tOy=H/2-a.y*tSc;
+  const sSc=sc,sOx=ox,sOy=oy;
+  const dur=680,t0=performance.now();
+  function step(now){
+    if(gen!==flyGen)return;
+    const p=Math.min(1,(now-t0)/dur);
+    const e=1-Math.pow(1-p,3);
+    sc=sSc+(tSc-sSc)*e;ox=sOx+(tOx-sOx)*e;oy=sOy+(tOy-sOy)*e;
+    if(p<1){requestAnimationFrame(step);}
+    else{sc=tSc;ox=tOx;oy=tOy;hilite={type:'member',a,t0:performance.now()};showT(a,W/2,H/2,true);gc.style.display='none';}
+  }
+  requestAnimationFrame(step);
+}
+
+function flyToGroup(g){
+  closeAll();
+  const gen=++flyGen;
+  const tSc=Math.max(0.80,sc>1.1?sc:0.80);
+  const tOx=W/2-g.x*tSc,tOy=H/2-g.y*tSc;
+  const sSc=sc,sOx=ox,sOy=oy;
+  const dur=680,t0=performance.now();
+  function step(now){
+    if(gen!==flyGen)return;
+    const p=Math.min(1,(now-t0)/dur);
+    const e=1-Math.pow(1-p,3);
+    sc=sSc+(tSc-sSc)*e;ox=sOx+(tOx-sOx)*e;oy=sOy+(tOy-sOy)*e;
+    if(p<1){requestAnimationFrame(step);}
+    else{sc=tSc;ox=tOx;oy=tOy;hilite={type:'group',x:g.x,y:g.y,t0:performance.now()};showGC(g.name.ko,W/2,H/2);}
+  }
+  requestAnimationFrame(step);
+}
+
+function drawHilite(){
+  if(!hilite)return;
+  const elapsed=performance.now()-hilite.t0;
+  const isGrp=hilite.type==='group';
+  const maxT=isGrp?2400:1800;
+  if(elapsed>maxT){hilite=null;return;}
+  const hx=isGrp?hilite.x:hilite.a.x;
+  const hy=isGrp?hilite.y:hilite.a.y;
+  if(!isGrp&&!memberVisible(hilite.a))return;
+  const px=wx(hx),py=wy(hy);
+  const p=elapsed/maxT;
+  const ease=1-Math.pow(1-p,2);
+  const baseR=isGrp?30:10,maxR=isGrp?90:42;
+  const r1=(baseR+ease*maxR)*sc,op1=(nightMode?0.28:0.14)*(1-p);
+  ctx.beginPath();ctx.arc(px,py,r1,0,Math.PI*2);
+  ctx.strokeStyle=nightMode?`rgba(180,210,255,${op1})`:`rgba(100,75,50,${op1})`;
+  ctx.lineWidth=Math.max(0.5,(isGrp?2.2:1.6)*(1-p));ctx.stroke();
+  if(p>0.14){
+    const p2=(p-0.14)/0.86,e2=1-Math.pow(1-p2,2);
+    const r2=(baseR+e2*maxR)*sc,op2=(nightMode?0.16:0.08)*(1-p2);
+    ctx.beginPath();ctx.arc(px,py,r2,0,Math.PI*2);
+    ctx.strokeStyle=nightMode?`rgba(160,195,245,${op2})`:`rgba(120,92,62,${op2})`;
+    ctx.lineWidth=Math.max(0.3,(isGrp?1.2:0.9)*(1-p2));ctx.stroke();
+  }
+}
+</script>
+</body>
+</html>
