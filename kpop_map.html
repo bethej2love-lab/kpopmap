@@ -190,6 +190,10 @@ body.night #cfg-reset:hover{background:rgba(80,110,190,0.28);color:#a0bce0;}
 #srch{position:absolute;top:11px;right:14px;display:flex;align-items:center;gap:5px;pointer-events:all;}
 #srch-btn{width:32px;height:32px;border-radius:50%;background:rgba(210,200,188,0.38);box-shadow:inset 0 1.5px 4px rgba(100,80,60,0.2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#7a6858;flex-shrink:0;padding:0;transition:background .15s,color .15s;}
 #srch-btn:hover{background:rgba(205,195,183,0.60);}
+#rand-btn{width:32px;height:32px;border-radius:50%;background:rgba(210,200,188,0.38);box-shadow:inset 0 1.5px 4px rgba(100,80,60,0.2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#7a6858;flex-shrink:0;padding:0;transition:background .15s,color .15s,transform .15s;font-size:14px;line-height:1;}
+#rand-btn:hover{background:rgba(205,195,183,0.60);transform:rotate(72deg);}
+body.night #rand-btn{background:rgba(40,50,80,0.55);box-shadow:inset 0 1.5px 4px rgba(0,0,0,0.4);color:#a0b0d0;}
+body.night #rand-btn:hover{background:rgba(50,65,105,0.68);}
 #srch-bar{height:32px;background:rgba(252,249,244,0.72);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border:0.5px solid rgba(255,255,255,0.82);border-radius:16px;box-shadow:0 1.5px 0 rgba(255,255,255,0.95) inset,0 4px 16px rgba(80,58,38,0.10);width:0;overflow:hidden;transition:width 0.28s cubic-bezier(0.34,1.2,0.64,1);display:flex;align-items:center;}
 #srch-bar.open{width:200px;}
 #srch-in{border:none;background:transparent;outline:none;font-family:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;color:#4a3c32;padding:0 14px;width:100%;letter-spacing:0.03em;}
@@ -230,12 +234,24 @@ body.night #mob-srch-in::placeholder{color:rgba(120,140,175,0.4);}
 body.night #mob-srch-close{color:#a0b0d0;}
 #mob-srch-drop{position:fixed;top:52px;left:0;right:0;background:rgba(252,249,244,0.97);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border-bottom:0.5px solid rgba(200,185,165,0.35);max-height:50vh;overflow-y:auto;display:none;z-index:300;}
 body.night #mob-srch-drop{background:rgba(14,18,36,0.97);border-bottom-color:rgba(255,255,255,0.06);}
+#zoom-ctrl{position:fixed;right:14px;bottom:14px;width:36px;background:rgba(252,249,244,0.52);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border:0.5px solid rgba(255,255,255,0.82);border-radius:18px;box-shadow:0 1.5px 0 rgba(255,255,255,0.95) inset,0 4px 16px rgba(80,58,38,0.10);display:flex;flex-direction:column;align-items:center;padding:4px 0;z-index:150;pointer-events:all;user-select:none;}
+body.night #zoom-ctrl{background:rgba(16,20,36,0.75);border-color:rgba(255,255,255,0.10);box-shadow:0 1px 0 rgba(255,255,255,0.06) inset,0 4px 16px rgba(0,0,0,0.35);}
+#zoom-plus,#zoom-minus{width:28px;height:28px;border:none;background:transparent;color:#7a6858;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .12s,color .12s;flex-shrink:0;padding:0;line-height:1;}
+#zoom-plus:hover,#zoom-minus:hover{background:rgba(160,140,120,0.18);color:#4a3c32;}
+body.night #zoom-plus,body.night #zoom-minus{color:#a0b0d0;}
+body.night #zoom-plus:hover,body.night #zoom-minus:hover{background:rgba(60,80,130,0.25);color:#c0d4f0;}
+#zoom-track{width:4px;height:120px;background:rgba(160,140,120,0.20);border-radius:2px;position:relative;margin:4px 0;cursor:pointer;flex-shrink:0;}
+body.night #zoom-track{background:rgba(80,100,150,0.30);}
+#zoom-handle{width:12px;height:12px;background:rgba(252,249,244,0.95);border:1px solid rgba(160,140,120,0.40);border-radius:50%;position:absolute;left:50%;transform:translateX(-50%);top:0;box-shadow:0 1px 4px rgba(80,58,38,0.18);cursor:grab;touch-action:none;}
+#zoom-handle:active{cursor:grabbing;}
+body.night #zoom-handle{background:rgba(140,165,210,0.90);border-color:rgba(255,255,255,0.25);box-shadow:0 1px 4px rgba(0,0,0,0.40);}
 @media(max-width:768px){
   #lang-sw,#mode-sw,#conn-sw,#cfg-btn,#srch{display:none!important;}
   #mob-bar{display:flex;}
   #cfg-panel{left:0!important;right:0!important;bottom:56px!important;top:auto!important;width:auto!important;max-width:100%!important;border-radius:20px 20px 0 0!important;box-sizing:border-box!important;}
   #tt,#gc,#lc{position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:56px!important;max-width:100%!important;width:100%;border-radius:20px 20px 0 0!important;transform:translateY(calc(100% + 56px));transition:transform .32s cubic-bezier(0.32,0.72,0,1);box-sizing:border-box;max-height:70vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
   #tt.bs-open,#gc.bs-open,#lc.bs-open{transform:translateY(0);}
+  #zoom-ctrl{display:none!important;}
 }
 </style>
 </head>
@@ -249,6 +265,7 @@ body.night #mob-srch-drop{background:rgba(14,18,36,0.97);border-bottom-color:rgb
   <div id="conn-sw"><div id="conn-knob">LINE</div><span id="conn-off">OFF</span></div>
   <button id="cfg-btn">⚙</button>
   <div id="srch">
+    <button id="rand-btn" title="랜덤 탐험">✦</button>
     <div id="srch-bar"><input id="srch-in" type="text" autocomplete="off" spellcheck="false" placeholder="멤버·그룹 검색..."></div>
     <button id="srch-btn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.5"/><line x1="8.5" y1="8.5" x2="12" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
     <div id="srch-drop"></div>
@@ -339,6 +356,24 @@ body.night #mob-srch-drop{background:rgba(14,18,36,0.97);border-bottom-color:rgb
   <button id="yt-next">&#8250;</button>
 </div>
 
+<div id="mob-bar">
+  <button class="mob-tab" id="mob-lang-btn"><span class="mob-lbl" id="mob-lang-lbl">KO</span></button>
+  <button class="mob-tab" id="mob-mode-btn"><span class="mob-lbl" id="mob-mode-lbl">DAY</span></button>
+  <button class="mob-tab" id="mob-conn-btn"><span class="mob-lbl" id="mob-conn-lbl">LINE</span></button>
+  <button class="mob-tab" id="mob-cfg-btn"><span class="mob-lbl">⚙</span></button>
+  <button class="mob-tab" id="mob-srch-open"><svg width="15" height="15" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.5"/><line x1="8.5" y1="8.5" x2="12" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+</div>
+<div id="mob-srch-wrap">
+  <input id="mob-srch-in" type="text" autocomplete="off" spellcheck="false" placeholder="멤버·그룹 검색...">
+  <button id="mob-srch-close">✕</button>
+  <div id="mob-srch-drop"></div>
+</div>
+<div id="zoom-ctrl">
+  <button id="zoom-plus">+</button>
+  <div id="zoom-track"><div id="zoom-handle"></div></div>
+  <button id="zoom-minus">−</button>
+</div>
+
 <script>
 const cv=document.getElementById('cv');
 const ctx=cv.getContext('2d');
@@ -351,14 +386,14 @@ const ttx=document.getElementById('ttx');
 let lang='ko';
 
 // ── 세계 좌표계 ──────────────────────────
-// 세계 크기: 6000 x 6000 단위 (정사각형)
-// 메인 구: 중심 (3000,3000), 반지름 2000
+// 세계 크기: 12000 x 12000 단위 (정사각형)
+// 메인 구: 중심 (6000,6000), 반지름 4000
 // 레거시 행성: 주변 가장자리
 // wx(x) = x * scale + offsetX  (세계→화면 변환)
 
 const BG=[];
 const PAL=[[210,170,200],[170,200,210],[200,210,170],[210,195,170],[180,170,210],[210,180,165]];
-for(let i=0;i<40;i++)BG.push({x:Math.random()*6000,y:Math.random()*6000,r:100+Math.random()*400,c:PAL[~~(Math.random()*6)],a:.04+Math.random()*.09});
+for(let i=0;i<40;i++)BG.push({x:Math.random()*12000,y:Math.random()*12000,r:100+Math.random()*400,c:PAL[~~(Math.random()*6)],a:.04+Math.random()*.09});
 
 const CO={hybe:{ko:'HYBE',en:'HYBE'},sm:{ko:'SM',en:'SM'},jyp:{ko:'JYP',en:'JYP'},yg:{ko:'YG',en:'YG'},starship:{ko:'Starship',en:'Starship'},s2:{ko:'S2',en:'S2'},themuse:{ko:'더뮤즈',en:'The Muse'},edam:{ko:'EDAM',en:'EDAM'},kq:{ko:'KQ',en:'KQ'},cube:{ko:'Cube',en:'Cube'},blacklabel:{ko:'더블랙레이블',en:'The Black Label'}};
 
@@ -378,22 +413,22 @@ const C={
 
 // 행성 (세계 좌표)
 const PLANETS=[
-  {id:'main', cx:3000,cy:3000,r:2000,legacy:false,color:[180,170,160]},
+  {id:'main', cx:6000,cy:6000,r:4000,legacy:false,color:[180,170,160]},
   // SM 레거시: 오른쪽
-  {id:'snsd',    name:{ko:'소녀시대',en:'SNSD'},    cx:5200,cy:500, r:380,legacy:true,color:C.snsd},
-  {id:'shinee',  name:{ko:'샤이니',en:'SHINee'},   cx:5600,cy:2200,r:360,legacy:true,color:C.shinee},
-  {id:'fx',      name:{ko:'f(x)',en:'f(x)'},       cx:5600,cy:3800,r:320,legacy:true,color:C.fx},
+  {id:'snsd',    name:{ko:'소녀시대',en:'SNSD'},    cx:10400,cy:1000, r:760,legacy:true,color:C.snsd},
+  {id:'shinee',  name:{ko:'샤이니',en:'SHINee'},   cx:11200,cy:4400,r:720,legacy:true,color:C.shinee},
+  {id:'fx',      name:{ko:'f(x)',en:'f(x)'},       cx:11200,cy:7600,r:640,legacy:true,color:C.fx},
   // HYBE 레거시: 오른쪽 하단
-  {id:'bts',     name:{ko:'BTS',en:'BTS'},         cx:5000,cy:5400,r:420,legacy:true,color:C.bts},
+  {id:'bts',     name:{ko:'BTS',en:'BTS'},         cx:10000,cy:10800,r:840,legacy:true,color:C.bts},
   // JYP 레거시: 왼쪽 하단
-  {id:'twice',   name:{ko:'트와이스',en:'TWICE'},   cx:700, cy:5200,r:410,legacy:true,color:C.twice},
+  {id:'twice',   name:{ko:'트와이스',en:'TWICE'},   cx:1400, cy:10400,r:820,legacy:true,color:C.twice},
   // YG 레거시: 왼쪽
-  {id:'bigbang', name:{ko:'빅뱅',en:'BIGBANG'},    cx:500, cy:500, r:380,legacy:true,color:C.bigbang},
-  {id:'blackpink',name:{ko:'블랙핑크',en:'BLACKPINK'},cx:700,cy:1500,r:360,legacy:true,color:C.blackpink},
+  {id:'bigbang', name:{ko:'빅뱅',en:'BIGBANG'},    cx:1000, cy:1000, r:760,legacy:true,color:C.bigbang},
+  {id:'blackpink',name:{ko:'블랙핑크',en:'BLACKPINK'},cx:1400,cy:3000,r:720,legacy:true,color:C.blackpink},
   // SM 레거시: 레드벨벳
-  {id:'redvelvet',name:{ko:'레드벨벳',en:'Red Velvet'},cx:5400,cy:3050,r:320,legacy:true,color:C.redvelvet},
+  {id:'redvelvet',name:{ko:'레드벨벳',en:'Red Velvet'},cx:10800,cy:6100,r:640,legacy:true,color:C.redvelvet},
   // 솔로
-  {id:'iu',      name:{ko:'아이유',en:'IU'},        cx:3000,cy:200, r:290,legacy:true,color:C.iu},
+  {id:'iu',      name:{ko:'아이유',en:'IU'},        cx:6000,cy:400, r:580,legacy:true,color:C.iu},
 ];
 
 // 아티스트 (세계 좌표)
@@ -452,224 +487,224 @@ function emy(m){const d=grpDelta[`${m.planet}__${m.group.ko}`];return wy(m.y)+(d
 const A=[
 // ── 메인 행성 ──────────────────────────────
 // SM: 오른쪽 | JYP: 왼쪽 | HYBE: 아래 | 독립: 위/대각선
-{name:{ko:'카리나',en:'Karina'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:3494,y:2665,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2000.04.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'도깨비불',u:'https://www.youtube.com/watch?v=tZixREYOIZQ'},{t:'Drama',u:'https://www.youtube.com/watch?v=tbg3QAu-GnI'},{t:'UP',u:'https://www.youtube.com/watch?v=5EYYp59TMzE'}]},
-{name:{ko:'지젤',en:'Giselle'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:3614,y:2645,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2000.10.30',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[{t:'Girls',u:'https://www.youtube.com/watch?v=kY-LVTbLYDI'},{t:'Whiplash',u:'https://www.youtube.com/watch?v=RFz5XIEXxag'},{t:'Black Mamba',u:'https://www.youtube.com/watch?v=M9wR7cwwgvQ'}]},
-{name:{ko:'윈터',en:'Winter'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:3654,y:2725,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2001.01.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Step Back',u:'https://www.youtube.com/watch?v=UAQT5Hgrm1Q'},{t:'Savage',u:'https://www.youtube.com/watch?v=S7f_LlxdgI0'},{t:'Black Mamba',u:'https://www.youtube.com/watch?v=MVtNkTF4Gvs'}]},
-{name:{ko:'닝닝',en:'Ningning'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:3534,y:2775,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2002.10.23',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[{t:'Drama',u:'https://www.youtube.com/watch?v=Dvt7ZPL15xU'},{t:'Black Mamba',u:'https://www.youtube.com/watch?v=UMMtPB3PdYI'},{t:'Thirsty',u:'https://www.youtube.com/watch?v=RQwT1-NiO6Q'}]},
-{name:{ko:'지우',en:'Jiwoo'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:3490,y:2470,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2006.09.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'카르멘',en:'Carmen'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:3590,y:2455,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2006.03.28',nat:{ko:'인도네시아',en:'ID'},sparkle:false,songs:[]},
-{name:{ko:'유하',en:'Yuha'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:3690,y:2468,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2007.04.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'스텔라',en:'Stella'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:3790,y:2455,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2007.06.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'주은',en:'Juun'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:3530,y:2555,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2008.12.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'에이나',en:'A-na'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:3630,y:2540,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2008.12.20',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'이안',en:'Ian'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:3730,y:2550,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2009.10.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'예온',en:'Ye-on'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:3840,y:2540,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2010.04.19',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'시온',en:'Sion'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4376,y:3123,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2002.05.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Steady',u:'https://www.youtube.com/watch?v=opnfgNPg1xI'},{t:'WISH (Korean Ver.)',u:'https://www.youtube.com/watch?v=hIqnEd16v04'},{t:'SODA POP',u:'https://www.youtube.com/watch?v=qk3qxZ9IcmQ'}]},
-{name:{ko:'리쿠',en:'Riku'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4466,y:3103,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2003.06.28',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[{t:'NASA',u:'https://www.youtube.com/watch?v=TUqZLkjgyVA'},{t:'으쌰! 으쌰!',u:'https://www.youtube.com/watch?v=ooq0MXgSjmU'},{t:'내 얘길 들어봐',u:'https://www.youtube.com/watch?v=WF4611kq1GQ'}]},
-{name:{ko:'유우시',en:'Yuushi'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4556,y:3133,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2004.04.05',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[{t:'NASA',u:'https://www.youtube.com/watch?v=Qe8Kp5qY9Vk'},{t:'Medley',u:'https://www.youtube.com/watch?v=UVf7PVf9kuY'},{t:'Steady',u:'https://www.youtube.com/watch?v=n3FM40NaPAg'}]},
-{name:{ko:'재희',en:'Jaehee'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4406,y:3223,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2005.06.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'료',en:'Ryo'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4506,y:3223,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2007.08.04',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'사쿠야',en:'Sakuya'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:4576,y:3183,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2007.11.18',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'쟈니',en:'Johnny'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4065,y:2755,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1995.02.09',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
-{name:{ko:'태용',en:'Taeyong'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4155,y:2735,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1995.07.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'질주',u:'https://www.youtube.com/watch?v=fXd-uJUrjK4'}]},
-{name:{ko:'유타',en:'Yuta'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4255,y:2745,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1995.10.26',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'도영',en:'Doyoung'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4315,y:2775,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1996.02.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'재현',en:'Jaehyun'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4085,y:2855,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1997.02.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'정우',en:'Jungwoo'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:4195,y:2835,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1998.02.19',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'마크',en:'Mark'},group:{ko:'NCT 127·NCT Dream',en:'NCT 127·NCT Dream'},co:'sm',planet:'main',x:4250,y:2965,sat:0.78,op:0.8,active:false,color:C.nct127,bday:'1999.08.02',nat:{ko:'한국·캐나다',en:'KR·CA'},sparkle:false,songs:[]},
-{name:{ko:'해찬',en:'Haechan'},group:{ko:'NCT 127·NCT Dream',en:'NCT 127·NCT Dream'},co:'sm',planet:'main',x:4150,y:2965,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'2000.06.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'런쥔',en:'Renjun'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:4160,y:3020,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2000.03.23',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
-{name:{ko:'제노',en:'Jeno'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:4260,y:3000,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2000.04.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'재민',en:'Jaemin'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:4320,y:3030,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2000.08.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'천러',en:'Chenle'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:4190,y:3130,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2001.11.22',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
-{name:{ko:'지성',en:'Jisung'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:4290,y:3130,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2002.02.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'쿤',en:'Kun'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4262,y:3655,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1996.01.01',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
-{name:{ko:'텐',en:'Ten'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4342,y:3635,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1996.02.27',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
-{name:{ko:'윈윈',en:'WinWin'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4422,y:3675,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1997.10.28',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
-{name:{ko:'샤오쥔',en:'Xiaojun'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4282,y:3755,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1999.08.08',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
-{name:{ko:'헨드리',en:'Hendery'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4382,y:3755,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1999.09.28',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
-{name:{ko:'양양',en:'Yangyang'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:4452,y:3715,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'2000.10.10',nat:{ko:'중국·독일',en:'CN·DE'},sparkle:false,songs:[]},
-{name:{ko:'방찬',en:'Bang Chan'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2536,y:3637,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.10.03',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[]},
-{name:{ko:'이노',en:'Lee Know'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2616,y:3617,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.10.25',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'창빈',en:'Changbin'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2716,y:3637,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.08.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'현진',en:'Hyunjin'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2766,y:3677,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.03.20',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'JJAM',u:'https://www.youtube.com/watch?v=IgrDN1yOIKY'}]},
-{name:{ko:'한',en:'Han'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2556,y:3757,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.09.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'필릭스',en:'Felix'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2666,y:3777,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.09.15',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[]},
-{name:{ko:'승민',en:'Seungmin'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2756,y:3737,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.09.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'아이엔',en:'I.N'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:2626,y:3807,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2001.02.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'예지',en:'Yeji'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:2280,y:3748,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2000.05.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'River',u:'https://www.youtube.com/watch?v=tnMFp53wrRg'},{t:'WANNABE',u:'https://www.youtube.com/watch?v=pmTjOXIu71Q'},{t:'달라달라',u:'https://www.youtube.com/watch?v=fSAUQ37xbho'}]},
-{name:{ko:'리아',en:'Lia'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:2360,y:3728,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2000.07.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Price Tag',u:'https://www.youtube.com/watch?v=zahgAha5D9Q'},{t:'WANNABE',u:'https://www.youtube.com/watch?v=c3jCty-g5x0'},{t:'달라달라',u:'https://www.youtube.com/watch?v=5QGp7KkfZ0Y'}]},
-{name:{ko:'류진',en:'Ryujin'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:2440,y:3768,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2001.04.17',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'WANNABE',u:'https://www.youtube.com/watch?v=KPUZjvAKmKM'},{t:'ICY',u:'https://www.youtube.com/watch?v=syoATmUcmL4'},{t:'마.피.아. In the morning',u:'https://www.youtube.com/watch?v=L1f8K9sYAgk'}]},
-{name:{ko:'채령',en:'Chaeryeong'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:2320,y:3848,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2001.06.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'WANNABE',u:'https://www.youtube.com/watch?v=s2Y5lscQVSQ'},{t:'Not Shy',u:'https://www.youtube.com/watch?v=Ifm6elFyYxQ'},{t:'SNEAKERS',u:'https://www.youtube.com/watch?v=fGTW6zI0rC8'}]},
-{name:{ko:'유나',en:'Yuna'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:2420,y:3848,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2003.12.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'달라달라',u:'https://www.youtube.com/watch?v=8f2IDOUrzkI'},{t:'U-Go-Girl',u:'https://www.youtube.com/watch?v=XxLigZQFc14'},{t:'WANNABE',u:'https://www.youtube.com/watch?v=eQl-5S35WGI'}]},
-{name:{ko:'릴리',en:'Lily'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2019,y:3625,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2003.08.04',nat:{ko:'캐나다',en:'CA'},sparkle:false,songs:[]},
-{name:{ko:'해원',en:'Haewon'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2109,y:3605,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2003.08.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'설윤',en:'Sullyoon'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2199,y:3630,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2004.11.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'배이',en:'Bae'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2049,y:3715,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2005.08.22',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[]},
-{name:{ko:'지우',en:'Jiwoo'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2139,y:3715,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2006.10.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'규진',en:'Kyujin'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:2209,y:3680,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2006.11.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'S.COUPS',en:'S.COUPS'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3045,y:3639,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1995.08.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'정한',en:'Jeonghan'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3125,y:3619,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1995.10.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'조슈아',en:'Joshua'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3205,y:3619,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1995.12.30',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
-{name:{ko:'준',en:'Jun'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3285,y:3639,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.06.10',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
-{name:{ko:'호시',en:'Hoshi'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3365,y:3669,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.06.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'MAESTRO',u:'https://www.youtube.com/watch?v=4r00ps3AtaU'}]},
-{name:{ko:'원우',en:'Wonwoo'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3425,y:3699,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.07.17',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'우지',en:'Woozi'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3045,y:3739,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.11.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'도겸',en:'DK'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3125,y:3729,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1997.02.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'민규',en:'Mingyu'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3205,y:3729,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1997.04.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'승관',en:'Seungkwan'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3285,y:3749,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1998.01.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'버논',en:'Vernon'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3365,y:3769,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1998.02.18',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
-{name:{ko:'디노',en:'Dino'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:3145,y:3809,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1999.02.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'신유',en:'Shinyu'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2800,y:3860,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2003.11.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=BtFPgl0tC0k'},{t:'Oh Mymy : 7s',u:'https://www.youtube.com/watch?v=jTQyctuLb_4'},{t:'Rock with you',u:'https://www.youtube.com/watch?v=kQem0PeYcvs'}]},
-{name:{ko:'도훈',en:'Dohoon'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2880,y:3840,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2005.01.30',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Run Run',u:'https://www.youtube.com/watch?v=EhDIY4FjCeU'},{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=KPd460eDrWs'},{t:'OVERDRIVE',u:'https://www.youtube.com/watch?v=XpadVtyPogs'}]},
-{name:{ko:'영재',en:'Youngjae'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2960,y:3870,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2005.05.31',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'너의 모든 가능성이 되어줄게',u:'https://www.youtube.com/watch?v=U5QNHCyKvXI'},{t:'다시 만난 오늘',u:'https://www.youtube.com/watch?v=Y_1mhDE_fX0'},{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=OYK9DHYPXDw'}]},
-{name:{ko:'한진',en:'Hanjin'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2810,y:3960,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2006.01.05',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=WxDm3oin7lk'},{t:'Oh Mymy : 7s',u:'https://www.youtube.com/watch?v=m9J7C7yrA9w'},{t:'내가 S면 넌 나의 N이 되어줘',u:'https://www.youtube.com/watch?v=X-DLqSIv3YA'}]},
-{name:{ko:'지훈',en:'Jihoon'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2910,y:3960,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2006.04.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'마음 따라 뛰는 건 멋지지 않아?',u:'https://www.youtube.com/watch?v=Ma_JErDCfBM'},{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=uJnPpGXEEf4'},{t:'내가 S면 넌 나의 N이 되어줘',u:'https://www.youtube.com/watch?v=BzSV1_K-P7A'}]},
-{name:{ko:'경민',en:'Kyungmin'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:2980,y:3920,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2007.09.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=TJxdabTKRQc'},{t:'はじめまして',u:'https://www.youtube.com/watch?v=zVjxDvjt36A'},{t:'BFF',u:'https://www.youtube.com/watch?v=UMcSD3KHeLQ'}]},
-{name:{ko:'민지',en:'Minji'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:2541,y:4147,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2004.05.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Odoriko (踊り子)',u:'https://www.youtube.com/watch?v=9ninWlkEthY'},{t:'Attention',u:'https://www.youtube.com/watch?v=ZzU1TNHWWhM'},{t:'Hype Boy',u:'https://www.youtube.com/watch?v=p1cE9T0CFCQ'}]},
-{name:{ko:'하니',en:'Hanni'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:2641,y:4137,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2004.10.06',nat:{ko:'베트남',en:'VN'},sparkle:false,songs:[{t:'푸른 산호초 (青い珊瑚礁)',u:'https://www.youtube.com/watch?v=Rj7N4ThLGQY'},{t:'Hype Boy',u:'https://www.youtube.com/watch?v=lmJPeFW75qQ'},{t:'New Jeans',u:'https://www.youtube.com/watch?v=tQ8YtKBqaMc'}]},
-{name:{ko:'해린',en:'Haerin'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:2531,y:4237,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2006.05.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Hype Boy',u:'https://www.youtube.com/watch?v=zbyet4HK4ko'},{t:'Tell Me',u:'https://www.youtube.com/watch?v=g6gM8x9H65Q'},{t:'Cookie',u:'https://www.youtube.com/watch?v=GyqqpCOyBos'}]},
-{name:{ko:'혜인',en:'Hyein'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:2651,y:4237,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2008.04.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Hype Boy',u:'https://www.youtube.com/watch?v=lg6O00c0dGU'},{t:'New Jeans',u:'https://www.youtube.com/watch?v=Wz_mVys9Z4w'},{t:'Attention',u:'https://www.youtube.com/watch?v=gwXFWPZAxME'}]},
-{name:{ko:'다니엘',en:'Danielle'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:2731,y:4187,sat:0.70,op:0.42,active:false,color:C.newjeans,bday:'2005.04.11',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[{t:'Hype Boy',u:'https://www.youtube.com/watch?v=v5UH3wTPbzw'},{t:'OMG',u:'https://www.youtube.com/watch?v=NDTuPvEvVRI'},{t:'Ditto',u:'https://www.youtube.com/watch?v=tPKmJMEg2do'}]},
-{name:{ko:'마틴',en:'Martin'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:3567,y:4147,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2008.03.20',nat:{ko:'한국·캐나다',en:'KR·CA'},sparkle:false,songs:[{t:'GO!',u:'https://www.youtube.com/watch?v=tWOItSAfA4M'},{t:'REDRED',u:'https://www.youtube.com/watch?v=2LDdWZOK34c'},{t:'What You Want',u:'https://www.youtube.com/watch?v=2azvJj4u5D4'}]},
-{name:{ko:'제임스',en:'James'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:3697,y:4127,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2005.10.14',nat:{ko:'대만',en:'TW'},sparkle:false,songs:[{t:'FaSHioN',u:'https://www.youtube.com/watch?v=twqghto0qZs'},{t:'REDRED',u:'https://www.youtube.com/watch?v=xZBxf0BhMV8'},{t:'ACAI',u:'https://www.youtube.com/watch?v=JlTb7tJbA8U'}]},
-{name:{ko:'주훈',en:'Juhoon'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:3607,y:4227,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2008.01.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'REDRED',u:'https://www.youtube.com/watch?v=a8PVi1KsIoc'},{t:'FaSHioN',u:'https://www.youtube.com/watch?v=vVPM4nZvGWg'},{t:'GO!',u:'https://www.youtube.com/watch?v=yYUTq-7Ttb4'}]},
-{name:{ko:'성현',en:'Seonghyeon'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:3707,y:4207,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2009.01.13',nat:{ko:'한국',en:'KR'},sparkle:true,songs:[{t:'REDRED',u:'https://www.youtube.com/watch?v=pXbO-QQJsxM'},{t:'FaSHioN',u:'https://www.youtube.com/watch?v=A7CRAA9Ztkw'},{t:'GO!',u:'https://www.youtube.com/watch?v=2Li7-6iraJE'}]},
-{name:{ko:'건호',en:'Geonho'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:3647,y:4257,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2009.02.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'GO!',u:'https://www.youtube.com/watch?v=93iJLm0kUAU'},{t:'REDRED',u:'https://www.youtube.com/watch?v=cxcxx0f6caM'},{t:'FaSHioN',u:'https://www.youtube.com/watch?v=kPjbIP7kaqs'}]},
-{name:{ko:'안유진',en:'Yujin'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3070,y:2280,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2003.09.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'ELEVEN',u:'https://www.youtube.com/watch?v=0Ar9bq1yjP0'},{t:'Lion Heart',u:'https://www.youtube.com/watch?v=zs7VgEMbpUg'},{t:'Kitsch',u:'https://www.youtube.com/watch?v=kYdWmnu4Qdo'}]},
-{name:{ko:'가을',en:'Gaeul'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3170,y:2260,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2002.09.24',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'After LIKE',u:'https://www.youtube.com/watch?v=-9RMTYZ2Etw'},{t:'Odd',u:'https://www.youtube.com/watch?v=UiYUVhsBraM'},{t:'LOVE DIVE',u:'https://www.youtube.com/watch?v=jlVi_OlLkAU'}]},
-{name:{ko:'레이',en:'Rei'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3270,y:2290,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2004.02.03',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[{t:'After LIKE',u:'https://www.youtube.com/watch?v=mKLLdYSl3Lk'},{t:'ELEVEN',u:'https://www.youtube.com/watch?v=bD5vB0Yc_O4'},{t:'LOVE DIVE',u:'https://www.youtube.com/watch?v=vWOPzl5iLIc'}]},
-{name:{ko:'장원영',en:'Wonyoung'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3110,y:2385,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2004.08.31',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LOVE DIVE',u:'https://www.youtube.com/watch?v=DqvMi7J_juM'},{t:'ELEVEN',u:'https://www.youtube.com/watch?v=ERGrC1s5_3k'},{t:'After LIKE',u:'https://www.youtube.com/watch?v=A0vgoyTmkgQ'}]},
-{name:{ko:'리즈',en:'Liz'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3210,y:2385,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2004.11.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'바람아 멈추어다오',u:'https://www.youtube.com/watch?v=FkmdvsEqW9k'},{t:'ELEVEN',u:'https://www.youtube.com/watch?v=d9v1UAN4tw0'},{t:'REBEL HEART',u:'https://www.youtube.com/watch?v=h7OmJZS7sxY'}]},
-{name:{ko:'이서',en:'Leeseo'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:3300,y:2350,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2007.02.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'ELEVEN',u:'https://www.youtube.com/watch?v=D0lmEcdgO1M'},{t:'LOVE DIVE',u:'https://www.youtube.com/watch?v=aHGZGBY-Koc'},{t:'After LIKE',u:'https://www.youtube.com/watch?v=NOVaFSRBZrk'}]},
-{name:{ko:'이솔',en:'Leesol'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:3090,y:1850,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2005.09.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'지유',en:'Jiyu'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:3175,y:1835,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2006.05.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'수이',en:'Sui'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:3250,y:1855,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2006.04.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'하음',en:'Haum'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:3120,y:1940,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2006.11.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'키야',en:'Kya'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:3210,y:1935,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2010.12.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'원이',en:'Woni'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:1796,y:2009,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2004.05.25',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=geAne2rrf7Q'},{t:'Deja Vu',u:'https://www.youtube.com/watch?v=a2OHT0Bi5lE'},{t:'Pinball',u:'https://www.youtube.com/watch?v=YAmTgcLa-80'}]},
-{name:{ko:'리브',en:'Liv'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:1906,y:1999,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2006.10.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=Xc8zNkCwGC0'},{t:'Glow Up',u:'https://www.youtube.com/watch?v=Lo1CTBTXda8'},{t:'Deja Vu',u:'https://www.youtube.com/watch?v=dwGvBIkURR0'}]},
-{name:{ko:'미나미',en:'Minami'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:1946,y:2069,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2006.11.29',nat:{ko:'일본',en:'JP'},sparkle:true,songs:[{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=3lONVqtRXAI'},{t:'다시 만난 세계',u:'https://www.youtube.com/watch?v=XA1cVAlrid4'},{t:'Runaway',u:'https://www.youtube.com/watch?v=ZJGzCkV_RGg'}]},
-{name:{ko:'메이',en:'May'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:1826,y:2109,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2008.08.19',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'다시 만난 세계',u:'https://www.youtube.com/watch?v=GX4I0MyI6I0'},{t:'Glow Up',u:'https://www.youtube.com/watch?v=hlyhddaC6qg'},{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=h7zcNExoSKM'}]},
-{name:{ko:'제나',en:'Zena'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:1926,y:2109,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2008.11.27',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Deja Vu',u:'https://www.youtube.com/watch?v=maQWa95XlLE'},{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=vJkC_NveL08'},{t:'Glow Up',u:'https://www.youtube.com/watch?v=jRfTKjK-mmY'}]},
-{name:{ko:'쥴리',en:'Julie'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:1675,y:3544,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2000.03.29',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
-{name:{ko:'나띠',en:'Natty'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:1795,y:3534,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2002.05.30',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[{t:'Who is she',u:'https://www.youtube.com/watch?v=Z9rYx1b4yjU'}]},
-{name:{ko:'벨',en:'Belle'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:1815,y:3624,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2004.03.20',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
-{name:{ko:'하늘',en:'Haneul'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:1695,y:3644,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2005.05.25',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'카리나',en:'Karina'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:6988,y:5330,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2000.04.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'도깨비불',u:'https://www.youtube.com/watch?v=tZixREYOIZQ'},{t:'Drama',u:'https://www.youtube.com/watch?v=tbg3QAu-GnI'},{t:'UP',u:'https://www.youtube.com/watch?v=5EYYp59TMzE'}]},
+{name:{ko:'지젤',en:'Giselle'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:7228,y:5290,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2000.10.30',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[{t:'Girls',u:'https://www.youtube.com/watch?v=kY-LVTbLYDI'},{t:'Whiplash',u:'https://www.youtube.com/watch?v=RFz5XIEXxag'},{t:'Black Mamba',u:'https://www.youtube.com/watch?v=M9wR7cwwgvQ'}]},
+{name:{ko:'윈터',en:'Winter'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:7308,y:5450,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2001.01.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Step Back',u:'https://www.youtube.com/watch?v=UAQT5Hgrm1Q'},{t:'Savage',u:'https://www.youtube.com/watch?v=S7f_LlxdgI0'},{t:'Black Mamba',u:'https://www.youtube.com/watch?v=MVtNkTF4Gvs'}]},
+{name:{ko:'닝닝',en:'Ningning'},group:{ko:'에스파',en:'aespa'},co:'sm',planet:'main',x:7068,y:5550,sat:0.85,op:0.8,active:true,color:C.aespa,bday:'2002.10.23',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[{t:'Drama',u:'https://www.youtube.com/watch?v=Dvt7ZPL15xU'},{t:'Black Mamba',u:'https://www.youtube.com/watch?v=UMMtPB3PdYI'},{t:'Thirsty',u:'https://www.youtube.com/watch?v=RQwT1-NiO6Q'}]},
+{name:{ko:'지우',en:'Jiwoo'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:6980,y:4940,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2006.09.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'카르멘',en:'Carmen'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:7180,y:4910,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2006.03.28',nat:{ko:'인도네시아',en:'ID'},sparkle:false,songs:[]},
+{name:{ko:'유하',en:'Yuha'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:7380,y:4936,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2007.04.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'스텔라',en:'Stella'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:7580,y:4910,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2007.06.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'주은',en:'Juun'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:7060,y:5110,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2008.12.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'에이나',en:'A-na'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:7260,y:5080,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2008.12.20',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'이안',en:'Ian'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:7460,y:5100,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2009.10.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'예온',en:'Ye-on'},group:{ko:'하츠투하츠',en:'Hearts2Hearts'},co:'sm',planet:'main',x:7680,y:5080,sat:0.80,op:0.8,active:true,color:C.hearts2hearts,bday:'2010.04.19',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'시온',en:'Sion'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:8752,y:6246,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2002.05.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Steady',u:'https://www.youtube.com/watch?v=opnfgNPg1xI'},{t:'WISH (Korean Ver.)',u:'https://www.youtube.com/watch?v=hIqnEd16v04'},{t:'SODA POP',u:'https://www.youtube.com/watch?v=qk3qxZ9IcmQ'}]},
+{name:{ko:'리쿠',en:'Riku'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:8932,y:6206,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2003.06.28',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[{t:'NASA',u:'https://www.youtube.com/watch?v=TUqZLkjgyVA'},{t:'으쌰! 으쌰!',u:'https://www.youtube.com/watch?v=ooq0MXgSjmU'},{t:'내 얘길 들어봐',u:'https://www.youtube.com/watch?v=WF4611kq1GQ'}]},
+{name:{ko:'유우시',en:'Yuushi'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:9112,y:6266,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2004.04.05',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[{t:'NASA',u:'https://www.youtube.com/watch?v=Qe8Kp5qY9Vk'},{t:'Medley',u:'https://www.youtube.com/watch?v=UVf7PVf9kuY'},{t:'Steady',u:'https://www.youtube.com/watch?v=n3FM40NaPAg'}]},
+{name:{ko:'재희',en:'Jaehee'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:8812,y:6446,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2005.06.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'료',en:'Ryo'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:9012,y:6446,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2007.08.04',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'사쿠야',en:'Sakuya'},group:{ko:'NCT WISH',en:'NCT WISH'},co:'sm',planet:'main',x:9152,y:6366,sat:0.72,op:0.8,active:true,color:C.nctwish,bday:'2007.11.18',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'쟈니',en:'Johnny'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:8130,y:5510,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1995.02.09',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'태용',en:'Taeyong'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:8310,y:5470,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1995.07.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'질주',u:'https://www.youtube.com/watch?v=fXd-uJUrjK4'}]},
+{name:{ko:'유타',en:'Yuta'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:8510,y:5490,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1995.10.26',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'도영',en:'Doyoung'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:8630,y:5550,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1996.02.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'재현',en:'Jaehyun'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:8170,y:5710,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1997.02.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'정우',en:'Jungwoo'},group:{ko:'NCT 127',en:'NCT 127'},co:'sm',planet:'main',x:8390,y:5670,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'1998.02.19',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'마크',en:'Mark'},group:{ko:'NCT 127·NCT Dream',en:'NCT 127·NCT Dream'},co:'sm',planet:'main',x:8500,y:5930,sat:0.78,op:0.8,active:false,color:C.nct127,bday:'1999.08.02',nat:{ko:'한국·캐나다',en:'KR·CA'},sparkle:false,songs:[]},
+{name:{ko:'해찬',en:'Haechan'},group:{ko:'NCT 127·NCT Dream',en:'NCT 127·NCT Dream'},co:'sm',planet:'main',x:8300,y:5930,sat:0.78,op:0.8,active:true,color:C.nct127,bday:'2000.06.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'런쥔',en:'Renjun'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:8320,y:6040,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2000.03.23',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'제노',en:'Jeno'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:8520,y:6000,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2000.04.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'재민',en:'Jaemin'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:8640,y:6060,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2000.08.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'천러',en:'Chenle'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:8380,y:6260,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2001.11.22',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'지성',en:'Jisung'},group:{ko:'NCT Dream',en:'NCT Dream'},co:'sm',planet:'main',x:8580,y:6260,sat:0.78,op:0.8,active:true,color:C.nctdream,bday:'2002.02.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'쿤',en:'Kun'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:8524,y:7310,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1996.01.01',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'텐',en:'Ten'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:8684,y:7270,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1996.02.27',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
+{name:{ko:'윈윈',en:'WinWin'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:8844,y:7350,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1997.10.28',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'샤오쥔',en:'Xiaojun'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:8564,y:7510,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1999.08.08',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'헨드리',en:'Hendery'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:8764,y:7510,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'1999.09.28',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'양양',en:'Yangyang'},group:{ko:'WayV',en:'WayV'},co:'sm',planet:'main',x:8904,y:7430,sat:0.72,op:0.8,active:true,color:C.wayv,bday:'2000.10.10',nat:{ko:'중국·독일',en:'CN·DE'},sparkle:false,songs:[]},
+{name:{ko:'방찬',en:'Bang Chan'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:5072,y:7274,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.10.03',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[]},
+{name:{ko:'이노',en:'Lee Know'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:5232,y:7234,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.10.25',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'창빈',en:'Changbin'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:5432,y:7274,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.08.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'현진',en:'Hyunjin'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:5532,y:7354,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.03.20',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'JJAM',u:'https://www.youtube.com/watch?v=IgrDN1yOIKY'}]},
+{name:{ko:'한',en:'Han'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:5112,y:7514,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.09.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'필릭스',en:'Felix'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:5332,y:7554,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.09.15',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[]},
+{name:{ko:'승민',en:'Seungmin'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:5512,y:7474,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2000.09.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'아이엔',en:'I.N'},group:{ko:'스트레이키즈',en:'Stray Kids'},co:'jyp',planet:'main',x:5252,y:7614,sat:0.85,op:0.8,active:true,color:C.skz,bday:'2001.02.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'예지',en:'Yeji'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:4560,y:7496,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2000.05.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'River',u:'https://www.youtube.com/watch?v=tnMFp53wrRg'},{t:'WANNABE',u:'https://www.youtube.com/watch?v=pmTjOXIu71Q'},{t:'달라달라',u:'https://www.youtube.com/watch?v=fSAUQ37xbho'}]},
+{name:{ko:'리아',en:'Lia'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:4720,y:7456,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2000.07.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Price Tag',u:'https://www.youtube.com/watch?v=zahgAha5D9Q'},{t:'WANNABE',u:'https://www.youtube.com/watch?v=c3jCty-g5x0'},{t:'달라달라',u:'https://www.youtube.com/watch?v=5QGp7KkfZ0Y'}]},
+{name:{ko:'류진',en:'Ryujin'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:4880,y:7536,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2001.04.17',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'WANNABE',u:'https://www.youtube.com/watch?v=KPUZjvAKmKM'},{t:'ICY',u:'https://www.youtube.com/watch?v=syoATmUcmL4'},{t:'마.피.아. In the morning',u:'https://www.youtube.com/watch?v=L1f8K9sYAgk'}]},
+{name:{ko:'채령',en:'Chaeryeong'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:4640,y:7696,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2001.06.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'WANNABE',u:'https://www.youtube.com/watch?v=s2Y5lscQVSQ'},{t:'Not Shy',u:'https://www.youtube.com/watch?v=Ifm6elFyYxQ'},{t:'SNEAKERS',u:'https://www.youtube.com/watch?v=fGTW6zI0rC8'}]},
+{name:{ko:'유나',en:'Yuna'},group:{ko:'있지',en:'ITZY'},co:'jyp',planet:'main',x:4840,y:7696,sat:0.78,op:0.8,active:true,color:C.itzy,bday:'2003.12.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'달라달라',u:'https://www.youtube.com/watch?v=8f2IDOUrzkI'},{t:'U-Go-Girl',u:'https://www.youtube.com/watch?v=XxLigZQFc14'},{t:'WANNABE',u:'https://www.youtube.com/watch?v=eQl-5S35WGI'}]},
+{name:{ko:'릴리',en:'Lily'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:4038,y:7250,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2003.08.04',nat:{ko:'캐나다',en:'CA'},sparkle:false,songs:[]},
+{name:{ko:'해원',en:'Haewon'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:4218,y:7210,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2003.08.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'설윤',en:'Sullyoon'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:4398,y:7260,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2004.11.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'배이',en:'Bae'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:4098,y:7430,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2005.08.22',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[]},
+{name:{ko:'지우',en:'Jiwoo'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:4278,y:7430,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2006.10.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'규진',en:'Kyujin'},group:{ko:'엔믹스',en:'NMIXX'},co:'jyp',planet:'main',x:4418,y:7360,sat:0.72,op:0.8,active:true,color:C.nmixx,bday:'2006.11.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'S.COUPS',en:'S.COUPS'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6090,y:7278,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1995.08.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'정한',en:'Jeonghan'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6250,y:7238,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1995.10.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'조슈아',en:'Joshua'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6410,y:7238,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1995.12.30',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'준',en:'Jun'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6570,y:7278,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.06.10',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'호시',en:'Hoshi'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6730,y:7338,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.06.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'MAESTRO',u:'https://www.youtube.com/watch?v=4r00ps3AtaU'}]},
+{name:{ko:'원우',en:'Wonwoo'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6850,y:7398,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.07.17',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'우지',en:'Woozi'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6090,y:7478,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1996.11.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'도겸',en:'DK'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6250,y:7458,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1997.02.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'민규',en:'Mingyu'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6410,y:7458,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1997.04.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'승관',en:'Seungkwan'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6570,y:7498,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1998.01.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'버논',en:'Vernon'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6730,y:7538,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1998.02.18',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'디노',en:'Dino'},group:{ko:'세븐틴',en:'SVT'},co:'hybe',planet:'main',x:6290,y:7618,sat:0.85,op:0.8,active:true,color:C.svt,bday:'1999.02.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'신유',en:'Shinyu'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:5600,y:7720,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2003.11.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=BtFPgl0tC0k'},{t:'Oh Mymy : 7s',u:'https://www.youtube.com/watch?v=jTQyctuLb_4'},{t:'Rock with you',u:'https://www.youtube.com/watch?v=kQem0PeYcvs'}]},
+{name:{ko:'도훈',en:'Dohoon'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:5760,y:7680,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2005.01.30',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Run Run',u:'https://www.youtube.com/watch?v=EhDIY4FjCeU'},{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=KPd460eDrWs'},{t:'OVERDRIVE',u:'https://www.youtube.com/watch?v=XpadVtyPogs'}]},
+{name:{ko:'영재',en:'Youngjae'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:5920,y:7740,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2005.05.31',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'너의 모든 가능성이 되어줄게',u:'https://www.youtube.com/watch?v=U5QNHCyKvXI'},{t:'다시 만난 오늘',u:'https://www.youtube.com/watch?v=Y_1mhDE_fX0'},{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=OYK9DHYPXDw'}]},
+{name:{ko:'한진',en:'Hanjin'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:5620,y:7920,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2006.01.05',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=WxDm3oin7lk'},{t:'Oh Mymy : 7s',u:'https://www.youtube.com/watch?v=m9J7C7yrA9w'},{t:'내가 S면 넌 나의 N이 되어줘',u:'https://www.youtube.com/watch?v=X-DLqSIv3YA'}]},
+{name:{ko:'지훈',en:'Jihoon'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:5820,y:7920,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2006.04.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'마음 따라 뛰는 건 멋지지 않아?',u:'https://www.youtube.com/watch?v=Ma_JErDCfBM'},{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=uJnPpGXEEf4'},{t:'내가 S면 넌 나의 N이 되어줘',u:'https://www.youtube.com/watch?v=BzSV1_K-P7A'}]},
+{name:{ko:'경민',en:'Kyungmin'},group:{ko:'투어스',en:'TWS'},co:'hybe',planet:'main',x:5960,y:7840,sat:0.72,op:0.8,active:true,color:C.tws,bday:'2007.09.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'첫 만남은 계획대로 되지 않아',u:'https://www.youtube.com/watch?v=TJxdabTKRQc'},{t:'はじめまして',u:'https://www.youtube.com/watch?v=zVjxDvjt36A'},{t:'BFF',u:'https://www.youtube.com/watch?v=UMcSD3KHeLQ'}]},
+{name:{ko:'민지',en:'Minji'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:5082,y:8294,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2004.05.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Odoriko (踊り子)',u:'https://www.youtube.com/watch?v=9ninWlkEthY'},{t:'Attention',u:'https://www.youtube.com/watch?v=ZzU1TNHWWhM'},{t:'Hype Boy',u:'https://www.youtube.com/watch?v=p1cE9T0CFCQ'}]},
+{name:{ko:'하니',en:'Hanni'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:5282,y:8274,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2004.10.06',nat:{ko:'베트남',en:'VN'},sparkle:false,songs:[{t:'푸른 산호초 (青い珊瑚礁)',u:'https://www.youtube.com/watch?v=Rj7N4ThLGQY'},{t:'Hype Boy',u:'https://www.youtube.com/watch?v=lmJPeFW75qQ'},{t:'New Jeans',u:'https://www.youtube.com/watch?v=tQ8YtKBqaMc'}]},
+{name:{ko:'해린',en:'Haerin'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:5062,y:8474,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2006.05.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Hype Boy',u:'https://www.youtube.com/watch?v=zbyet4HK4ko'},{t:'Tell Me',u:'https://www.youtube.com/watch?v=g6gM8x9H65Q'},{t:'Cookie',u:'https://www.youtube.com/watch?v=GyqqpCOyBos'}]},
+{name:{ko:'혜인',en:'Hyein'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:5302,y:8474,sat:0.72,op:0.8,active:true,color:C.newjeans,bday:'2008.04.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Hype Boy',u:'https://www.youtube.com/watch?v=lg6O00c0dGU'},{t:'New Jeans',u:'https://www.youtube.com/watch?v=Wz_mVys9Z4w'},{t:'Attention',u:'https://www.youtube.com/watch?v=gwXFWPZAxME'}]},
+{name:{ko:'다니엘',en:'Danielle'},group:{ko:'뉴진스',en:'NewJeans'},co:'hybe',planet:'main',x:5462,y:8374,sat:0.70,op:0.42,active:false,color:C.newjeans,bday:'2005.04.11',nat:{ko:'한국·호주',en:'KR·AU'},sparkle:false,songs:[{t:'Hype Boy',u:'https://www.youtube.com/watch?v=v5UH3wTPbzw'},{t:'OMG',u:'https://www.youtube.com/watch?v=NDTuPvEvVRI'},{t:'Ditto',u:'https://www.youtube.com/watch?v=tPKmJMEg2do'}]},
+{name:{ko:'마틴',en:'Martin'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:7134,y:8294,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2008.03.20',nat:{ko:'한국·캐나다',en:'KR·CA'},sparkle:false,songs:[{t:'GO!',u:'https://www.youtube.com/watch?v=tWOItSAfA4M'},{t:'REDRED',u:'https://www.youtube.com/watch?v=2LDdWZOK34c'},{t:'What You Want',u:'https://www.youtube.com/watch?v=2azvJj4u5D4'}]},
+{name:{ko:'제임스',en:'James'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:7394,y:8254,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2005.10.14',nat:{ko:'대만',en:'TW'},sparkle:false,songs:[{t:'FaSHioN',u:'https://www.youtube.com/watch?v=twqghto0qZs'},{t:'REDRED',u:'https://www.youtube.com/watch?v=xZBxf0BhMV8'},{t:'ACAI',u:'https://www.youtube.com/watch?v=JlTb7tJbA8U'}]},
+{name:{ko:'주훈',en:'Juhoon'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:7214,y:8454,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2008.01.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'REDRED',u:'https://www.youtube.com/watch?v=a8PVi1KsIoc'},{t:'FaSHioN',u:'https://www.youtube.com/watch?v=vVPM4nZvGWg'},{t:'GO!',u:'https://www.youtube.com/watch?v=yYUTq-7Ttb4'}]},
+{name:{ko:'성현',en:'Seonghyeon'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:7414,y:8414,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2009.01.13',nat:{ko:'한국',en:'KR'},sparkle:true,songs:[{t:'REDRED',u:'https://www.youtube.com/watch?v=pXbO-QQJsxM'},{t:'FaSHioN',u:'https://www.youtube.com/watch?v=A7CRAA9Ztkw'},{t:'GO!',u:'https://www.youtube.com/watch?v=2Li7-6iraJE'}]},
+{name:{ko:'건호',en:'Geonho'},group:{ko:'코르티스',en:'CORTIS'},co:'hybe',planet:'main',x:7294,y:8514,sat:0.72,op:0.8,active:true,color:C.cortis,bday:'2009.02.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'GO!',u:'https://www.youtube.com/watch?v=93iJLm0kUAU'},{t:'REDRED',u:'https://www.youtube.com/watch?v=cxcxx0f6caM'},{t:'FaSHioN',u:'https://www.youtube.com/watch?v=kPjbIP7kaqs'}]},
+{name:{ko:'안유진',en:'Yujin'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:6140,y:4560,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2003.09.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'ELEVEN',u:'https://www.youtube.com/watch?v=0Ar9bq1yjP0'},{t:'Lion Heart',u:'https://www.youtube.com/watch?v=zs7VgEMbpUg'},{t:'Kitsch',u:'https://www.youtube.com/watch?v=kYdWmnu4Qdo'}]},
+{name:{ko:'가을',en:'Gaeul'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:6340,y:4520,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2002.09.24',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'After LIKE',u:'https://www.youtube.com/watch?v=-9RMTYZ2Etw'},{t:'Odd',u:'https://www.youtube.com/watch?v=UiYUVhsBraM'},{t:'LOVE DIVE',u:'https://www.youtube.com/watch?v=jlVi_OlLkAU'}]},
+{name:{ko:'레이',en:'Rei'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:6540,y:4580,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2004.02.03',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[{t:'After LIKE',u:'https://www.youtube.com/watch?v=mKLLdYSl3Lk'},{t:'ELEVEN',u:'https://www.youtube.com/watch?v=bD5vB0Yc_O4'},{t:'LOVE DIVE',u:'https://www.youtube.com/watch?v=vWOPzl5iLIc'}]},
+{name:{ko:'장원영',en:'Wonyoung'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:6220,y:4770,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2004.08.31',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LOVE DIVE',u:'https://www.youtube.com/watch?v=DqvMi7J_juM'},{t:'ELEVEN',u:'https://www.youtube.com/watch?v=ERGrC1s5_3k'},{t:'After LIKE',u:'https://www.youtube.com/watch?v=A0vgoyTmkgQ'}]},
+{name:{ko:'리즈',en:'Liz'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:6420,y:4770,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2004.11.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'바람아 멈추어다오',u:'https://www.youtube.com/watch?v=FkmdvsEqW9k'},{t:'ELEVEN',u:'https://www.youtube.com/watch?v=d9v1UAN4tw0'},{t:'REBEL HEART',u:'https://www.youtube.com/watch?v=h7OmJZS7sxY'}]},
+{name:{ko:'이서',en:'Leeseo'},group:{ko:'아이브',en:'IVE'},co:'starship',planet:'main',x:6600,y:4700,sat:0.78,op:0.8,active:true,color:C.ive,bday:'2007.02.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'ELEVEN',u:'https://www.youtube.com/watch?v=D0lmEcdgO1M'},{t:'LOVE DIVE',u:'https://www.youtube.com/watch?v=aHGZGBY-Koc'},{t:'After LIKE',u:'https://www.youtube.com/watch?v=NOVaFSRBZrk'}]},
+{name:{ko:'이솔',en:'Leesol'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:6180,y:3700,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2005.09.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'지유',en:'Jiyu'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:6350,y:3670,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2006.05.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'수이',en:'Sui'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:6500,y:3710,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2006.04.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'하음',en:'Haum'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:6240,y:3880,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2006.11.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'키야',en:'Kya'},group:{ko:'키키',en:'KiiiKiii'},co:'starship',planet:'main',x:6420,y:3870,sat:0.72,op:0.8,active:true,color:C.kiiikiii,bday:'2010.12.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'원이',en:'Woni'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:3592,y:4018,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2004.05.25',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=geAne2rrf7Q'},{t:'Deja Vu',u:'https://www.youtube.com/watch?v=a2OHT0Bi5lE'},{t:'Pinball',u:'https://www.youtube.com/watch?v=YAmTgcLa-80'}]},
+{name:{ko:'리브',en:'Liv'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:3812,y:3998,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2006.10.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=Xc8zNkCwGC0'},{t:'Glow Up',u:'https://www.youtube.com/watch?v=Lo1CTBTXda8'},{t:'Deja Vu',u:'https://www.youtube.com/watch?v=dwGvBIkURR0'}]},
+{name:{ko:'미나미',en:'Minami'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:3892,y:4138,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2006.11.29',nat:{ko:'일본',en:'JP'},sparkle:true,songs:[{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=3lONVqtRXAI'},{t:'다시 만난 세계',u:'https://www.youtube.com/watch?v=XA1cVAlrid4'},{t:'Runaway',u:'https://www.youtube.com/watch?v=ZJGzCkV_RGg'}]},
+{name:{ko:'메이',en:'May'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:3652,y:4218,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2008.08.19',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'다시 만난 세계',u:'https://www.youtube.com/watch?v=GX4I0MyI6I0'},{t:'Glow Up',u:'https://www.youtube.com/watch?v=hlyhddaC6qg'},{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=h7zcNExoSKM'}]},
+{name:{ko:'제나',en:'Zena'},group:{ko:'리센느',en:'RESCENE'},co:'themuse',planet:'main',x:3852,y:4218,sat:0.72,op:0.8,active:true,color:C.rescene,bday:'2008.11.27',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'Deja Vu',u:'https://www.youtube.com/watch?v=maQWa95XlLE'},{t:'LOVE ATTACK',u:'https://www.youtube.com/watch?v=vJkC_NveL08'},{t:'Glow Up',u:'https://www.youtube.com/watch?v=jRfTKjK-mmY'}]},
+{name:{ko:'쥴리',en:'Julie'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:3350,y:7088,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2000.03.29',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'나띠',en:'Natty'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:3590,y:7068,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2002.05.30',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[{t:'Who is she',u:'https://www.youtube.com/watch?v=Z9rYx1b4yjU'}]},
+{name:{ko:'벨',en:'Belle'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:3630,y:7248,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2004.03.20',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'하늘',en:'Haneul'},group:{ko:'키스오브라이프',en:'KISS OF LIFE'},co:'s2',planet:'main',x:3390,y:7288,sat:0.72,op:0.8,active:true,color:C.kolof,bday:'2005.05.25',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
 
 // ── 에이티즈 ──
-{name:{ko:'홍중',en:'Hongjoong'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2180,y:3132,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1998.11.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'성화',en:'Seonghwa'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2270,y:3112,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1998.04.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'윤호',en:'Yunho'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2360,y:3132,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.03.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'여상',en:'Yeosang'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2445,y:3152,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.06.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'산',en:'San'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2195,y:3242,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.07.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'민기',en:'Mingi'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2285,y:3232,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.08.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'우영',en:'Wooyoung'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2375,y:3247,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.11.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'종호',en:'Jongho'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:2455,y:3222,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'2000.09.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'홍중',en:'Hongjoong'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:4360,y:6264,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1998.11.07',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'성화',en:'Seonghwa'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:4540,y:6224,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1998.04.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'윤호',en:'Yunho'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:4720,y:6264,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.03.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'여상',en:'Yeosang'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:4890,y:6304,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.06.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'산',en:'San'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:4390,y:6484,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.07.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'민기',en:'Mingi'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:4570,y:6464,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.08.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'우영',en:'Wooyoung'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:4750,y:6494,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'1999.11.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'종호',en:'Jongho'},group:{ko:'에이티즈',en:'ATEEZ'},co:'kq',planet:'main',x:4910,y:6444,sat:0.85,op:0.8,active:true,color:C.ateez,bday:'2000.09.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
 
 // ── (여자)아이들 ──
-{name:{ko:'소연',en:'Soyeon'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2323,y:2398,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1998.08.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'미연',en:'Miyeon'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2413,y:2378,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1997.01.31',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'민니',en:'Minnie'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2498,y:2408,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1997.10.23',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
-{name:{ko:'수진',en:'Soojin'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2358,y:2498,sat:0.70,op:0.45,active:false,color:C.gidle,bday:'1998.03.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'우기',en:'Yuqi'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2443,y:2513,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1999.09.23',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
-{name:{ko:'슈화',en:'Shuhua'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:2528,y:2503,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'2000.10.10',nat:{ko:'대만',en:'TW'},sparkle:false,songs:[]},
+{name:{ko:'소연',en:'Soyeon'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:4646,y:4796,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1998.08.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'미연',en:'Miyeon'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:4826,y:4756,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1997.01.31',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'민니',en:'Minnie'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:4996,y:4816,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1997.10.23',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
+{name:{ko:'수진',en:'Soojin'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:4716,y:4996,sat:0.70,op:0.45,active:false,color:C.gidle,bday:'1998.03.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'우기',en:'Yuqi'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:4886,y:5026,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'1999.09.23',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'슈화',en:'Shuhua'},group:{ko:'아이들',en:'(G)I-DLE'},co:'cube',planet:'main',x:5056,y:5006,sat:0.85,op:0.8,active:true,color:C.gidle,bday:'2000.10.10',nat:{ko:'대만',en:'TW'},sparkle:false,songs:[]},
 
 // ── 신규 추가 ──
-{name:{ko:'성찬',en:'Sungchan'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3930,y:2460,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2001.09.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'은석',en:'Eunseok'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3710,y:2450,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2001.01.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'쇼타로',en:'Shotaro'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3950,y:2535,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2000.11.25',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'원빈',en:'Wonbin'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3810,y:2430,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2002.02.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'승한',en:'Seunghan'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3880,y:2450,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2003.04.02',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'소희',en:'Sohee'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3750,y:2540,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2003.04.17',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'앤톤',en:'Anton'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:3855,y:2525,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2004.11.21',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
-{name:{ko:'연준',en:'Yeonjun'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:3625,y:3940,sat:0.78,op:0.8,active:true,color:C.txt,bday:'1999.09.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'수빈',en:'Soobin'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:3705,y:3920,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2000.12.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'범규',en:'Beomgyu'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:3785,y:3950,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2001.03.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'태현',en:'Taehyun'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:3665,y:4050,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2002.02.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'휴닝카이',en:'Huening Kai'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:3765,y:4050,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2002.08.14',nat:{ko:'한국·독일·미국',en:'KR·DE·US'},sparkle:false,songs:[]},
-{name:{ko:'희승',en:'Heeseung'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3149,y:4106,sat:0.78,op:0.8,active:false,color:C.enhypen,bday:'2001.10.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'제이',en:'Jay'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3219,y:4086,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2002.04.20',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
-{name:{ko:'제이크',en:'Jake'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3299,y:4106,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2002.11.15',nat:{ko:'호주',en:'AU'},sparkle:false,songs:[]},
-{name:{ko:'성훈',en:'Sunghoon'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3359,y:4136,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2002.12.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'선우',en:'Sunoo'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3169,y:4226,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2003.06.24',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'정원',en:'Jungwon'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3279,y:4236,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2004.02.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'니키',en:'Ni-Ki'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:3349,y:4206,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2005.12.09',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'윤아',en:'Yunah'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:2900,y:4150,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2004.01.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'민주',en:'Minju'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:2980,y:4130,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2004.05.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'모카',en:'Moka'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:3060,y:4155,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2004.10.08',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'원희',en:'Wonhee'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:2920,y:4250,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2007.06.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'이로하',en:'Iroha'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:3020,y:4250,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2008.12.21',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'성찬',en:'Sungchan'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:7860,y:4920,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2001.09.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'은석',en:'Eunseok'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:7420,y:4900,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2001.01.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'쇼타로',en:'Shotaro'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:7900,y:5070,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2000.11.25',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'원빈',en:'Wonbin'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:7620,y:4860,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2002.02.21',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'승한',en:'Seunghan'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:7760,y:4900,sat:0.78,op:0.42,active:false,color:C.riize,bday:'2003.04.02',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'소희',en:'Sohee'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:7500,y:5080,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2003.04.17',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'앤톤',en:'Anton'},group:{ko:'라이즈',en:'RIIZE'},co:'sm',planet:'main',x:7710,y:5050,sat:0.78,op:0.8,active:true,color:C.riize,bday:'2004.11.21',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'연준',en:'Yeonjun'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:7250,y:7880,sat:0.78,op:0.8,active:true,color:C.txt,bday:'1999.09.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'수빈',en:'Soobin'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:7410,y:7840,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2000.12.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'범규',en:'Beomgyu'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:7570,y:7900,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2001.03.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'태현',en:'Taehyun'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:7330,y:8100,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2002.02.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'휴닝카이',en:'Huening Kai'},group:{ko:'TXT',en:'TXT'},co:'hybe',planet:'main',x:7530,y:8100,sat:0.78,op:0.8,active:true,color:C.txt,bday:'2002.08.14',nat:{ko:'한국·독일·미국',en:'KR·DE·US'},sparkle:false,songs:[]},
+{name:{ko:'희승',en:'Heeseung'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:6298,y:8212,sat:0.78,op:0.8,active:false,color:C.enhypen,bday:'2001.10.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'제이',en:'Jay'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:6438,y:8172,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2002.04.20',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'제이크',en:'Jake'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:6598,y:8212,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2002.11.15',nat:{ko:'호주',en:'AU'},sparkle:false,songs:[]},
+{name:{ko:'성훈',en:'Sunghoon'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:6718,y:8272,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2002.12.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'선우',en:'Sunoo'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:6338,y:8452,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2003.06.24',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'정원',en:'Jungwon'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:6558,y:8472,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2004.02.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'니키',en:'Ni-Ki'},group:{ko:'엔하이픈',en:'ENHYPEN'},co:'hybe',planet:'main',x:6698,y:8412,sat:0.78,op:0.8,active:true,color:C.enhypen,bday:'2005.12.09',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'윤아',en:'Yunah'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:5800,y:8300,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2004.01.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'민주',en:'Minju'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:5960,y:8260,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2004.05.11',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'모카',en:'Moka'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:6120,y:8310,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2004.10.08',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'원희',en:'Wonhee'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:5840,y:8500,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2007.06.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'이로하',en:'Iroha'},group:{ko:'아일릿',en:'ILLIT'},co:'hybe',planet:'main',x:6040,y:8500,sat:0.72,op:0.8,active:true,color:C.illit,bday:'2008.12.21',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
 
 // ── 르세라핌 ──
-{name:{ko:'사쿠라',en:'Sakura'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3405,y:3970,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'1998.03.19',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'김채원',en:'Chaewon'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3495,y:3952,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2000.08.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'허윤진',en:'Yunjin'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3572,y:3978,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2001.10.08',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
-{name:{ko:'카즈하',en:'Kazuha'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3422,y:4068,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2003.08.09',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'홍은채',en:'Eunchae'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3527,y:4073,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2006.11.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'김가람',en:'Garam'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:3468,y:4022,sat:0.70,op:0.42,active:false,color:C.lesserafim,bday:'2004.10.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'사쿠라',en:'Sakura'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:6810,y:7940,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'1998.03.19',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'김채원',en:'Chaewon'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:6990,y:7904,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2000.08.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'허윤진',en:'Yunjin'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:7144,y:7956,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2001.10.08',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'카즈하',en:'Kazuha'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:6844,y:8136,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2003.08.09',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'홍은채',en:'Eunchae'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:7054,y:8146,sat:0.85,op:0.8,active:true,color:C.lesserafim,bday:'2006.11.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'김가람',en:'Garam'},group:{ko:'르세라핌',en:'LE SSERAFIM'},co:'hybe',planet:'main',x:6936,y:8044,sat:0.70,op:0.42,active:false,color:C.lesserafim,bday:'2004.10.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
 
 // ── 베이비몬스터 ──
-{name:{ko:'루카',en:'Ruka'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2099,y:2052,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2004.11.25',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'파리타',en:'Pharita'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2189,y:2032,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2004.03.03',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
-{name:{ko:'아사',en:'Ahyeon'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2279,y:2058,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2006.04.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'치키타',en:'Chiquita'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2111,y:2147,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2005.01.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'라미',en:'Rami'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2207,y:2162,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2004.09.28',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'로라',en:'Rora'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2291,y:2142,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2007.04.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'하나',en:'Hana'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:2227,y:2110,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2007.04.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'수인',en:'Sooin'},group:{ko:'미야오',en:'MEOVV'},co:'blacklabel',planet:'main',x:2090,y:2265,sat:0.82,op:0.8,active:true,color:C.meovv,bday:'2005.04.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'가원',en:'Gawon'},group:{ko:'미야오',en:'MEOVV'},co:'blacklabel',planet:'main',x:2180,y:2248,sat:0.82,op:0.8,active:true,color:C.meovv,bday:'2005.04.27',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'안나',en:'Anna'},group:{ko:'미야오',en:'MEOVV'},co:'blacklabel',planet:'main',x:2268,y:2262,sat:0.82,op:0.8,active:true,color:C.meovv,bday:'2005.11.17',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'나린',en:'Narin'},group:{ko:'미야오',en:'MEOVV'},co:'blacklabel',planet:'main',x:2135,y:2342,sat:0.82,op:0.8,active:true,color:C.meovv,bday:'2007.08.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'엘라',en:'Ella'},group:{ko:'미야오',en:'MEOVV'},co:'blacklabel',planet:'main',x:2222,y:2328,sat:0.82,op:0.8,active:true,color:C.meovv,bday:'2008.12.01',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'루카',en:'Ruka'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:4198,y:4104,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2004.11.25',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'파리타',en:'Pharita'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:4378,y:4064,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2004.03.03',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
+{name:{ko:'아사',en:'Ahyeon'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:4558,y:4116,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2006.04.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'치키타',en:'Chiquita'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:4222,y:4294,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2005.01.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'라미',en:'Rami'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:4414,y:4324,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2004.09.28',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'로라',en:'Rora'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:4582,y:4284,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2007.04.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'하나',en:'Hana'},group:{ko:'베이비몬스터',en:'BABYMONSTER'},co:'yg',planet:'main',x:4454,y:4220,sat:0.85,op:0.8,active:true,color:C.babymonster,bday:'2007.04.06',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'수인',en:'Sooin'},group:{ko:'미야오',en:'MEOVV'},co:'blacklabel',planet:'main',x:4180,y:4530,sat:0.82,op:0.8,active:true,color:C.meovv,bday:'2005.04.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'가원',en:'Gawon'},group:{ko:'미야오',en:'MEOVV'},co:'blacklabel',planet:'main',x:4360,y:4496,sat:0.82,op:0.8,active:true,color:C.meovv,bday:'2005.04.27',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'안나',en:'Anna'},group:{ko:'미야오',en:'MEOVV'},co:'blacklabel',planet:'main',x:4536,y:4524,sat:0.82,op:0.8,active:true,color:C.meovv,bday:'2005.11.17',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'나린',en:'Narin'},group:{ko:'미야오',en:'MEOVV'},co:'blacklabel',planet:'main',x:4270,y:4684,sat:0.82,op:0.8,active:true,color:C.meovv,bday:'2007.08.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'엘라',en:'Ella'},group:{ko:'미야오',en:'MEOVV'},co:'blacklabel',planet:'main',x:4444,y:4656,sat:0.82,op:0.8,active:true,color:C.meovv,bday:'2008.12.01',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
 
-{name:{ko:'아이린',en:'Irene'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:5320,y:3000,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1991.03.29',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'슬기',en:'Seulgi'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:5400,y:2980,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1994.02.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'웬디',en:'Wendy'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:5480,y:3010,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1994.02.21',nat:{ko:'한국·캐나다',en:'KR·CA'},sparkle:false,songs:[]},
-{name:{ko:'조이',en:'Joy'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:5360,y:3120,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1996.09.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'예리',en:'Yeri'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:5460,y:3120,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1999.03.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'아이린',en:'Irene'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:10640,y:6000,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1991.03.29',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'슬기',en:'Seulgi'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:10800,y:5960,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1994.02.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'웬디',en:'Wendy'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:10960,y:6020,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1994.02.21',nat:{ko:'한국·캐나다',en:'KR·CA'},sparkle:false,songs:[]},
+{name:{ko:'조이',en:'Joy'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:10720,y:6240,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1996.09.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'예리',en:'Yeri'},group:{ko:'레드벨벳',en:'Red Velvet'},co:'sm',planet:'redvelvet',x:10920,y:6240,sat:0.78,op:0.8,active:true,color:C.redvelvet,bday:'1999.03.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
 // ── 레거시 행성 ──────────────────────────────
-{name:{ko:'태연',en:'Taeyeon'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5060,y:440,sat:.92,op:.82,active:true,color:C.snsd,bday:'1989.03.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'써니',en:'Sunny'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5160,y:420,sat:.72,op:.70,active:true,color:C.snsd,bday:'1989.05.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'효연',en:'Hyoyeon'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5260,y:440,sat:.70,op:.68,active:true,color:C.snsd,bday:'1989.09.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'유리',en:'Yuri'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5300,y:500,sat:.74,op:.70,active:true,color:C.snsd,bday:'1989.12.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'수영',en:'Sooyoung'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5200,y:540,sat:.72,op:.70,active:true,color:C.snsd,bday:'1990.02.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'윤아',en:'Yoona'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5080,y:520,sat:.80,op:.75,active:true,color:C.snsd,bday:'1990.05.30',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'서현',en:'Seohyun'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:5240,y:580,sat:.70,op:.68,active:true,color:C.snsd,bday:'1991.06.28',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'온유',en:'Onew'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:5500,y:2140,sat:.88,op:.80,active:true,color:C.shinee,bday:'1989.12.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'키',en:'Key'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:5620,y:2120,sat:.85,op:.78,active:true,color:C.shinee,bday:'1991.09.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'민호',en:'Minho'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:5720,y:2180,sat:.80,op:.76,active:true,color:C.shinee,bday:'1991.12.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'태민',en:'Taemin'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:5660,y:2280,sat:.95,op:.85,active:true,color:C.shinee,bday:'1993.07.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'종현',en:'Jonghyun'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:5520,y:2260,sat:.92,op:.35,active:false,color:C.shinee,bday:'1990.04.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'빅토리아',en:'Victoria'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:5480,y:3740,sat:.75,op:.50,active:false,color:C.fx,bday:'1987.02.02',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
-{name:{ko:'앰버',en:'Amber'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:5620,y:3720,sat:.78,op:.55,active:false,color:C.fx,bday:'1992.09.18',nat:{ko:'미국',en:'US'},sparkle:false,songs:[]},
-{name:{ko:'루나',en:'Luna'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:5640,y:3840,sat:.72,op:.50,active:false,color:C.fx,bday:'1993.08.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'크리스탈',en:'Krystal'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:5500,y:3860,sat:.80,op:.55,active:false,color:C.fx,bday:'1994.10.24',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
-{name:{ko:'RM',en:'RM'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:4860,y:5320,sat:.85,op:.78,active:true,color:C.bts,bday:'1994.09.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'진',en:'Jin'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:4980,y:5280,sat:.75,op:.76,active:true,color:C.bts,bday:'1992.12.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'슈가',en:'Suga'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:5100,y:5300,sat:.80,op:.78,active:true,color:C.bts,bday:'1993.03.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'제이홉',en:'J-Hope'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:5160,y:5400,sat:.78,op:.76,active:true,color:C.bts,bday:'1994.02.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'지민',en:'Jimin'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:5020,y:5480,sat:.72,op:.80,active:true,color:C.bts,bday:'1995.10.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'뷔',en:'V'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:4880,y:5460,sat:.76,op:.78,active:true,color:C.bts,bday:'1995.12.30',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'정국',en:'Jungkook'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:4960,y:5540,sat:.70,op:.82,active:true,color:C.bts,bday:'1997.09.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'나연',en:'Nayeon'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:560,y:5100,sat:.80,op:.78,active:true,color:C.twice,bday:'1995.09.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'정연',en:'Jeongyeon'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:680,y:5060,sat:.75,op:.75,active:true,color:C.twice,bday:'1996.09.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'모모',en:'Momo'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:800,y:5100,sat:.78,op:.76,active:true,color:C.twice,bday:'1996.11.09',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'사나',en:'Sana'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:860,y:5200,sat:.76,op:.76,active:true,color:C.twice,bday:'1996.12.29',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'지효',en:'Jihyo'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:700,y:5260,sat:.82,op:.78,active:true,color:C.twice,bday:'1997.02.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'미나',en:'Mina'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:580,y:5200,sat:.78,op:.74,active:true,color:C.twice,bday:'1997.03.24',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
-{name:{ko:'다현',en:'Dahyun'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:620,y:5320,sat:.72,op:.72,active:true,color:C.twice,bday:'1998.05.28',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'채영',en:'Chaeyoung'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:780,y:5320,sat:.75,op:.73,active:true,color:C.twice,bday:'1999.04.23',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
-{name:{ko:'쯔위',en:'Tzuyu'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:720,y:5400,sat:.80,op:.76,active:true,color:C.twice,bday:'2000.06.14',nat:{ko:'대만',en:'TW'},sparkle:false,songs:[]},
-{name:{ko:'GD',en:'G-Dragon'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:400,y:420,sat:.92,op:.80,active:true,color:C.bigbang,bday:'1988.08.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'태양',en:'Taeyang'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:540,y:400,sat:.78,op:.50,active:false,color:C.bigbang,bday:'1988.05.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'탑',en:'T.O.P'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:600,y:500,sat:.60,op:.35,active:false,color:C.bigbang,bday:'1987.11.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'대성',en:'Daesung'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:440,y:580,sat:.68,op:.50,active:false,color:C.bigbang,bday:'1989.04.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'지수',en:'Jisoo'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:600,y:1420,sat:.85,op:.80,active:true,color:C.blackpink,bday:'1995.01.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'제니',en:'Jennie'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:740,y:1400,sat:.88,op:.82,active:true,color:C.blackpink,bday:'1996.01.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
-{name:{ko:'로제',en:'Rosé'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:780,y:1540,sat:.85,op:.80,active:true,color:C.blackpink,bday:'1997.02.11',nat:{ko:'한국·NZ',en:'KR·NZ'},sparkle:false,songs:[]},
-{name:{ko:'리사',en:'Lisa'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:620,y:1580,sat:.90,op:.82,active:true,color:C.blackpink,bday:'1997.03.27',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
-{name:{ko:'아이유',en:'IU'},group:{ko:'솔로',en:'Solo'},co:'edam',planet:'iu',x:3000,y:200,sat:.95,op:.85,active:true,color:C.iu,bday:'1993.05.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LILAC',u:'https://www.youtube.com/watch?v=A-Bd5NnUMNk'},{t:'Celebrity',u:'https://www.youtube.com/watch?v=6oanIo_9Z4M'},{t:'Strawberry Moon',u:'https://www.youtube.com/watch?v=UY4ZCgkTHpQ'}]},
+{name:{ko:'태연',en:'Taeyeon'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:10120,y:880,sat:.92,op:.82,active:true,color:C.snsd,bday:'1989.03.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'써니',en:'Sunny'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:10320,y:840,sat:.72,op:.70,active:true,color:C.snsd,bday:'1989.05.15',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'효연',en:'Hyoyeon'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:10520,y:880,sat:.70,op:.68,active:true,color:C.snsd,bday:'1989.09.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'유리',en:'Yuri'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:10600,y:1000,sat:.74,op:.70,active:true,color:C.snsd,bday:'1989.12.05',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'수영',en:'Sooyoung'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:10400,y:1080,sat:.72,op:.70,active:true,color:C.snsd,bday:'1990.02.10',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'윤아',en:'Yoona'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:10160,y:1040,sat:.80,op:.75,active:true,color:C.snsd,bday:'1990.05.30',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'서현',en:'Seohyun'},group:{ko:'소녀시대',en:'SNSD'},co:'sm',planet:'snsd',x:10480,y:1160,sat:.70,op:.68,active:true,color:C.snsd,bday:'1991.06.28',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'온유',en:'Onew'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:11000,y:4280,sat:.88,op:.80,active:true,color:C.shinee,bday:'1989.12.14',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'키',en:'Key'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:11240,y:4240,sat:.85,op:.78,active:true,color:C.shinee,bday:'1991.09.23',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'민호',en:'Minho'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:11440,y:4360,sat:.80,op:.76,active:true,color:C.shinee,bday:'1991.12.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'태민',en:'Taemin'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:11320,y:4560,sat:.95,op:.85,active:true,color:C.shinee,bday:'1993.07.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'종현',en:'Jonghyun'},group:{ko:'샤이니',en:'SHINee'},co:'sm',planet:'shinee',x:11040,y:4520,sat:.92,op:.35,active:false,color:C.shinee,bday:'1990.04.08',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'빅토리아',en:'Victoria'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:10960,y:7480,sat:.75,op:.50,active:false,color:C.fx,bday:'1987.02.02',nat:{ko:'중국',en:'CN'},sparkle:false,songs:[]},
+{name:{ko:'앰버',en:'Amber'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:11240,y:7440,sat:.78,op:.55,active:false,color:C.fx,bday:'1992.09.18',nat:{ko:'미국',en:'US'},sparkle:false,songs:[]},
+{name:{ko:'루나',en:'Luna'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:11280,y:7680,sat:.72,op:.50,active:false,color:C.fx,bday:'1993.08.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'크리스탈',en:'Krystal'},group:{ko:'f(x)',en:'f(x)'},co:'sm',planet:'fx',x:11000,y:7720,sat:.80,op:.55,active:false,color:C.fx,bday:'1994.10.24',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'RM',en:'RM'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:9720,y:10640,sat:.85,op:.78,active:true,color:C.bts,bday:'1994.09.12',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'진',en:'Jin'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:9960,y:10560,sat:.75,op:.76,active:true,color:C.bts,bday:'1992.12.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'슈가',en:'Suga'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:10200,y:10600,sat:.80,op:.78,active:true,color:C.bts,bday:'1993.03.09',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'제이홉',en:'J-Hope'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:10320,y:10800,sat:.78,op:.76,active:true,color:C.bts,bday:'1994.02.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'지민',en:'Jimin'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:10040,y:10960,sat:.72,op:.80,active:true,color:C.bts,bday:'1995.10.13',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'뷔',en:'V'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:9760,y:10920,sat:.76,op:.78,active:true,color:C.bts,bday:'1995.12.30',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'정국',en:'Jungkook'},group:{ko:'BTS',en:'BTS'},co:'hybe',planet:'bts',x:9920,y:11080,sat:.70,op:.82,active:true,color:C.bts,bday:'1997.09.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'나연',en:'Nayeon'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:1120,y:10200,sat:.80,op:.78,active:true,color:C.twice,bday:'1995.09.22',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'정연',en:'Jeongyeon'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:1360,y:10120,sat:.75,op:.75,active:true,color:C.twice,bday:'1996.09.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'모모',en:'Momo'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:1600,y:10200,sat:.78,op:.76,active:true,color:C.twice,bday:'1996.11.09',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'사나',en:'Sana'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:1720,y:10400,sat:.76,op:.76,active:true,color:C.twice,bday:'1996.12.29',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'지효',en:'Jihyo'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:1400,y:10520,sat:.82,op:.78,active:true,color:C.twice,bday:'1997.02.01',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'미나',en:'Mina'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:1160,y:10400,sat:.78,op:.74,active:true,color:C.twice,bday:'1997.03.24',nat:{ko:'일본',en:'JP'},sparkle:false,songs:[]},
+{name:{ko:'다현',en:'Dahyun'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:1240,y:10640,sat:.72,op:.72,active:true,color:C.twice,bday:'1998.05.28',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'채영',en:'Chaeyoung'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:1560,y:10640,sat:.75,op:.73,active:true,color:C.twice,bday:'1999.04.23',nat:{ko:'한국·미국',en:'KR·US'},sparkle:false,songs:[]},
+{name:{ko:'쯔위',en:'Tzuyu'},group:{ko:'트와이스',en:'TWICE'},co:'jyp',planet:'twice',x:1440,y:10800,sat:.80,op:.76,active:true,color:C.twice,bday:'2000.06.14',nat:{ko:'대만',en:'TW'},sparkle:false,songs:[]},
+{name:{ko:'GD',en:'G-Dragon'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:800,y:840,sat:.92,op:.80,active:true,color:C.bigbang,bday:'1988.08.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'태양',en:'Taeyang'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:1080,y:800,sat:.78,op:.50,active:false,color:C.bigbang,bday:'1988.05.18',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'탑',en:'T.O.P'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:1200,y:1000,sat:.60,op:.35,active:false,color:C.bigbang,bday:'1987.11.04',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'대성',en:'Daesung'},group:{ko:'빅뱅',en:'BIGBANG'},co:'yg',planet:'bigbang',x:880,y:1160,sat:.68,op:.50,active:false,color:C.bigbang,bday:'1989.04.26',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'지수',en:'Jisoo'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:1200,y:2840,sat:.85,op:.80,active:true,color:C.blackpink,bday:'1995.01.03',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'제니',en:'Jennie'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:1480,y:2800,sat:.88,op:.82,active:true,color:C.blackpink,bday:'1996.01.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[]},
+{name:{ko:'로제',en:'Rosé'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:1560,y:3080,sat:.85,op:.80,active:true,color:C.blackpink,bday:'1997.02.11',nat:{ko:'한국·NZ',en:'KR·NZ'},sparkle:false,songs:[]},
+{name:{ko:'리사',en:'Lisa'},group:{ko:'블랙핑크',en:'BLACKPINK'},co:'yg',planet:'blackpink',x:1240,y:3160,sat:.90,op:.82,active:true,color:C.blackpink,bday:'1997.03.27',nat:{ko:'태국',en:'TH'},sparkle:false,songs:[]},
+{name:{ko:'아이유',en:'IU'},group:{ko:'솔로',en:'Solo'},co:'edam',planet:'iu',x:6000,y:400,sat:.95,op:.85,active:true,color:C.iu,bday:'1993.05.16',nat:{ko:'한국',en:'KR'},sparkle:false,songs:[{t:'LILAC',u:'https://www.youtube.com/watch?v=A-Bd5NnUMNk'},{t:'Celebrity',u:'https://www.youtube.com/watch?v=6oanIo_9Z4M'},{t:'Strawberry Moon',u:'https://www.youtube.com/watch?v=UY4ZCgkTHpQ'}]},
 ];
 
 // 연결선 데이터 — 개별 멤버 기반
@@ -912,16 +947,18 @@ function memberVisible(a){
 A.forEach(a=>{a._fade=memberVisible(a)?1:0;});
 let W,H,sc,ox,oy;
 let drag=false,dsx=0,dsy=0,dox=0,doy=0,moved=false,pinned=false;
+let zoomGest=false,zoomTimer=null,zoomStartY=0,zoomStartSc=1,zoomCx=0,zoomCy=0;
+let zoomDragging=false,zoomDragStartY=0,zoomDragStartSc=1;
 let pd=0,ps=1;
 
 function initView(){
   W=window.innerWidth;H=window.innerHeight;
   cv.width=W;cv.height=H;
   // 메인 구가 화면의 ~80% 차지하도록 초기 스케일
-  sc=Math.min(W,H)*0.7/2000;
-  // 메인 구 중심(3000,3000)을 화면 중앙에
-  ox=W/2-3000*sc;
-  oy=H/2-3000*sc;
+  sc=Math.min(W,H)*0.7/4000;
+  // 메인 구 중심(6000,6000)을 화면 중앙에
+  ox=W/2-6000*sc;
+  oy=H/2-6000*sc;
 }
 
 function resize(){W=window.innerWidth;H=window.innerHeight;cv.width=W;cv.height=H;}
@@ -949,7 +986,7 @@ function drawConnections(){
     // 베지어 제어점: 선분 수직 방향으로 offset, 지도 중심(3000,3000) 쪽으로 볼록
     const mx2=(ax+bx)/2,my2=(ay+by)/2;
     const px=-(by-ay)/len*len*0.2,py=(bx-ax)/len*len*0.2;
-    const dot=(wx(3000)-mx2)*px+(wy(3000)-my2)*py;
+    const dot=(wx(6000)-mx2)*px+(wy(6000)-my2)*py;
     const cpx=mx2+(dot>=0?px:-px),cpy=my2+(dot>=0?py:-py);
     const rgb=c.type==='member'?ma.color:null;
     // 탈퇴 등 inactive 멤버가 포함된 선은 매우 얇고 희미하게
@@ -1093,22 +1130,35 @@ function drawGroups(){
     // circ 센터 갱신 + grpDelta 저장 (멤버 렌더링에 적용)
     mc.forEach(({k})=>{const t=tmp[k];grpDelta[k]=t;const c=circ.find(x=>x.k===k);if(c){c.mx+=t.dx;c.my+=t.dy;}});
   }
-  // 1차: 원 그리기
+  // 1차: 원 그리기 (sc≥0.15 에서만) — grpCache는 항상 갱신
   circ.forEach(({k,grpKo,isL,mem,mx,my,r})=>{
     if(mx+r<0||mx-r>W||my+r<0||my-r>H)return;
+    grpCache[k]={cx:mx,cy:my,r:r};
+    if(sc<0.15)return;
     const rgb=(GI[grpKo]||{color:mem[0].color}).color;
     ctx.beginPath();ctx.arc(mx,my,r,0,Math.PI*2);
     ctx.strokeStyle=`rgba(${rgb[0]-15},${rgb[1]-15},${rgb[2]-15},.14)`;
     ctx.lineWidth=.5;ctx.setLineDash([2*sc,2*sc]);ctx.stroke();ctx.setLineDash([]);
     ctx.fillStyle=`rgba(${rgb[0]},${rgb[1]},${rgb[2]},.05)`;ctx.fill();
-    grpCache[k]={cx:mx,cy:my,r:r};
   });
+  // sc<0.15: 그룹 중심 대표 점
+  if(sc<0.15){
+    circ.forEach(({grpKo,isL,mem,mx,my})=>{
+      if(isL||mx<-20||mx>W+20||my<-20||my>H+20)return;
+      const rgb=(GI[grpKo]||{color:mem[0].color}).color;
+      const g=ctx.createRadialGradient(mx,my,0,mx,my,11);
+      g.addColorStop(0,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.90)`);
+      g.addColorStop(0.4,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.50)`);
+      g.addColorStop(1,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},0)`);
+      ctx.beginPath();ctx.arc(mx,my,11,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+    });
+  }
   // 2차: 레이블 — 다른 원 밖 위치 탐색 (위→아래→왼→오른 순)
   circ.forEach(({k,grpKo,isL,mem,mx,my,r})=>{
     if(isL||mx+r<0||mx-r>W||my+r<0||my-r>H)return;
     const rgb=(GI[grpKo]||{color:mem[0].color}).color;
-    const fs=Math.max(6,Math.min(12,10*sc));
-    ctx.fillStyle=`rgba(${rgb[0]-40},${rgb[1]-40},${rgb[2]-40},.38)`;
+    const fs=sc<0.15?10:Math.max(6,Math.min(12,10*sc));
+    ctx.fillStyle=`rgba(${rgb[0]-40},${rgb[1]-40},${rgb[2]-40},${sc<0.15?.70:.38})`;
     ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
     const lbl=lang==='ko'?grpKo:(GI[grpKo]?.en||grpKo);
     const cands=[[mx,my-r-4*sc],[mx,my+r+fs+4*sc],[mx-r-16*sc,my],[mx+r+16*sc,my]];
@@ -1161,28 +1211,32 @@ function sparkle(px,py,t){
 }
 
 function draw(t){
-  ctx.clearRect(0,0,W,H);
+  ctx.clearRect(0,0,W,H);updateZoomSlider();
   const FADE=0.07;
   A.forEach(a=>{const tgt=memberVisible(a)?1:0;if(a._fade<tgt)a._fade=Math.min(1,a._fade+FADE);else if(a._fade>tgt)a._fade=Math.max(0,a._fade-FADE);});
-  drawBg();drawPlanets();drawGroups();drawConnections();
-  A.forEach(a=>{if(a._fade===0)return;if(a.sparkle)sparkle(emx(a),emy(a),t);});
-  A.forEach((a,i)=>{
-    if(a._fade===0)return;
-    const fd=a._fade;
-    const px=emx(a),py=emy(a);
-    if(px<-50||px>W+50||py<-50||py>H+50)return;
-    const br=(10+a.sat*11)*sc,rgb=a.color;
-    const b=[Math.min(255,rgb[0]-a.sat*24),Math.min(255,rgb[1]-a.sat*16),Math.min(255,rgb[2]-a.sat*12)];
-    if(a.active){wc(px,py,br*1.2/sc,rgb,a.op*.28*fd,i*100);wc(px,py,br*.8/sc,b,a.op*.52*fd,i*100+1);wc(px,py,br*.35/sc,[b[0]-8,b[1]-8,b[2]-8],a.op*.40*fd,i*100+2);}
-    else{wc(px,py,br*.8/sc,rgb,a.op*.22*fd,i*100);for(let j=0;j<7;j++){const a2=j/7*Math.PI*2;ctx.beginPath();ctx.arc(px+Math.cos(a2)*(br*.5),py+Math.sin(a2)*(br*.5),sc,0,Math.PI*2);ctx.fillStyle=`rgba(${rgb[0]-10},${rgb[1]-10},${rgb[2]-10},${a.op*.35*fd})`;ctx.fill();}}
-    const fs=Math.max(5,Math.min(13,(7.5+a.sat)*sc));
-    ctx.fillStyle=nightMode?`rgba(150,165,188,${(a.active?.52:.20)*fd})`:`rgba(55,45,40,${(a.active?.64:.24)*fd})`;ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
-    ctx.fillText(a.name[lang],px,py+br+6*sc);
-  });
+  drawBg();drawPlanets();drawGroups();if(sc>=0.15)drawConnections();
+  if(sc>=0.15){
+    A.forEach(a=>{if(a._fade===0)return;if(a.sparkle)sparkle(emx(a),emy(a),t);});
+    A.forEach((a,i)=>{
+      if(a._fade===0)return;
+      const fd=a._fade;
+      const px=emx(a),py=emy(a);
+      if(px<-50||px>W+50||py<-50||py>H+50)return;
+      const br=(10+a.sat*11)*sc,rgb=a.color;
+      const b=[Math.min(255,rgb[0]-a.sat*24),Math.min(255,rgb[1]-a.sat*16),Math.min(255,rgb[2]-a.sat*12)];
+      if(a.active){wc(px,py,br*1.2/sc,rgb,a.op*.28*fd,i*100);wc(px,py,br*.8/sc,b,a.op*.52*fd,i*100+1);wc(px,py,br*.35/sc,[b[0]-8,b[1]-8,b[2]-8],a.op*.40*fd,i*100+2);}
+      else{wc(px,py,br*.8/sc,rgb,a.op*.22*fd,i*100);for(let j=0;j<7;j++){const a2=j/7*Math.PI*2;ctx.beginPath();ctx.arc(px+Math.cos(a2)*(br*.5),py+Math.sin(a2)*(br*.5),sc,0,Math.PI*2);ctx.fillStyle=`rgba(${rgb[0]-10},${rgb[1]-10},${rgb[2]-10},${a.op*.35*fd})`;ctx.fill();}}
+      if(sc>=0.35){
+        const fs=Math.max(5,Math.min(13,(7.5+a.sat)*sc));
+        ctx.fillStyle=nightMode?`rgba(150,165,188,${(a.active?.52:.20)*fd})`:`rgba(55,45,40,${(a.active?.64:.24)*fd})`;ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
+        ctx.fillText(a.name[lang],px,py+br+6*sc);
+      }
+    });
+  }
   drawHilite();
 }
 
-function find(mx,my){let f=null,d=30*sc;A.forEach(a=>{const dd=Math.hypot(emx(a)-mx,emy(a)-my);if(dd<d){d=dd;f=a;}});return f;}
+function find(mx,my){if(sc<0.15)return null;let f=null,d=30*sc;A.forEach(a=>{const dd=Math.hypot(emx(a)-mx,emy(a)-my);if(dd<d){d=dd;f=a;}});return f;}
 
 
 const gc=document.getElementById('gc');
@@ -1279,7 +1333,7 @@ function findConn(mx,my){
     const len=Math.hypot(bx-ax,by-ay);if(len<1)continue;
     const mx2=(ax+bx)/2,my2=(ay+by)/2;
     const px=-(by-ay)/len*len*0.2,py=(bx-ax)/len*len*0.2;
-    const dot=(wx(3000)-mx2)*px+(wy(3000)-my2)*py;
+    const dot=(wx(6000)-mx2)*px+(wy(6000)-my2)*py;
     const cpx=mx2+(dot>=0?px:-px),cpy=my2+(dot>=0?py:-py);
     ctx.save();
     ctx.beginPath();ctx.moveTo(ax,ay);ctx.quadraticCurveTo(cpx,cpy,bx,by);
@@ -1476,9 +1530,9 @@ window.addEventListener('mouseup',e=>{
   drag=false;cv.classList.remove('drag');
 });
 window.addEventListener('mouseleave',()=>{if(!pinned)tt.style.display='none';});
-cv.addEventListener('touchstart',e=>{e.preventDefault();if(e.touches.length===2){pd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);ps=sc;drag=false;return;}drag=true;moved=false;const p=gp(e);dsx=p.x;dsy=p.y;dox=ox;doy=oy;},{passive:false});
-cv.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY),ns=Math.max(.02,Math.min(2,ps*(d/pd))),mx=(e.touches[0].clientX+e.touches[1].clientX)/2,my=(e.touches[0].clientY+e.touches[1].clientY)/2;ox=mx-(mx-ox)*(ns/sc);oy=my-(my-oy)*(ns/sc);sc=ns;closeAll();return;}if(!drag)return;const p=gp(e),dx=p.x-dsx,dy=p.y-dsy;if(Math.abs(dx)>6||Math.abs(dy)>6){if(!moved)closeAll();moved=true;}ox=dox+dx;oy=doy+dy;},{passive:false});
-cv.addEventListener('touchend',e=>{e.preventDefault();drag=false;if(!moved&&e.changedTouches.length===1){const t2=e.changedTouches[0],f=find(t2.clientX,t2.clientY);if(f){showT(f,t2.clientX,t2.clientY,true);gc.classList.remove('bs-open');gc.style.display='none';lc.classList.remove('bs-open');lc.style.display='none';}else{const cn=findConn(t2.clientX,t2.clientY);if(cn){closeT();gc.classList.remove('bs-open');gc.style.display='none';showLC(cn.c,cn.ma,cn.mb,t2.clientX,t2.clientY);}else{const g=findGroup(t2.clientX,t2.clientY);if(g){closeT();lc.classList.remove('bs-open');lc.style.display='none';showGC(g,t2.clientX,t2.clientY);}else{closeAll();}}}}},{passive:false});
+cv.addEventListener('touchstart',e=>{e.preventDefault();clearTimeout(zoomTimer);zoomGest=false;if(e.touches.length===2){pd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);ps=sc;drag=false;return;}drag=true;moved=false;const p=gp(e);dsx=p.x;dsy=p.y;dox=ox;doy=oy;const capX=p.x,capY=p.y;zoomTimer=setTimeout(()=>{if(!moved){zoomGest=true;zoomStartY=capY;zoomStartSc=sc;zoomCx=capX;zoomCy=capY;}},220);},{passive:false});
+cv.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length===2){clearTimeout(zoomTimer);zoomGest=false;const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY),ns=Math.max(.02,Math.min(2,ps*(d/pd))),mx=(e.touches[0].clientX+e.touches[1].clientX)/2,my=(e.touches[0].clientY+e.touches[1].clientY)/2;ox=mx-(mx-ox)*(ns/sc);oy=my-(my-oy)*(ns/sc);sc=ns;closeAll();return;}if(zoomGest&&e.touches.length===1){const p=gp(e),dy=p.y-zoomStartY,nsc=Math.max(0.02,Math.min(2,zoomStartSc*Math.exp(-dy*0.01)));const ratio=nsc/sc;ox=zoomCx-(zoomCx-ox)*ratio;oy=zoomCy-(zoomCy-oy)*ratio;sc=nsc;return;}if(!drag)return;const p=gp(e),dx=p.x-dsx,dy=p.y-dsy;if(Math.abs(dx)>6||Math.abs(dy)>6){if(!moved){closeAll();clearTimeout(zoomTimer);}moved=true;}ox=dox+dx;oy=doy+dy;},{passive:false});
+cv.addEventListener('touchend',e=>{e.preventDefault();clearTimeout(zoomTimer);if(zoomGest){zoomGest=false;drag=false;moved=false;return;}drag=false;if(!moved&&e.changedTouches.length===1){const t2=e.changedTouches[0],f=find(t2.clientX,t2.clientY);if(f){showT(f,t2.clientX,t2.clientY,true);gc.classList.remove('bs-open');gc.style.display='none';lc.classList.remove('bs-open');lc.style.display='none';}else{const cn=findConn(t2.clientX,t2.clientY);if(cn){closeT();gc.classList.remove('bs-open');gc.style.display='none';showLC(cn.c,cn.ma,cn.mb,t2.clientX,t2.clientY);}else{const g=findGroup(t2.clientX,t2.clientY)||findGroupLabel(t2.clientX,t2.clientY);if(g){closeT();lc.classList.remove('bs-open');lc.style.display='none';showGC(g,t2.clientX,t2.clientY);}else{closeAll();}}}}},{passive:false});
 window.addEventListener('resize',()=>{resize();});
 // ── 설정 패널 ─────────────────────────────────
 const cfgBtn=document.getElementById('cfg-btn');
@@ -1545,6 +1599,16 @@ const connKnob=document.getElementById('conn-knob');
 connSw.addEventListener('click',()=>{showConn=!showConn;connSw.classList.toggle('on');connKnob.classList.toggle('on');connKnob.textContent=showConn?'ON':'LINE';});
 initView();
 requestAnimationFrame(function loop(t){requestAnimationFrame(loop);draw(t);});
+
+// ── Random Explore ──────────────────────────
+const randBtn=document.getElementById('rand-btn');
+const randHist=[];
+if(randBtn)randBtn.addEventListener('click',()=>{
+  const pool=A.filter(a=>!randHist.includes(a));
+  const pick=(pool.length?pool:A)[Math.floor(Math.random()*(pool.length?pool:A).length)];
+  randHist.push(pick);if(randHist.length>5)randHist.shift();
+  flyTo(pick);
+});
 
 // ── Search ──────────────────────────────────
 let hilite=null,flyGen=0;
@@ -1623,11 +1687,53 @@ srchIn.addEventListener('keydown',e=>{
   else if(e.key==='Escape'){srchToggle();}
 });
 
+function computeGroupDeltaAt(tSc){
+  const grps={};
+  A.forEach(m=>{
+    if(m._fade===0)return;
+    const koNames=m.group.ko.includes('·')?m.group.ko.split('·').map(s=>s.trim()):[m.group.ko];
+    koNames.forEach(kn=>{const k=`${m.planet}__${kn}`;if(!grps[k])grps[k]=[];grps[k].push(m);});
+  });
+  const circ=[];
+  Object.entries(grps).forEach(([k,mem])=>{
+    if(mem.length===0)return;
+    const pid=k.split('__')[0];
+    if(PLANETS.find(p=>p.id===pid)?.legacy)return;
+    const pts=mem.map(m=>[m.x*tSc,m.y*tSc]);
+    const mx=pts.reduce((s,p)=>s+p[0],0)/pts.length;
+    const my=pts.reduce((s,p)=>s+p[1],0)/pts.length;
+    const r=Math.max(...pts.map(p=>Math.hypot(p[0]-mx,p[1]-my)))+16*tSc;
+    circ.push({k,mx,my,r});
+  });
+  const ALLOW=new Set(['main__NCT 127|main__NCT Dream','main__NCT Dream|main__NCT 127']);
+  const FIXED=new Set(['main__NCT 127','main__NCT Dream']);
+  const tmp={};circ.forEach(c=>{tmp[c.k]={dx:0,dy:0};});
+  for(let iter=0;iter<30;iter++){
+    for(let i=0;i<circ.length;i++){for(let j=i+1;j<circ.length;j++){
+      const ci=circ[i],cj=circ[j];
+      if(ALLOW.has(`${ci.k}|${cj.k}`))continue;
+      const ax=ci.mx+tmp[ci.k].dx,ay=ci.my+tmp[ci.k].dy;
+      const bx=cj.mx+tmp[cj.k].dx,by=cj.my+tmp[cj.k].dy;
+      const ddx=ax-bx,ddy=ay-by;
+      const dist=Math.hypot(ddx,ddy)||0.01;
+      const minD=ci.r+cj.r+4*tSc;
+      if(dist<minD){
+        const push=(minD-dist)*0.5,nx=ddx/dist,ny=ddy/dist;
+        if(!FIXED.has(ci.k)){tmp[ci.k].dx+=nx*push;tmp[ci.k].dy+=ny*push;}
+        if(!FIXED.has(cj.k)){tmp[cj.k].dx-=nx*push;tmp[cj.k].dy-=ny*push;}
+      }
+    }}
+  }
+  return tmp;
+}
+
 function flyTo(a){
   closeAll();
   const gen=++flyGen;
   const tSc=Math.max(0.80,sc>1.1?sc:0.80);
-  const tOx=W/2-a.x*tSc,tOy=H/2-a.y*tSc;
+  const dkMap=computeGroupDeltaAt(tSc);
+  const dk=dkMap[`${a.planet}__${a.group.ko}`]||{dx:0,dy:0};
+  const tOx=W/2-a.x*tSc-dk.dx,tOy=H/2-a.y*tSc-dk.dy;
   const sSc=sc,sOx=ox,sOy=oy;
   const dur=680,t0=performance.now();
   function step(now){
@@ -1665,12 +1771,16 @@ function drawHilite(){
   const isGrp=hilite.type==='group';
   const maxT=isGrp?2400:1800;
   if(elapsed>maxT){hilite=null;return;}
-  const hx=isGrp?hilite.x:hilite.a.x;
-  const hy=isGrp?hilite.y:hilite.a.y;
   if(!isGrp&&!memberVisible(hilite.a))return;
-  let ddx=0,ddy=0;
-  if(isGrp&&hilite.grpKo){const dk=Object.keys(grpDelta).find(k=>k.endsWith('__'+hilite.grpKo));if(dk){ddx=grpDelta[dk].dx;ddy=grpDelta[dk].dy;}}
-  const px=wx(hx)+ddx,py=wy(hy)+ddy;
+  let px,py;
+  if(isGrp){
+    const hx=hilite.x,hy=hilite.y;
+    let ddx=0,ddy=0;
+    if(hilite.grpKo){const dk=Object.keys(grpDelta).find(k=>k.endsWith('__'+hilite.grpKo));if(dk){ddx=grpDelta[dk].dx;ddy=grpDelta[dk].dy;}}
+    px=wx(hx)+ddx;py=wy(hy)+ddy;
+  }else{
+    px=emx(hilite.a);py=emy(hilite.a);
+  }
   const p=elapsed/maxT;
   const ease=1-Math.pow(1-p,2);
   const baseR=isGrp?30:10,maxR=isGrp?90:42;
@@ -1751,18 +1861,47 @@ mobSrchIn.addEventListener('input',function(){
   mobSrchDrop.style.display='block';
 });
 mobSrchIn.addEventListener('keydown',e=>{if(e.key==='Escape')mobSrchClose.click();});
+
+// ── 줌 슬라이더 ─────────────────────────────────
+const SC_MIN=0.02,SC_MAX=2.0;
+const LOG_MIN=Math.log(SC_MIN),LOG_MAX=Math.log(SC_MAX);
+function scToPos(s){return 1-(Math.log(Math.max(SC_MIN,Math.min(SC_MAX,s)))-LOG_MIN)/(LOG_MAX-LOG_MIN);}
+function posToSc(p){return Math.exp(LOG_MIN+(1-Math.max(0,Math.min(1,p)))*(LOG_MAX-LOG_MIN));}
+function applyZoomAt(newSc,cx,cy){newSc=Math.max(SC_MIN,Math.min(SC_MAX,newSc));const ratio=newSc/sc;ox=cx-(cx-ox)*ratio;oy=cy-(cy-oy)*ratio;sc=newSc;}
+function updateZoomSlider(){
+  const zh=document.getElementById('zoom-handle'),zt=document.getElementById('zoom-track');
+  if(!zh||!zt)return;
+  const th=zt.clientHeight-zh.offsetHeight;
+  if(th<=0)return;
+  zh.style.top=(scToPos(sc)*th)+'px';
+}
+const zoomHandleEl=document.getElementById('zoom-handle');
+const zoomTrackEl=document.getElementById('zoom-track');
+const zoomPlusEl=document.getElementById('zoom-plus');
+const zoomMinusEl=document.getElementById('zoom-minus');
+if(zoomHandleEl){
+  zoomHandleEl.addEventListener('mousedown',e=>{
+    e.preventDefault();zoomDragging=true;zoomDragStartY=e.clientY;zoomDragStartSc=sc;
+  });
+}
+window.addEventListener('mousemove',e=>{
+  if(!zoomDragging)return;
+  const zt=zoomTrackEl,zh=zoomHandleEl;if(!zt||!zh)return;
+  const th=zt.clientHeight-zh.offsetHeight;if(th<=0)return;
+  const dy=e.clientY-zoomDragStartY;
+  const newPos=Math.max(0,Math.min(1,scToPos(zoomDragStartSc)+dy/th));
+  applyZoomAt(posToSc(newPos),W/2,H/2);
+});
+window.addEventListener('mouseup',()=>{zoomDragging=false;});
+if(zoomTrackEl){
+  zoomTrackEl.addEventListener('click',e=>{
+    if(e.target===zoomHandleEl)return;
+    const rect=zoomTrackEl.getBoundingClientRect();
+    applyZoomAt(posToSc((e.clientY-rect.top)/rect.height),W/2,H/2);
+  });
+}
+if(zoomPlusEl)zoomPlusEl.addEventListener('click',()=>applyZoomAt(sc*1.5,W/2,H/2));
+if(zoomMinusEl)zoomMinusEl.addEventListener('click',()=>applyZoomAt(sc/1.5,W/2,H/2));
 </script>
-<div id="mob-bar">
-  <button class="mob-tab" id="mob-lang-btn"><span class="mob-lbl" id="mob-lang-lbl">KO</span></button>
-  <button class="mob-tab" id="mob-mode-btn"><span class="mob-lbl" id="mob-mode-lbl">DAY</span></button>
-  <button class="mob-tab" id="mob-conn-btn"><span class="mob-lbl" id="mob-conn-lbl">LINE</span></button>
-  <button class="mob-tab" id="mob-cfg-btn"><span class="mob-lbl">⚙</span></button>
-  <button class="mob-tab" id="mob-srch-open"><svg width="15" height="15" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.5"/><line x1="8.5" y1="8.5" x2="12" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
-</div>
-<div id="mob-srch-wrap">
-  <input id="mob-srch-in" type="text" autocomplete="off" spellcheck="false" placeholder="멤버·그룹 검색...">
-  <button id="mob-srch-close">✕</button>
-  <div id="mob-srch-drop"></div>
-</div>
 </body>
 </html>
