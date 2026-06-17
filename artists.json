@@ -4178,7 +4178,20 @@
       "en": "KR"
     },
     "sparkle": false,
-    "songs": []
+    "songs": [
+      {
+        "t": "GGUM",
+        "u": "https://www.youtube.com/watch?v=x3Y2-mQRWFw"
+      },
+      {
+        "t": "Run Away",
+        "u": "https://www.youtube.com/watch?v=sx4hPjppi6E"
+      },
+      {
+        "t": "교환일기 (두밧두 와리와리)",
+        "u": "https://www.youtube.com/watch?v=o3WX9FRTIUI"
+      }
+    ]
   },
   {
     "name": {
@@ -4207,7 +4220,20 @@
       "en": "KR"
     },
     "sparkle": false,
-    "songs": []
+    "songs": [
+      {
+        "t": "Dolphin",
+        "u": "https://www.youtube.com/watch?v=NTDTHIyNWLk"
+      },
+      {
+        "t": "Run Away",
+        "u": "https://www.youtube.com/watch?v=ibnQ1bH8fIM"
+      },
+      {
+        "t": "어느날 머리에서 뿔이 자랐다 (CROWN)",
+        "u": "https://www.youtube.com/watch?v=CrYbcz9ONYY"
+      }
+    ]
   },
   {
     "name": {
@@ -4236,7 +4262,20 @@
       "en": "KR"
     },
     "sparkle": false,
-    "songs": []
+    "songs": [
+      {
+        "t": "Panic",
+        "u": "https://www.youtube.com/watch?v=-oJ_uuwNMgk"
+      },
+      {
+        "t": "0X1=LOVESONG (I Know I Love You)",
+        "u": "https://www.youtube.com/watch?v=rDnPaRFDnUk"
+      },
+      {
+        "t": "LO$ER=LO♥ER",
+        "u": "https://www.youtube.com/watch?v=OPdaubrjGqk"
+      }
+    ]
   },
   {
     "name": {
@@ -4265,7 +4304,20 @@
       "en": "KR"
     },
     "sparkle": false,
-    "songs": []
+    "songs": [
+      {
+        "t": "Angel Or Devil",
+        "u": "https://www.youtube.com/watch?v=L7rEIensKMo"
+      },
+      {
+        "t": "0X1=LOVESONG (I Know I Love You)",
+        "u": "https://www.youtube.com/watch?v=A7nimn-8ZA8"
+      },
+      {
+        "t": "거리에서",
+        "u": "https://www.youtube.com/watch?v=wYMeibz-Uqc"
+      }
+    ]
   },
   {
     "name": {
@@ -4294,7 +4346,20 @@
       "en": "KR·DE·US"
     },
     "sparkle": false,
-    "songs": []
+    "songs": [
+      {
+        "t": "Run Away",
+        "u": "https://www.youtube.com/watch?v=GINn6TxkNCU"
+      },
+      {
+        "t": "어느날 머리에서 뿔이 자랐다 (CROWN)",
+        "u": "https://www.youtube.com/watch?v=OJhk0vWphdQ"
+      },
+      {
+        "t": "Upside Down Kiss",
+        "u": "https://www.youtube.com/watch?v=umDN066o6-Y"
+      }
+    ]
   },
   {
     "name": {
