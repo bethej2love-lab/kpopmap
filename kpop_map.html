@@ -75,7 +75,8 @@ body.night .tv-empty{color:#2e3e56;}
 #yt-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:200;align-items:center;justify-content:center;gap:16px;}
 #yt-prev,#yt-next{background:none;border:none;color:rgba(255,255,255,.5);font-size:22px;line-height:1;cursor:pointer;padding:6px 8px;border-radius:6px;transition:color .15s;flex-shrink:0;}
 #yt-prev:hover,#yt-next:hover{color:rgba(255,255,255,.9);}
-#yt-prev[hidden],#yt-next[hidden]{visibility:hidden;pointer-events:none;}
+#yt-prev,#yt-next{visibility:visible;}
+#yt-prev.nav-hide,#yt-next.nav-hide{visibility:hidden;pointer-events:none;}
 #yt-mi{position:relative;width:min(92vw,640px);background:#0e0e0e;border-radius:14px;padding:12px 12px 14px;box-shadow:0 10px 48px rgba(0,0,0,.85);}
 #yt-mp{width:100%;padding-bottom:56.25%;position:relative;background:#000;border-radius:8px;overflow:hidden;}
 #yt-mp>div,#yt-mp iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
@@ -368,6 +369,7 @@ body.night #mob-sheet-handle{background:rgba(255,255,255,0.14);}
   <button class="mob-tab" id="mob-mode-btn"><span class="mob-lbl" id="mob-mode-lbl">DAY</span></button>
   <button class="mob-tab" id="mob-conn-btn"><span class="mob-lbl" id="mob-conn-lbl">LINE</span></button>
   <button class="mob-tab" id="mob-cfg-btn"><span class="mob-lbl">⚙</span></button>
+  <button class="mob-tab" id="mob-rand-btn" style="font-size:17px;line-height:1;">✦</button>
   <button class="mob-tab" id="mob-srch-open"><svg width="15" height="15" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.5"/><line x1="8.5" y1="8.5" x2="12" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
 </div>
 <div id="mob-srch-wrap">
@@ -660,19 +662,19 @@ function drawGroups(){
     // circ 센터 갱신 + grpDelta 저장 (멤버 렌더링에 적용)
     mc.forEach(({k})=>{const t=tmp[k];grpDelta[k]=t;const c=circ.find(x=>x.k===k);if(c){c.mx+=t.dx;c.my+=t.dy;}});
   }
-  // 1차: 원 그리기 (sc≥0.15 에서만) — grpCache는 항상 갱신
+  // 1차: 원 그리기 (sc≥0.08 에서만) — grpCache는 항상 갱신
   circ.forEach(({k,grpKo,isL,mem,mx,my,r})=>{
     if(mx+r<0||mx-r>W||my+r<0||my-r>H)return;
     grpCache[k]={cx:mx,cy:my,r:r};
-    if(sc<0.15)return;
+    if(sc<0.08)return;
     const rgb=(GI[grpKo]||{color:mem[0].color}).color;
     ctx.beginPath();ctx.arc(mx,my,r,0,Math.PI*2);
     ctx.strokeStyle=`rgba(${rgb[0]-15},${rgb[1]-15},${rgb[2]-15},.14)`;
     ctx.lineWidth=.5;ctx.setLineDash([2*sc,2*sc]);ctx.stroke();ctx.setLineDash([]);
     ctx.fillStyle=`rgba(${rgb[0]},${rgb[1]},${rgb[2]},.05)`;ctx.fill();
   });
-  // sc<0.15: 그룹 중심 대표 점
-  if(sc<0.15){
+  // sc<0.08: 그룹 중심 대표 점
+  if(sc<0.08){
     circ.forEach(({grpKo,isL,mem,mx,my})=>{
       if(isL||mx<-20||mx>W+20||my<-20||my>H+20)return;
       const rgb=(GI[grpKo]||{color:mem[0].color}).color;
@@ -687,8 +689,9 @@ function drawGroups(){
   circ.forEach(({k,grpKo,isL,mem,mx,my,r})=>{
     if(isL||mx+r<0||mx-r>W||my+r<0||my-r>H)return;
     const rgb=(GI[grpKo]||{color:mem[0].color}).color;
-    const fs=sc<0.15?10:Math.max(6,Math.min(12,10*sc));
-    ctx.fillStyle=`rgba(${rgb[0]-40},${rgb[1]-40},${rgb[2]-40},${sc<0.15?.70:.38})`;
+    const fs=(sc<0.08?10:Math.max(6,Math.min(12,10*sc)))*(isMob()?1.3:1);
+    if(nightMode){ctx.fillStyle=`rgba(${Math.min(255,rgb[0]+20)},${Math.min(255,rgb[1]+20)},${Math.min(255,rgb[2]+20)},${sc<0.08?.90:.80})`;}
+    else{ctx.fillStyle=`rgba(${rgb[0]-40},${rgb[1]-40},${rgb[2]-40},${sc<0.08?.70:.65})`;}
     ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
     const lbl=lang==='ko'?grpKo:(GI[grpKo]?.en||grpKo);
     const cands=[[mx,my-r-4*sc],[mx,my+r+fs+4*sc],[mx-r-16*sc,my],[mx+r+16*sc,my]];
@@ -744,8 +747,8 @@ function draw(t){
   ctx.clearRect(0,0,W,H);updateZoomSlider();
   const FADE=0.07;
   A.forEach(a=>{const tgt=memberVisible(a)?1:0;if(a._fade<tgt)a._fade=Math.min(1,a._fade+FADE);else if(a._fade>tgt)a._fade=Math.max(0,a._fade-FADE);});
-  drawBg();drawPlanets();drawGroups();if(sc>=0.15)drawConnections();
-  if(sc>=0.15){
+  drawBg();drawPlanets();drawGroups();if(sc>=0.08)drawConnections();
+  if(sc>=0.08){
     A.forEach(a=>{if(a._fade===0)return;if(a.sparkle)sparkle(emx(a),emy(a),t);});
     A.forEach((a,i)=>{
       if(a._fade===0)return;
@@ -756,9 +759,9 @@ function draw(t){
       const b=[Math.min(255,rgb[0]-a.sat*24),Math.min(255,rgb[1]-a.sat*16),Math.min(255,rgb[2]-a.sat*12)];
       if(a.active){wc(px,py,br*1.2/sc,rgb,a.op*.28*fd,i*100);wc(px,py,br*.8/sc,b,a.op*.52*fd,i*100+1);wc(px,py,br*.35/sc,[b[0]-8,b[1]-8,b[2]-8],a.op*.40*fd,i*100+2);}
       else{wc(px,py,br*.8/sc,rgb,a.op*.22*fd,i*100);for(let j=0;j<7;j++){const a2=j/7*Math.PI*2;ctx.beginPath();ctx.arc(px+Math.cos(a2)*(br*.5),py+Math.sin(a2)*(br*.5),sc,0,Math.PI*2);ctx.fillStyle=`rgba(${rgb[0]-10},${rgb[1]-10},${rgb[2]-10},${a.op*.35*fd})`;ctx.fill();}}
-      if(sc>=0.35){
-        const fs=Math.max(5,Math.min(13,(7.5+a.sat)*sc));
-        ctx.fillStyle=nightMode?`rgba(150,165,188,${(a.active?.52:.20)*fd})`:`rgba(55,45,40,${(a.active?.64:.24)*fd})`;ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
+      if(sc>=0.08){
+        const fs=Math.max(5,Math.min(13,(7.5+a.sat)*sc))*(isMob()?1.3:1);
+        ctx.fillStyle=nightMode?`rgba(210,225,245,${(a.active?.72:.28)*fd})`:`rgba(55,45,40,${(a.active?.64:.24)*fd})`;ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
         ctx.fillText(a.name[lang],px,py+br+6*sc);
       }
     });
@@ -766,7 +769,7 @@ function draw(t){
   drawHilite();
 }
 
-function find(mx,my){if(sc<0.15)return null;let f=null,d=30*sc;A.forEach(a=>{const dd=Math.hypot(emx(a)-mx,emy(a)-my);if(dd<d){d=dd;f=a;}});return f;}
+function find(mx,my){if(sc<0.08)return null;let f=null,d=30*sc;A.forEach(a=>{const dd=Math.hypot(emx(a)-mx,emy(a)-my);if(dd<d){d=dd;f=a;}});return f;}
 
 
 const gc=document.getElementById('gc');
@@ -917,8 +920,8 @@ function onYtReady(cb){if(ytApiReady)cb();else ytCbs.push(cb);}
 
 function updateYtNav(){
   const prev=document.getElementById('yt-prev'),next=document.getElementById('yt-next');
-  ytNavIdx>0?prev.removeAttribute('hidden'):prev.setAttribute('hidden','');
-  ytNavIdx<ytNavSongs.length-1?next.removeAttribute('hidden'):next.setAttribute('hidden','');
+  ytNavIdx>0?prev.classList.remove('nav-hide'):prev.classList.add('nav-hide');
+  ytNavIdx<ytNavSongs.length-1?next.classList.remove('nav-hide'):next.classList.add('nav-hide');
 }
 function openVideoModal(url,title,songs,idx){
   if(songs!==undefined){ytNavSongs=songs;ytNavIdx=idx||0;}
@@ -1155,12 +1158,15 @@ Promise.all([
 // ── Random Explore ──────────────────────────
 const randBtn=document.getElementById('rand-btn');
 const randHist=[];
-if(randBtn)randBtn.addEventListener('click',()=>{
-  const pool=A.filter(a=>!randHist.includes(a));
+function doRandom(){
+  const pool=A.filter(a=>memberVisible(a)&&!randHist.includes(a));
   const pick=(pool.length?pool:A)[Math.floor(Math.random()*(pool.length?pool:A).length)];
   randHist.push(pick);if(randHist.length>5)randHist.shift();
   flyTo(pick);
-});
+}
+if(randBtn)randBtn.addEventListener('click',doRandom);
+const mobRandBtn=document.getElementById('mob-rand-btn');
+if(mobRandBtn)mobRandBtn.addEventListener('click',doRandom);
 
 // ── Search ──────────────────────────────────
 let hilite=null,flyGen=0;
