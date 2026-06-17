@@ -986,7 +986,14 @@ function showT(a,ex,ey,pin){
   tgEl.textContent=a.group[lang];
   tgEl.onclick=e=>{e.stopPropagation();closeT();showGC(a.group.ko,W/2,H/2);pinnedGC=true;};
   document.getElementById('tco').textContent=CO[a.co]?.[lang]||'';
-  const meta=[];if(a.nat)meta.push(a.nat[lang]);if(a.bday)meta.push(a.bday);
+  const meta=[];if(a.nat)meta.push(a.nat[lang]);
+  if(a.bday){
+    const[by,bm,bd]=a.bday.split('.').map(Number);
+    const now=new Date();
+    let age=now.getFullYear()-by;
+    if(now.getMonth()+1<bm||(now.getMonth()+1===bm&&now.getDate()<bd))age--;
+    meta.push(a.bday+' ('+(age<0?'':age)+(lang==='ko'?'세':' y.o.')+')');
+  }
   document.getElementById('tm').textContent=meta.join(' · ');
 
   const tv=document.getElementById('tv');
