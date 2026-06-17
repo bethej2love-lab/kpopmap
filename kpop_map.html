@@ -390,6 +390,7 @@ body.night #mob-sheet-handle{background:rgba(255,255,255,0.14);}
 <script>
 const cv=document.getElementById('cv');
 const ctx=cv.getContext('2d');
+const dpr=window.devicePixelRatio||1;
 const sw=document.getElementById('lang-sw');
 const knob=document.getElementById('knob');
 const titl=document.getElementById('titl');
@@ -483,9 +484,14 @@ let zoomGest=false,zoomTimer=null,zoomStartY=0,zoomStartSc=1,zoomCx=0,zoomCy=0;
 let zoomDragging=false,zoomDragStartY=0,zoomDragStartSc=1;
 let pd=0,ps=1;
 
+function setCanvasSize(){
+  cv.width=W*dpr;cv.height=H*dpr;
+  cv.style.width=W+'px';cv.style.height=H+'px';
+  ctx.scale(dpr,dpr);
+}
 function initView(){
   W=window.innerWidth;H=window.innerHeight;
-  cv.width=W;cv.height=H;
+  setCanvasSize();
   // 메인 구가 화면의 ~80% 차지하도록 초기 스케일
   sc=Math.min(W,H)*0.7/4000;
   // 메인 구 중심(6000,6000)을 화면 중앙에
@@ -493,7 +499,7 @@ function initView(){
   oy=H/2-6000*sc;
 }
 
-function resize(){W=window.innerWidth;H=window.innerHeight;cv.width=W;cv.height=H;}
+function resize(){W=window.innerWidth;H=window.innerHeight;setCanvasSize();}
 function wx(x){return x*sc+ox;}
 function wy(y){return y*sc+oy;}
 function groupDebutYear(ko){const i=GI[ko];if(!i||!i.debut)return 9999;return parseInt(i.debut)||9999;}
