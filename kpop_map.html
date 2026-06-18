@@ -1048,7 +1048,7 @@ function showT(a,ex,ey,pin){
 
 function gp(e){return e.touches?{x:e.touches[0].clientX,y:e.touches[0].clientY}:{x:e.clientX,y:e.clientY};}
 
-window.addEventListener('wheel',e=>{e.preventDefault();const mx=e.clientX,my=e.clientY,ns=Math.max(.02,Math.min(2,sc*(e.deltaY>0?.88:1.12)));ox=mx-(mx-ox)*(ns/sc);oy=my-(my-oy)*(ns/sc);sc=ns;closeAll();},{passive:false});
+window.addEventListener('wheel',e=>{e.preventDefault();const mx=e.clientX,my=e.clientY,ns=Math.max(minSc(),Math.min(SC_MAX,sc*(e.deltaY>0?.88:1.12)));ox=mx-(mx-ox)*(ns/sc);oy=my-(my-oy)*(ns/sc);sc=ns;closeAll();},{passive:false});
 cv.addEventListener('mousedown',e=>{drag=true;moved=false;const p=gp(e);dsx=p.x;dsy=p.y;dox=ox;doy=oy;cv.classList.add('drag');});
 let _hovGrpKo=null;
 window.addEventListener('mousemove',e=>{
@@ -1081,7 +1081,7 @@ window.addEventListener('mouseup',e=>{
 });
 window.addEventListener('mouseleave',()=>{if(!pinned)tt.style.display='none';});
 cv.addEventListener('touchstart',e=>{e.preventDefault();clearTimeout(zoomTimer);zoomGest=false;if(e.touches.length===2){isPinching=true;clearTimeout(pinchEndTimer);pd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);ps=sc;drag=false;return;}drag=true;moved=false;const p=gp(e);dsx=p.x;dsy=p.y;dox=ox;doy=oy;const capX=p.x,capY=p.y;zoomTimer=setTimeout(()=>{if(!moved){zoomGest=true;zoomStartY=capY;zoomStartSc=sc;zoomCx=capX;zoomCy=capY;}},220);},{passive:false});
-cv.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length===2){isPinching=true;clearTimeout(zoomTimer);zoomGest=false;const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY),ns=Math.max(.02,Math.min(2,ps*(d/pd))),mx=(e.touches[0].clientX+e.touches[1].clientX)/2,my=(e.touches[0].clientY+e.touches[1].clientY)/2;ox=mx-(mx-ox)*(ns/sc);oy=my-(my-oy)*(ns/sc);sc=ns;closeAll();return;}if(zoomGest&&e.touches.length===1){const p=gp(e),dy=p.y-zoomStartY,nsc=Math.max(0.02,Math.min(2,zoomStartSc*Math.exp(-dy*0.01)));const ratio=nsc/sc;ox=zoomCx-(zoomCx-ox)*ratio;oy=zoomCy-(zoomCy-oy)*ratio;sc=nsc;return;}if(!drag)return;const p=gp(e),dx=p.x-dsx,dy=p.y-dsy;if(Math.abs(dx)>6||Math.abs(dy)>6){if(!moved){closeAll();clearTimeout(zoomTimer);}moved=true;}ox=dox+dx;oy=doy+dy;},{passive:false});
+cv.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length===2){isPinching=true;clearTimeout(zoomTimer);zoomGest=false;const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY),ns=Math.max(minSc(),Math.min(SC_MAX,ps*(d/pd))),mx=(e.touches[0].clientX+e.touches[1].clientX)/2,my=(e.touches[0].clientY+e.touches[1].clientY)/2;ox=mx-(mx-ox)*(ns/sc);oy=my-(my-oy)*(ns/sc);sc=ns;closeAll();return;}if(zoomGest&&e.touches.length===1){const p=gp(e),dy=p.y-zoomStartY,nsc=Math.max(minSc(),Math.min(SC_MAX,zoomStartSc*Math.exp(-dy*0.01)));const ratio=nsc/sc;ox=zoomCx-(zoomCx-ox)*ratio;oy=zoomCy-(zoomCy-oy)*ratio;sc=nsc;return;}if(!drag)return;const p=gp(e),dx=p.x-dsx,dy=p.y-dsy;if(Math.abs(dx)>6||Math.abs(dy)>6){if(!moved){closeAll();clearTimeout(zoomTimer);}moved=true;}ox=dox+dx;oy=doy+dy;},{passive:false});
 cv.addEventListener('touchend',e=>{e.preventDefault();clearTimeout(zoomTimer);if(e.touches.length===0){clearTimeout(pinchEndTimer);pinchEndTimer=setTimeout(()=>{isPinching=false;},300);}if(zoomGest){zoomGest=false;drag=false;moved=false;return;}drag=false;if(isPinching)return;if(!moved&&e.changedTouches.length===1){const t2=e.changedTouches[0],f=find(t2.clientX,t2.clientY);if(f){showT(f,t2.clientX,t2.clientY,true);gc.classList.remove('bs-open');gc.style.display='none';lc.classList.remove('bs-open');lc.style.display='none';}else{const cn=findConn(t2.clientX,t2.clientY);if(cn){closeT();gc.classList.remove('bs-open');gc.style.display='none';showLC(cn.c,cn.ma,cn.mb,t2.clientX,t2.clientY);}else{const g=findGroup(t2.clientX,t2.clientY)||findGroupLabel(t2.clientX,t2.clientY);if(g){closeT();lc.classList.remove('bs-open');lc.style.display='none';showGC(g,t2.clientX,t2.clientY);}else{closeAll();}}}}},{passive:false});
 window.addEventListener('resize',()=>{resize();});
 // ── 설정 패널 ─────────────────────────────────
@@ -1497,11 +1497,11 @@ mobSrchIn.addEventListener('input',function(){
 mobSrchIn.addEventListener('keydown',e=>{if(e.key==='Escape')mobSrchClose.click();});
 
 // ── 줌 슬라이더 ─────────────────────────────────
-const SC_MIN=0.02,SC_MAX=2.0;
-const LOG_MIN=Math.log(SC_MIN),LOG_MAX=Math.log(SC_MAX);
-function scToPos(s){return 1-(Math.log(Math.max(SC_MIN,Math.min(SC_MAX,s)))-LOG_MIN)/(LOG_MAX-LOG_MIN);}
-function posToSc(p){return Math.exp(LOG_MIN+(1-Math.max(0,Math.min(1,p)))*(LOG_MAX-LOG_MIN));}
-function applyZoomAt(newSc,cx,cy){newSc=Math.max(SC_MIN,Math.min(SC_MAX,newSc));const ratio=newSc/sc;ox=cx-(cx-ox)*ratio;oy=cy-(cy-oy)*ratio;sc=newSc;}
+const SC_MAX=2.0;
+function minSc(){return Math.max(W,H)/WORLD*1.1;}
+function scToPos(s){const lmn=Math.log(minSc()),lmx=Math.log(SC_MAX);return 1-(Math.log(Math.max(minSc(),Math.min(SC_MAX,s)))-lmn)/(lmx-lmn);}
+function posToSc(p){const lmn=Math.log(minSc()),lmx=Math.log(SC_MAX);return Math.exp(lmn+(1-Math.max(0,Math.min(1,p)))*(lmx-lmn));}
+function applyZoomAt(newSc,cx,cy){newSc=Math.max(minSc(),Math.min(SC_MAX,newSc));const ratio=newSc/sc;ox=cx-(cx-ox)*ratio;oy=cy-(cy-oy)*ratio;sc=newSc;}
 function updateZoomSlider(){
   const zh=document.getElementById('zoom-handle'),zt=document.getElementById('zoom-track');
   if(!zh||!zt)return;
