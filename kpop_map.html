@@ -503,9 +503,8 @@ function initView(){
 
 function resize(){W=window.innerWidth;H=window.innerHeight;setCanvasSize();}
 const WORLD=12000;
-let _tox=0,_toy=0;
-function wx(x){return x*sc+_tox;}
-function wy(y){return y*sc+_toy;}
+function wx(x){return x*sc+ox;}
+function wy(y){return y*sc+oy;}
 
 function groupDebutYear(ko){const i=GI[ko];if(!i||!i.debut)return 9999;return parseInt(i.debut)||9999;}
 const PLANET_DEBUT={iu:2008};
@@ -759,9 +758,10 @@ function draw(t){
   ctx.fillStyle=nightMode?'#1a1e2e':'#f5f0e8';ctx.fillRect(0,0,W,H);
   grpCache=[];grpLabelCache=[];
   const wpx=WORLD*sc;
+  const _ox=ox,_oy=oy;
   for(let tx=-1;tx<=1;tx++){for(let ty=-1;ty<=1;ty++){
-    _tox=ox+tx*wpx;_toy=oy+ty*wpx;
-    if(_tox+wpx<-50||_tox>W+50||_toy+wpx<-50||_toy>H+50)continue;
+    ox=_ox+tx*wpx;oy=_oy+ty*wpx;
+    if(ox+wpx<-50||ox>W+50||oy+wpx<-50||oy>H+50)continue;
     drawBg();drawPlanets();drawGroups();if(sc>=0.08)drawConnections();
     if(sc>=0.08){
       A.forEach(a=>{if(a._fade===0)return;if(a.sparkle)sparkle(emx(a),emy(a),t);});
@@ -783,18 +783,19 @@ function draw(t){
     }
     drawHilite();
   }}
-  _tox=ox;_toy=oy;
+  ox=_ox;oy=_oy;
 }
 
 function find(ex,ey){
   if(sc<0.08)return null;
   let f=null,d=30*sc;
   const wpx=WORLD*sc;
+  const _ox=ox,_oy=oy;
   for(let tx=-1;tx<=1;tx++){for(let ty=-1;ty<=1;ty++){
-    _tox=ox+tx*wpx;_toy=oy+ty*wpx;
+    ox=_ox+tx*wpx;oy=_oy+ty*wpx;
     A.forEach(a=>{if(a._fade===0)return;const dd=Math.hypot(emx(a)-ex,emy(a)-ey);if(dd<d){d=dd;f=a;}});
   }}
-  _tox=ox;_toy=oy;
+  ox=_ox;oy=_oy;
   return f;
 }
 
@@ -885,9 +886,10 @@ function findGroup(mx,my){
 function findConn(ex,ey){
   if(!showConn)return null;
   const wpx=WORLD*sc;
+  const _ox=ox,_oy=oy;
   for(let tx=-1;tx<=1;tx++){for(let ty=-1;ty<=1;ty++){
-    _tox=ox+tx*wpx;_toy=oy+ty*wpx;
-    if(_tox+wpx<-50||_tox>W+50||_toy+wpx<-50||_toy>H+50)continue;
+    ox=_ox+tx*wpx;oy=_oy+ty*wpx;
+    if(ox+wpx<-50||ox>W+50||oy+wpx<-50||oy>H+50)continue;
     for(const c of CONN){
       const ma=A.find(m=>m.name.ko===c.a||m.name.en===c.a);
       const mb=A.find(m=>m.name.ko===c.b||m.name.en===c.b);
@@ -903,10 +905,10 @@ function findConn(ex,ey){
       ctx.lineWidth=12;
       const hit=ctx.isPointInStroke(ex,ey);
       ctx.restore();
-      if(hit){_tox=ox;_toy=oy;return{c,ma,mb};}
+      if(hit){ox=_ox;oy=_oy;return{c,ma,mb};}
     }
   }}
-  _tox=ox;_toy=oy;
+  ox=_ox;oy=_oy;
   return null;
 }
 
