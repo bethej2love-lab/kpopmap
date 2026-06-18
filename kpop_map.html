@@ -456,7 +456,7 @@ const PLANETS=[
 let A=[], GI={}, CONN=[];
 
 // 그룹 경계 캐시
-let grpCache={};
+let grpCache=[];
 let grpLabelCache=[];
 // 그룹 원 충돌 분리용 오프셋 (screen px)
 const grpDelta={};
@@ -503,8 +503,9 @@ function initView(){
 
 function resize(){W=window.innerWidth;H=window.innerHeight;setCanvasSize();}
 const WORLD=12000;
-function wx(x){const wpx=WORLD*sc;return((x*sc+ox)%wpx+wpx)%wpx;}
-function wy(y){const wpx=WORLD*sc;return((y*sc+oy)%wpx+wpx)%wpx;}
+let _tox=0,_toy=0;
+function wx(x){return x*sc+_tox;}
+function wy(y){return y*sc+_toy;}
 
 function groupDebutYear(ko){const i=GI[ko];if(!i||!i.debut)return 9999;return parseInt(i.debut)||9999;}
 const PLANET_DEBUT={iu:2008};
@@ -594,7 +595,6 @@ function wc(x,y,r,rgb,a,seed){
 }
 
 function drawBg(){
-  ctx.fillStyle=nightMode?'#1a1e2e':'#f5f0e8';ctx.fillRect(0,0,W,H);
   BG.forEach(b=>{
     const bx=wx(b.x),by=wy(b.y),br=b.r*sc;
     if(bx+br<0||bx-br>W||by+br<0||by-br>H)return; // 화면 밖 skip
@@ -629,7 +629,6 @@ function drawPlanets(){
 }
 
 function drawGroups(){
-  grpCache={};grpLabelCache=[];
   const grps={};
   A.forEach(a=>{
     if(!a.group[lang])return;
@@ -675,7 +674,7 @@ function drawGroups(){
   // 1차: 원 그리기 (sc≥0.08 에서만) — grpCache는 항상 갱신
   circ.forEach(({k,grpKo,isL,mem,mx,my,r})=>{
     if(mx+r<0||mx-r>W||my+r<0||my-r>H)return;
-    grpCache[k]={cx:mx,cy:my,r:r};
+    grpCache.push({grpKo,cx:mx,cy:my,r:r});
     if(sc<0.08)return;
     const rgb=(GI[grpKo]||{color:mem[0].color}).color;
     ctx.beginPath();ctx.arc(mx,my,r,0,Math.PI*2);
@@ -757,29 +756,47 @@ function draw(t){
   ctx.clearRect(0,0,W,H);updateZoomSlider();
   const FADE=0.07;
   A.forEach(a=>{const tgt=memberVisible(a)?1:0;if(a._fade<tgt)a._fade=Math.min(1,a._fade+FADE);else if(a._fade>tgt)a._fade=Math.max(0,a._fade-FADE);});
-  drawBg();drawPlanets();drawGroups();if(sc>=0.08)drawConnections();
-  if(sc>=0.08){
-    A.forEach(a=>{if(a._fade===0)return;if(a.sparkle)sparkle(emx(a),emy(a),t);});
-    A.forEach((a,i)=>{
-      if(a._fade===0)return;
-      const fd=a._fade;
-      const px=emx(a),py=emy(a);
-      if(px<-50||px>W+50||py<-50||py>H+50)return;
-      const br=(10+a.sat*11)*sc*1.5,rgb=a.color;
-      const b=[Math.min(255,rgb[0]-a.sat*24),Math.min(255,rgb[1]-a.sat*16),Math.min(255,rgb[2]-a.sat*12)];
-      if(a.active){wc(px,py,br*1.2/sc,rgb,a.op*.28*fd,i*100);wc(px,py,br*.8/sc,b,a.op*.52*fd,i*100+1);wc(px,py,br*.35/sc,[b[0]-8,b[1]-8,b[2]-8],a.op*.40*fd,i*100+2);}
-      else{wc(px,py,br*.8/sc,rgb,a.op*.22*fd,i*100);for(let j=0;j<7;j++){const a2=j/7*Math.PI*2;ctx.beginPath();ctx.arc(px+Math.cos(a2)*(br*.5),py+Math.sin(a2)*(br*.5),sc,0,Math.PI*2);ctx.fillStyle=`rgba(${rgb[0]-10},${rgb[1]-10},${rgb[2]-10},${a.op*.35*fd})`;ctx.fill();}}
-      if(sc>=0.08){
-        const fs=Math.max(7.5,Math.min(19.5,(7.5+a.sat)*sc*1.5))*(isMob()?1.3:1);
-        ctx.fillStyle=nightMode?`rgba(210,225,245,${(a.active?.72:.28)*fd})`:`rgba(55,45,40,${(a.active?.64:.24)*fd})`;ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
-        ctx.fillText(a.name[lang],px,py+br+6*sc);
-      }
-    });
-  }
-  drawHilite();
+  ctx.fillStyle=nightMode?'#1a1e2e':'#f5f0e8';ctx.fillRect(0,0,W,H);
+  grpCache=[];grpLabelCache=[];
+  const wpx=WORLD*sc;
+  for(let tx=-1;tx<=1;tx++){for(let ty=-1;ty<=1;ty++){
+    _tox=ox+tx*wpx;_toy=oy+ty*wpx;
+    if(_tox+wpx<-50||_tox>W+50||_toy+wpx<-50||_toy>H+50)continue;
+    drawBg();drawPlanets();drawGroups();if(sc>=0.08)drawConnections();
+    if(sc>=0.08){
+      A.forEach(a=>{if(a._fade===0)return;if(a.sparkle)sparkle(emx(a),emy(a),t);});
+      A.forEach((a,i)=>{
+        if(a._fade===0)return;
+        const fd=a._fade;
+        const px=emx(a),py=emy(a);
+        if(px<-50||px>W+50||py<-50||py>H+50)return;
+        const br=(10+a.sat*11)*sc*1.5,rgb=a.color;
+        const b=[Math.min(255,rgb[0]-a.sat*24),Math.min(255,rgb[1]-a.sat*16),Math.min(255,rgb[2]-a.sat*12)];
+        if(a.active){wc(px,py,br*1.2/sc,rgb,a.op*.28*fd,i*100);wc(px,py,br*.8/sc,b,a.op*.52*fd,i*100+1);wc(px,py,br*.35/sc,[b[0]-8,b[1]-8,b[2]-8],a.op*.40*fd,i*100+2);}
+        else{wc(px,py,br*.8/sc,rgb,a.op*.22*fd,i*100);for(let j=0;j<7;j++){const a2=j/7*Math.PI*2;ctx.beginPath();ctx.arc(px+Math.cos(a2)*(br*.5),py+Math.sin(a2)*(br*.5),sc,0,Math.PI*2);ctx.fillStyle=`rgba(${rgb[0]-10},${rgb[1]-10},${rgb[2]-10},${a.op*.35*fd})`;ctx.fill();}}
+        if(sc>=0.08){
+          const fs=Math.max(7.5,Math.min(19.5,(7.5+a.sat)*sc*1.5))*(isMob()?1.3:1);
+          ctx.fillStyle=nightMode?`rgba(210,225,245,${(a.active?.72:.28)*fd})`:`rgba(55,45,40,${(a.active?.64:.24)*fd})`;ctx.font=`${fs}px 'Pretendard Variable',Pretendard,'Apple SD Gothic Neo',sans-serif`;ctx.textAlign='center';
+          ctx.fillText(a.name[lang],px,py+br+6*sc);
+        }
+      });
+    }
+    drawHilite();
+  }}
+  _tox=ox;_toy=oy;
 }
 
-function find(mx,my){if(sc<0.08)return null;let f=null,d=30*sc;A.forEach(a=>{const dd=Math.hypot(emx(a)-mx,emy(a)-my);if(dd<d){d=dd;f=a;}});return f;}
+function find(ex,ey){
+  if(sc<0.08)return null;
+  let f=null,d=30*sc;
+  const wpx=WORLD*sc;
+  for(let tx=-1;tx<=1;tx++){for(let ty=-1;ty<=1;ty++){
+    _tox=ox+tx*wpx;_toy=oy+ty*wpx;
+    A.forEach(a=>{if(a._fade===0)return;const dd=Math.hypot(emx(a)-ex,emy(a)-ey);if(dd<d){d=dd;f=a;}});
+  }}
+  _tox=ox;_toy=oy;
+  return f;
+}
 
 
 const gc=document.getElementById('gc');
@@ -858,33 +875,38 @@ function findGroupLabel(mx,my){
   return null;
 }
 function findGroup(mx,my){
-  for(const [k,v] of Object.entries(grpCache)){
+  for(const v of grpCache){
     const dx=mx-v.cx,dy=my-v.cy;
-    if(dx*dx+dy*dy<v.r*v.r)return k.split('__')[1];
+    if(dx*dx+dy*dy<v.r*v.r)return v.grpKo;
   }
   return null;
 }
 
-function findConn(mx,my){
+function findConn(ex,ey){
   if(!showConn)return null;
-  for(const c of CONN){
-    const ma=A.find(m=>m.name.ko===c.a||m.name.en===c.a);
-    const mb=A.find(m=>m.name.ko===c.b||m.name.en===c.b);
-    if(!ma||!mb)continue;
-    if(!memberVisible(ma)||!memberVisible(mb))continue;
-    const ax=emx(ma),ay=emy(ma),bx=emx(mb),by=emy(mb);
-    const len=Math.hypot(bx-ax,by-ay);if(len<1)continue;
-    const mx2=(ax+bx)/2,my2=(ay+by)/2;
-    const px=-(by-ay)/len*len*0.2,py=(bx-ax)/len*len*0.2;
-    const dot=(wx(6000)-mx2)*px+(wy(6000)-my2)*py;
-    const cpx=mx2+(dot>=0?px:-px),cpy=my2+(dot>=0?py:-py);
-    ctx.save();
-    ctx.beginPath();ctx.moveTo(ax,ay);ctx.quadraticCurveTo(cpx,cpy,bx,by);
-    ctx.lineWidth=12;
-    const hit=ctx.isPointInStroke(mx,my);
-    ctx.restore();
-    if(hit)return{c,ma,mb};
-  }
+  const wpx=WORLD*sc;
+  for(let tx=-1;tx<=1;tx++){for(let ty=-1;ty<=1;ty++){
+    _tox=ox+tx*wpx;_toy=oy+ty*wpx;
+    if(_tox+wpx<-50||_tox>W+50||_toy+wpx<-50||_toy>H+50)continue;
+    for(const c of CONN){
+      const ma=A.find(m=>m.name.ko===c.a||m.name.en===c.a);
+      const mb=A.find(m=>m.name.ko===c.b||m.name.en===c.b);
+      if(!ma||!mb)continue;
+      if(!memberVisible(ma)||!memberVisible(mb))continue;
+      const ax=emx(ma),ay=emy(ma),bx=emx(mb),by=emy(mb);
+      const len=Math.hypot(bx-ax,by-ay);if(len<1)continue;
+      const mx2=(ax+bx)/2,my2=(ay+by)/2;
+      const px=-(by-ay)/len*len*0.2,py=(bx-ax)/len*len*0.2;
+      const dot=(wx(6000)-mx2)*px+(wy(6000)-my2)*py;
+      const cpx=mx2+(dot>=0?px:-px),cpy=my2+(dot>=0?py:-py);
+      ctx.save();ctx.beginPath();ctx.moveTo(ax,ay);ctx.quadraticCurveTo(cpx,cpy,bx,by);
+      ctx.lineWidth=12;
+      const hit=ctx.isPointInStroke(ex,ey);
+      ctx.restore();
+      if(hit){_tox=ox;_toy=oy;return{c,ma,mb};}
+    }
+  }}
+  _tox=ox;_toy=oy;
   return null;
 }
 
@@ -1497,8 +1519,12 @@ mobSrchIn.addEventListener('input',function(){
 mobSrchIn.addEventListener('keydown',e=>{if(e.key==='Escape')mobSrchClose.click();});
 
 // ── 줌 슬라이더 ─────────────────────────────────
-const SC_MAX=2.0;
-function minSc(){return Math.max(W,H)/WORLD*1.1;}
+const SC_MAX=0.8;
+function minSc(){
+  let x1=Infinity,y1=Infinity,x2=-Infinity,y2=-Infinity;
+  PLANETS.forEach(p=>{x1=Math.min(x1,p.cx-p.r);y1=Math.min(y1,p.cy-p.r);x2=Math.max(x2,p.cx+p.r);y2=Math.max(y2,p.cy+p.r);});
+  return Math.min(W,H)*0.4/Math.max(x2-x1,y2-y1);
+}
 function scToPos(s){const lmn=Math.log(minSc()),lmx=Math.log(SC_MAX);return 1-(Math.log(Math.max(minSc(),Math.min(SC_MAX,s)))-lmn)/(lmx-lmn);}
 function posToSc(p){const lmn=Math.log(minSc()),lmx=Math.log(SC_MAX);return Math.exp(lmn+(1-Math.max(0,Math.min(1,p)))*(lmx-lmn));}
 function applyZoomAt(newSc,cx,cy){newSc=Math.max(minSc(),Math.min(SC_MAX,newSc));const ratio=newSc/sc;ox=cx-(cx-ox)*ratio;oy=cy-(cy-oy)*ratio;sc=newSc;}
